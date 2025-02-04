@@ -1,13 +1,18 @@
 import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
 import {StyleSheet} from 'react-native';
-import {Provider} from 'react-redux';
+import {Provider, useSelector} from 'react-redux';
 import store from './redux/store';
 import Router from './route';
+import Toast from 'react-native-toast-message';
+import {LoadingPrimary} from './component';
 const MainApp = () => {
+  const {isLoading} = useSelector(state => state.globalReducer);
   return (
     <NavigationContainer>
       <Router />
+      <Toast />
+      {isLoading && <LoadingPrimary />}
     </NavigationContainer>
   );
 };

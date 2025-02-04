@@ -4,9 +4,31 @@ import InputScrollView from 'react-native-input-scroll-view';
 import {Button, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Gap} from '../../component';
+import {showMessage, useForm} from '../../utils';
+import {useDispatch} from 'react-redux';
+import {signInAccton} from '../../redux/action';
 const {width, height} = Dimensions.get('window');
-const LoginScreen = () => {
+const LoginScreen = ({navigation}) => {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+  const dispatch = useDispatch();
+  const [form, setForm] = useForm({
+    iusername: '',
+    password: '',
+  });
+
+  const onSubmit = () => {
+    if (form.password == '' || form.iusername == '') {
+      showMessage('Silahkan Lengkapi Data');
+      return;
+    }
+
+    const data = new FormData();
+    data.append('iusername', form.iusername);
+    data.append('password', form.password);
+
+    dispatch({type: 'SET_LOADING', value: true});
+    dispatch(signInAccton(data, navigation));
+  };
 
   return (
     <SafeAreaView style={styles.page}>
@@ -24,6 +46,8 @@ const LoginScreen = () => {
             <TextInput
               mode="outlined"
               label="Username"
+              value={form.iusername}
+              onChangeText={value => setForm('iusername', value)}
               placeholder="Type something"
             />
             <Gap height={20} />
@@ -31,8 +55,8 @@ const LoginScreen = () => {
               mode="outlined"
               label="Password"
               secureTextEntry={secureTextEntry}
-              // value={form.password}
-              // onChangeText={value => setForm('password', value)}
+              value={form.password}
+              onChangeText={value => setForm('password', value)}
               right={
                 <TextInput.Icon
                   icon={secureTextEntry ? 'eye' : 'eye-off'}
@@ -46,7 +70,7 @@ const LoginScreen = () => {
               icon="login"
               mode="contained"
               style={styles.button}
-              onPress={() => console.log('Pressed')}>
+              onPress={onSubmit}>
               Login
             </Button>
           </View>
