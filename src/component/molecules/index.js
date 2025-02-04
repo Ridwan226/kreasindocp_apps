@@ -1,2 +1,3 @@
 import BottomTabNavigator from './BottomTabNavigator';
-export {BottomTabNavigator};
+import CardUser from './CardUser';
+export {BottomTabNavigator, CardUser};

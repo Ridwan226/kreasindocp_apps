@@ -84,7 +84,7 @@ export default BottomTabNavigator;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: '#02275D',
+    backgroundColor: '#DD4017',
     paddingBottom: 7,
     paddingTop: 13,
     justifyContent: 'space-between',

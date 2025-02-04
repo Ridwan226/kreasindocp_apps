@@ -1,7 +1,13 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import {HomeScreen, LoginScreen, SplashScreen, TaskScreen} from '../pages';
+import {
+  HomeScreen,
+  LoginScreen,
+  SplashScreen,
+  TakeSelfieScreen,
+  TaskScreen,
+} from '../pages';
 import {BottomTabNavigator} from '../component';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -39,6 +45,11 @@ const Router = () => {
       <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="TakeSelfieScreen"
+        component={TakeSelfieScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
