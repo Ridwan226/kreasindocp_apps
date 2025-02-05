@@ -3,4 +3,12 @@ import HomeScreen from './HomeScreen';
 import TaskScreen from './TaskScreen';
 import LoginScreen from './LoginScreen';
 import TakeSelfieScreen from './TakeSelfieScreen';
-export {SplashScreen, HomeScreen, TaskScreen, LoginScreen, TakeSelfieScreen};
+import MyAttendanceScreen from './MyAttendanceScreen';
+export {
+  SplashScreen,
+  HomeScreen,
+  TaskScreen,
+  LoginScreen,
+  TakeSelfieScreen,
+  MyAttendanceScreen,
+};

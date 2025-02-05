@@ -242,7 +242,7 @@ const HomeScreen = ({navigation}) => {
               mode="contained"
               buttonColor="#DD4017"
               style={{marginTop: 20, width: '100%'}}
-              onPress={() => console.log('Pressed')}>
+              onPress={() => navigation.push('MyAttendanceScreen')}>
               Kehadiran Saya
             </Button>
           </View>

@@ -21,6 +21,7 @@
     "react-native": "0.77.0",
     "react-native-geolocation-service": "^5.3.1",
     "react-native-input-scroll-view": "^1.11.0",
+    "react-native-month-year-picker": "^1.9.0",
     "react-native-paper": "^5.13.1",
     "react-native-safe-area-context": "^5.2.0",
     "react-native-screens": "^4.6.0",

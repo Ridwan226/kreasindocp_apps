@@ -4,6 +4,7 @@ import React from 'react';
 import {
   HomeScreen,
   LoginScreen,
+  MyAttendanceScreen,
   SplashScreen,
   TakeSelfieScreen,
   TaskScreen,
@@ -50,6 +51,11 @@ const Router = () => {
       <Stack.Screen
         name="TakeSelfieScreen"
         component={TakeSelfieScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="MyAttendanceScreen"
+        component={MyAttendanceScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
