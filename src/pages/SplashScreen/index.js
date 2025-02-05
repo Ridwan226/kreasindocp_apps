@@ -3,9 +3,11 @@ import React, {useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {getData} from '../../utils';
 import {LogoKorpie} from '../../assets';
+import RNFS from 'react-native-fs';
 
 const SplashScreen = ({navigation}) => {
   useEffect(() => {
+    clearCache();
     setTimeout(() => {
       getData('tokenLogin')
         .then(res => {
@@ -20,6 +22,13 @@ const SplashScreen = ({navigation}) => {
         });
     }, 3000);
   }, []);
+
+  const clearCache = async () => {
+    try {
+      const cacheDirectory = RNFS.CachesDirectoryPath;
+      await RNFS.unlink(cacheDirectory);
+    } catch (error) {}
+  };
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#FFF'}}>
