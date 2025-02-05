@@ -58,3 +58,57 @@ export const clockInPost = form => dispatch => {
       console.log('err shift', err);
     });
 };
+
+export const viewDataMyAttendance = (form, setDateList) => dispatch => {
+  getData('tokenLogin')
+    .then(resToken => {
+      Axios.post(`${API_HOST.url_api}/Shifts/monthly_attendance_view`, form, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          authorization: resToken.value,
+        },
+      })
+        .then(res => {
+          let result = res.data;
+          setDateList(result?.message);
+        })
+        .catch(err => {
+          console.log('err', err);
+          showMessage(
+            err?.response?.data?.message
+              ? err?.response?.data?.message
+              : 'Something went wrong',
+          );
+        });
+    })
+    .catch(err => {
+      console.log('err shift', err);
+    });
+};
+
+export const viewDataMyAttendanceDetail = (form, setData) => dispatch => {
+  getData('tokenLogin')
+    .then(resToken => {
+      Axios.post(`${API_HOST.url_api}/Shifts/attendance_info`, form, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          authorization: resToken.value,
+        },
+      })
+        .then(res => {
+          let result = res.data;
+          setData(result?.message);
+        })
+        .catch(err => {
+          console.log('err', err);
+          showMessage(
+            err?.response?.data?.message
+              ? err?.response?.data?.message
+              : 'Something went wrong',
+          );
+        });
+    })
+    .catch(err => {
+      console.log('err shift', err);
+    });
+};

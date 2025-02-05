@@ -4,6 +4,7 @@ import TaskScreen from './TaskScreen';
 import LoginScreen from './LoginScreen';
 import TakeSelfieScreen from './TakeSelfieScreen';
 import MyAttendanceScreen from './MyAttendanceScreen';
+import MyAttendanceDetailScreen from './MyAttendanceDetailScreen';
 export {
   SplashScreen,
   HomeScreen,
@@ -11,4 +12,5 @@ export {
   LoginScreen,
   TakeSelfieScreen,
   MyAttendanceScreen,
+  MyAttendanceDetailScreen,
 };

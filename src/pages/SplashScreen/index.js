@@ -2,6 +2,7 @@ import {Image, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {getData} from '../../utils';
+import {LogoKorpie} from '../../assets';
 
 const SplashScreen = ({navigation}) => {
   useEffect(() => {
@@ -23,10 +24,11 @@ const SplashScreen = ({navigation}) => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#FFF'}}>
       <View style={styles.container}>
-        <Image
+        {/* <Image
           source={require('../../assets/image/logo.png')}
           style={styles.imgLogo}
-        />
+        /> */}
+        <LogoKorpie />
       </View>
     </SafeAreaView>
   );
