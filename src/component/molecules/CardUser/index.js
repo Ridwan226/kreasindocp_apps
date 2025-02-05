@@ -5,7 +5,7 @@ import {Button, Dialog} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 
-const CardUser = ({onPressLogout}) => {
+const CardUser = ({onPressLogout, name, username, image}) => {
   const navigation = useNavigation();
 
   return (
@@ -14,13 +14,13 @@ const CardUser = ({onPressLogout}) => {
         <View style={styles.wpContent}>
           <Image
             source={{
-              uri: 'https://kreasindocp.graphie.design/public/uploads/users/thumb/id.png',
+              uri: `https://kreasindocp.graphie.design/public/uploads/users/thumb/${image}`,
             }}
             style={styles.img}
           />
           <View style={{marginLeft: 10}}>
-            <Text style={styles.txTitle}>IT Spv Korpie </Text>
-            <Text style={styles.txDesc}>@itspvkorpie </Text>
+            <Text style={styles.txTitle}>{name} </Text>
+            <Text style={styles.txDesc}>@{username} </Text>
           </View>
         </View>
         <Button

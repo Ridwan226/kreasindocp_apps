@@ -1,4 +1,11 @@
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  Image,
+  PermissionsAndroid,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useCallback, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -7,9 +14,14 @@ import {Button, Dialog} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useFocusEffect} from '@react-navigation/native';
 import {showMessage} from '../../utils';
-
+import Geolocation from 'react-native-geolocation-service';
+import {clockInPost, getShiftData} from '../../redux/action/shift';
+import {getProfileDataAction} from '../../redux/action/profile';
 const HomeScreen = ({navigation}) => {
+  const [location, setLocation] = useState(false);
   const [visibleLogout, setVisibleLogout] = useState(false);
+  const [dataShift, setDataShift] = useState({});
+  const [dataProfile, setDataProfile] = useState({});
   const hideDialog = () => setVisibleLogout(!visibleLogout);
   const {isLoading, imageSelfie} = useSelector(state => state.globalReducer);
   console.log('isLoading', isLoading);
@@ -18,8 +30,66 @@ const HomeScreen = ({navigation}) => {
   useFocusEffect(
     useCallback(() => {
       console.log('imageSelfie', imageSelfie);
+      getDataShift();
+      getDataProfile();
+      getLocation();
     }, []),
   );
+
+  const getDataShift = () => {
+    dispatch(getShiftData(setDataShift));
+  };
+
+  const getDataProfile = () => {
+    dispatch(getProfileDataAction(setDataProfile));
+  };
+
+  const requestLocationPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Geolocation Permission',
+          message: 'Can we access your location?',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      console.log('granted', granted);
+      if (granted === 'granted') {
+        console.log('You can use Geolocation');
+        return true;
+      } else {
+        console.log('You cannot use Geolocation');
+        return false;
+      }
+    } catch (err) {
+      return false;
+    }
+  };
+
+  const getLocation = () => {
+    const result = requestLocationPermission();
+    result.then(res => {
+      console.log('res is:', res);
+      if (res) {
+        Geolocation.getCurrentPosition(
+          position => {
+            console.log(position);
+            setLocation(position);
+          },
+          error => {
+            // See error code charts below.
+            console.log(error.code, error.message);
+            setLocation(false);
+          },
+          {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+        );
+      }
+    });
+    console.log(location);
+  };
 
   const onLogout = async () => {
     setVisibleLogout(!visibleLogout);
@@ -38,50 +108,121 @@ const HomeScreen = ({navigation}) => {
       return;
     }
 
-    dispatch({type: 'SET_IMAGE_SELFIE', value: {}});
+    if (!location?.coords?.latitude) {
+      showMessage('Silahkan Aktifkan GPS Lokasi Anda');
+      return;
+    }
+
+    const form = new FormData();
+    form.append('file', imageSelfie);
+    form.append('latitude', location?.coords?.latitude);
+    form.append('longitude', location?.coords?.longitude);
+    form.append('clock_state', 'clock_in');
+    form.append('type', 'set_clocking');
+
+    console.log('form', form);
+    dispatch(clockInPost(form));
+    setTimeout(() => {
+      getDataShift();
+      getDataProfile();
+      getLocation();
+    }, 2000);
   };
 
-  const onClockOut = () => {};
+  const onClockOut = () => {
+    if (!location?.coords?.latitude) {
+      showMessage('Silahkan Aktifkan GPS Lokasi Anda');
+      return;
+    }
+
+    const form = new FormData();
+    form.append('latitude', location?.coords?.latitude);
+    form.append('longitude', location?.coords?.longitude);
+    form.append('clock_state', 'clock_out');
+    form.append('type', 'set_clocking');
+    form.append(
+      'time_id',
+      dataShift?.attendance_time_checks_value_api?.[0]?.time_attendance_id,
+    );
+
+    console.log('form', form);
+    dispatch(clockInPost(form));
+    setTimeout(() => {
+      getDataShift();
+      getDataProfile();
+      getLocation();
+    }, 2000);
+  };
 
   return (
     <SafeAreaView style={styles.page}>
       <ScrollView>
-        <CardUser onPressLogout={() => setVisibleLogout(!visibleLogout)} />
+        <CardUser
+          onPressLogout={() => setVisibleLogout(!visibleLogout)}
+          name={dataProfile?.first_name}
+          username={dataProfile?.username}
+          image={dataProfile?.profile_photo}
+        />
         <View style={styles.container}>
           <View style={styles.wpUser}>
             <View style={{width: '70%'}}>
-              <Text style={styles.txName}>Welcome IT Spv Korpie</Text>
-              <Text style={styles.txShift}>My Shift: 10:00 am To 06:00 pm</Text>
+              <Text style={styles.txName}>
+                Welcome IT {dataProfile?.first_name} {dataProfile?.last_name}
+              </Text>
+              <Text style={styles.txShift}>{dataShift?.shift}</Text>
             </View>
             <View style={styles.wpRole}>
-              <Text style={styles.txRole}>Database Administrator (DBA)</Text>
+              <Text style={styles.txRole}>{dataShift?.idesignations}</Text>
             </View>
           </View>
           <Gap height={20} />
           <View style={styles.wpAbsen}>
-            {imageSelfie?.uri ? (
-              <Image
-                source={{
-                  uri: imageSelfie?.uri,
-                }}
-                style={styles.img}
-              />
-            ) : null}
+            {dataShift?.attendance_time_checks < 1 ? (
+              <>
+                {imageSelfie?.uri ? (
+                  <Image
+                    source={{
+                      uri: imageSelfie?.uri,
+                    }}
+                    style={styles.img}
+                  />
+                ) : null}
 
-            <Gap height={20} />
-            <Button
-              icon="camera"
-              buttonColor="#DD4017"
-              mode="contained"
-              onPress={() => navigation.push('TakeSelfieScreen')}>
-              Ambil Foto
-            </Button>
+                <Gap height={20} />
+                <Button
+                  icon="camera"
+                  buttonColor="#DD4017"
+                  mode="contained"
+                  disabled={
+                    dataShift?.attendance_time_checks < 1 ? false : true
+                  }
+                  onPress={() => navigation.push('TakeSelfieScreen')}>
+                  Ambil Foto
+                </Button>
+              </>
+            ) : (
+              <View
+                style={{
+                  alignItems: 'flex-start',
+                  width: '100%',
+                }}>
+                <Text>
+                  Anda sudah Clock in di Lokasi :{' '}
+                  {
+                    dataShift?.attendance_time_checks_value_api?.[0]
+                      ?.project_name
+                  }
+                </Text>
+              </View>
+            )}
+
             <Gap height={20} />
 
             <View style={styles.wpButton}>
               <Button
                 icon="arrow-right"
                 mode="contained"
+                disabled={dataShift?.attendance_time_checks < 1 ? false : true}
                 buttonColor="#17C666"
                 onPress={() => onClockIn()}>
                 Jam Masuk
@@ -89,8 +230,9 @@ const HomeScreen = ({navigation}) => {
               <Button
                 icon="arrow-down"
                 mode="contained"
+                disabled={dataShift?.attendance_time_checks < 1 ? true : false}
                 buttonColor="#6c757d"
-                onPress={() => console.log('Pressed')}>
+                onPress={() => onClockOut()}>
                 Jam Keluar
               </Button>
             </View>
