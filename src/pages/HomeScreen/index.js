@@ -4,6 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useCallback, useState} from 'react';
@@ -17,6 +18,8 @@ import {showMessage} from '../../utils';
 import Geolocation from 'react-native-geolocation-service';
 import {clockInPost, getShiftData} from '../../redux/action/shift';
 import {getProfileDataAction} from '../../redux/action/profile';
+import Feather from 'react-native-vector-icons/Feather';
+
 const HomeScreen = ({navigation}) => {
   const [location, setLocation] = useState(false);
   const [visibleLogout, setVisibleLogout] = useState(false);
@@ -247,6 +250,37 @@ const HomeScreen = ({navigation}) => {
             </Button>
           </View>
         </View>
+
+        <View style={styles.wpIconMenu}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.wpIcon}
+            onPress={() => {}}>
+            <Feather name="check-square" size={30} color={'#DD4017'} />
+            <Text style={styles.txMenu}>{'Tasks'}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.wpIcon}
+            onPress={() => {}}>
+            <Feather name="briefcase" size={30} color={'#DD4017'} />
+            <Text style={styles.txMenu}>Projects</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.wpIcon}
+            onPress={() => {}}>
+            <Feather name="git-pull-request" size={30} color={'#DD4017'} />
+            <Text style={styles.txMenu}>Request</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.wpIcon}
+            onPress={() => {}}>
+            <Feather name="users" size={30} color={'#DD4017'} />
+            <Text style={styles.txMenu}>Manage Client</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
       <Dialog visible={visibleLogout} onDismiss={hideDialog}>
         <Dialog.Icon icon="alert" />
@@ -319,5 +353,23 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
+  },
+  wpIconMenu: {
+    marginTop: '5%',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+  },
+  wpIcon: {
+    width: '20%',
+    alignItems: 'center',
+    marginHorizontal: 10,
+    marginBottom: 10,
+  },
+  txMenu: {
+    fontSize: 13,
+    color: '#02275D',
+    fontFamily: 'Poppins-Medium',
+    textAlign: 'center',
   },
 });
