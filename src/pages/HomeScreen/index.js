@@ -255,14 +255,14 @@ const HomeScreen = ({navigation}) => {
           <TouchableOpacity
             activeOpacity={0.8}
             style={styles.wpIcon}
-            onPress={() => {}}>
+            onPress={() => navigation.push('TaskScreen')}>
             <Feather name="check-square" size={30} color={'#DD4017'} />
             <Text style={styles.txMenu}>{'Tasks'}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.8}
             style={styles.wpIcon}
-            onPress={() => {}}>
+            onPress={() => navigation.push('ProjectScreen')}>
             <Feather name="briefcase" size={30} color={'#DD4017'} />
             <Text style={styles.txMenu}>Projects</Text>
           </TouchableOpacity>
@@ -276,7 +276,7 @@ const HomeScreen = ({navigation}) => {
           <TouchableOpacity
             activeOpacity={0.8}
             style={styles.wpIcon}
-            onPress={() => {}}>
+            onPress={() => navigation.push('ClientScreen')}>
             <Feather name="users" size={30} color={'#DD4017'} />
             <Text style={styles.txMenu}>Manage Client</Text>
           </TouchableOpacity>
@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   wpIcon: {
-    width: '20%',
+    width: '18%',
     alignItems: 'center',
     marginHorizontal: 10,
     marginBottom: 10,

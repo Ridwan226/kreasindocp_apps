@@ -8,7 +8,7 @@ const Icons = ({label, focuse}) => {
       return (
         <Entypo name="home" size={23} color={focuse ? '#FFF' : '#ACACAF'} />
       );
-    case 'Task':
+    case 'Information':
       return (
         <Entypo name="list" size={23} color={focuse ? '#FFF' : '#ACACAF'} />
       );

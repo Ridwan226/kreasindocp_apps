@@ -5,6 +5,9 @@ import LoginScreen from './LoginScreen';
 import TakeSelfieScreen from './TakeSelfieScreen';
 import MyAttendanceScreen from './MyAttendanceScreen';
 import MyAttendanceDetailScreen from './MyAttendanceDetailScreen';
+import InformationScreen from './InformationScreen';
+import ProjectScreen from './ProjectScreen';
+import ClientScreen from './ClientScreen';
 export {
   SplashScreen,
   HomeScreen,
@@ -13,4 +16,7 @@ export {
   TakeSelfieScreen,
   MyAttendanceScreen,
   MyAttendanceDetailScreen,
+  InformationScreen,
+  ProjectScreen,
+  ClientScreen,
 };

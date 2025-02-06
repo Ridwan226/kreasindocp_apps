@@ -1,10 +1,9 @@
-import {FlatList, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {CardTasks, HeaderPrimary} from '../../component';
-import {formatGrid} from '../../utils';
 
-const TaskScreen = ({navigation}) => {
+const ProjectScreen = ({navigation}) => {
   let dataList = [
     {
       data: 'oke',
@@ -16,14 +15,9 @@ const TaskScreen = ({navigation}) => {
       data: 'coba',
     },
   ];
-
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#FFF'}}>
-      <HeaderPrimary
-        onPress={() => navigation.goBack()}
-        title="Tasks"
-        onPressIcon={() => {}}
-      />
+      <HeaderPrimary onPress={() => navigation.goBack()} title="Project" />
       <View style={styles.wpList}>
         <FlatList
           data={dataList}
@@ -36,7 +30,7 @@ const TaskScreen = ({navigation}) => {
   );
 };
 
-export default TaskScreen;
+export default ProjectScreen;
 
 const styles = StyleSheet.create({
   wpList: {

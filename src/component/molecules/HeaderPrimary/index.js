@@ -9,7 +9,7 @@ const HeaderPrimary = ({onPress, onPressIcon, title}) => {
       {onPressIcon && (
         <Appbar.Action
           style={styles.icon}
-          icon="bell"
+          icon="plus"
           onPress={onPressIcon}
           color="#fff"
         />
