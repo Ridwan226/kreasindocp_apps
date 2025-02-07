@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
 import {Appbar} from 'react-native-paper';
-const HeaderPrimary = ({onPress, onPressIcon, title}) => {
+const HeaderPrimary = ({onPress, onPressIcon, title, iconName = 'bell'}) => {
   return (
     <Appbar.Header mode="small" style={styles.container}>
       {onPress && <Appbar.BackAction color="#fff" onPress={onPress} />}
@@ -9,7 +9,7 @@ const HeaderPrimary = ({onPress, onPressIcon, title}) => {
       {onPressIcon && (
         <Appbar.Action
           style={styles.icon}
-          icon="plus"
+          icon={iconName}
           onPress={onPressIcon}
           color="#fff"
         />

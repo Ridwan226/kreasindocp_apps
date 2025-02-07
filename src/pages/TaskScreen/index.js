@@ -1,8 +1,7 @@
-import {FlatList, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import {FlatList, StyleSheet, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {CardTasks, HeaderPrimary} from '../../component';
-import {formatGrid} from '../../utils';
 
 const TaskScreen = ({navigation}) => {
   let dataList = [
@@ -22,7 +21,8 @@ const TaskScreen = ({navigation}) => {
       <HeaderPrimary
         onPress={() => navigation.goBack()}
         title="Tasks"
-        onPressIcon={() => {}}
+        onPressIcon={() => navigation.push('TasksAddScreen')}
+        iconName={'plus'}
       />
       <View style={styles.wpList}>
         <FlatList

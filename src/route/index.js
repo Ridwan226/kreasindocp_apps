@@ -4,13 +4,17 @@ import React from 'react';
 import {
   ClientScreen,
   HomeScreen,
+  InformationDetailScreen,
   InformationScreen,
   LoginScreen,
   MyAttendanceDetailScreen,
   MyAttendanceScreen,
+  ProjectAddScreen,
   ProjectScreen,
+  RequestMenuScreen,
   SplashScreen,
   TakeSelfieScreen,
+  TasksAddScreen,
   TaskScreen,
 } from '../pages';
 import {BottomTabNavigator} from '../component';
@@ -80,6 +84,26 @@ const Router = () => {
       <Stack.Screen
         name="ClientScreen"
         component={ClientScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="RequestMenuScreen"
+        component={RequestMenuScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="TasksAddScreen"
+        component={TasksAddScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ProjectAddScreen"
+        component={ProjectAddScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="InformationDetailScreen"
+        component={InformationDetailScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

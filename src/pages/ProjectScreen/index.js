@@ -17,7 +17,12 @@ const ProjectScreen = ({navigation}) => {
   ];
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#FFF'}}>
-      <HeaderPrimary onPress={() => navigation.goBack()} title="Project" />
+      <HeaderPrimary
+        onPress={() => navigation.goBack()}
+        title="Project"
+        onPressIcon={() => navigation.push('ProjectAddScreen')}
+        iconName={'plus'}
+      />
       <View style={styles.wpList}>
         <FlatList
           data={dataList}

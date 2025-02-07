@@ -269,7 +269,7 @@ const HomeScreen = ({navigation}) => {
           <TouchableOpacity
             activeOpacity={0.8}
             style={styles.wpIcon}
-            onPress={() => {}}>
+            onPress={() => navigation.push('RequestMenuScreen')}>
             <Feather name="git-pull-request" size={30} color={'#DD4017'} />
             <Text style={styles.txMenu}>Request</Text>
           </TouchableOpacity>
@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   txName: {
-    fontSize: 16,
+    fontSize: 14,
     fontFamily: 'Poppins-Medium',
     color: '#02275D',
   },

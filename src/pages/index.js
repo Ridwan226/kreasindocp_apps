@@ -8,6 +8,10 @@ import MyAttendanceDetailScreen from './MyAttendanceDetailScreen';
 import InformationScreen from './InformationScreen';
 import ProjectScreen from './ProjectScreen';
 import ClientScreen from './ClientScreen';
+import RequestMenuScreen from './RequestMenuScreen';
+import TasksAddScreen from './TasksAddScreen';
+import ProjectAddScreen from './ProjectAddScreen';
+import InformationDetailScreen from './InformationDetailScreen';
 export {
   SplashScreen,
   HomeScreen,
@@ -19,4 +23,8 @@ export {
   InformationScreen,
   ProjectScreen,
   ClientScreen,
+  RequestMenuScreen,
+  TasksAddScreen,
+  ProjectAddScreen,
+  InformationDetailScreen,
 };

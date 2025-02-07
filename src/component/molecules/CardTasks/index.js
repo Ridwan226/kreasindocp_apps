@@ -101,6 +101,8 @@ const styles = StyleSheet.create({
     borderRadius: 50 / 2,
     objectFit: 'cover',
     marginRight: -11,
+    borderWidth: 3,
+    borderColor: '#fff',
   },
   wpFooter: {
     flexDirection: 'row',
