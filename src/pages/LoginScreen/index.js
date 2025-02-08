@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import InputScrollView from 'react-native-input-scroll-view';
 import {Button, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -35,13 +42,11 @@ const LoginScreen = ({navigation}) => {
       <InputScrollView style={styles.scroll}>
         <View style={styles.contentWrapper}>
           <Image
-            source={require('../../assets/image/logo.png')}
+            source={require('../../assets/image/Absence.png')}
             style={styles.imgLogo}
           />
-          <Text style={styles.title}>Welcome to Kreasindocp </Text>
-          <Text style={styles.desc}>
-            Welcome back, Please login into an account
-          </Text>
+          <Text style={styles.title}>KORPIE</Text>
+          <Text style={styles.desc}>Attendance</Text>
           <View style={styles.wpForm}>
             <TextInput
               mode="outlined"
@@ -67,12 +72,22 @@ const LoginScreen = ({navigation}) => {
 
             <Gap height={20} />
             <Button
-              icon="login"
+              // icon="login"
               mode="contained"
               style={styles.button}
+              labelStyle={{
+                color: '#FFF',
+                fontSize: 18,
+                fontFamily: 'Poppins-Medium',
+              }}
               onPress={onSubmit}>
               Login
             </Button>
+            <Gap height={20} />
+
+            <TouchableOpacity>
+              <Text style={styles.txForgot}>Forgot Password</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </InputScrollView>
@@ -97,17 +112,19 @@ const styles = StyleSheet.create({
   },
   imgLogo: {
     width: width / 2,
+    height: width / 2,
     objectFit: 'contain',
   },
   title: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: 20,
+    fontFamily: 'Poppins-Bold',
+    fontSize: 50,
     color: '#02275D',
+    lineHeight: 50,
   },
   desc: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: 14,
-    color: '#02275D',
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 25,
+    color: '#468190',
   },
   wpForm: {
     width: '100%',
@@ -116,6 +133,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   button: {
-    backgroundColor: '#003399',
+    backgroundColor: '#DD4017',
+    borderRadius: 10,
+    paddingVertical: 5,
+  },
+  txForgot: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 17,
+    color: '#468190',
+    textAlign: 'center',
   },
 });

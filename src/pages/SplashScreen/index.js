@@ -12,7 +12,8 @@ const SplashScreen = ({navigation}) => {
       getData('tokenLogin')
         .then(res => {
           if (res) {
-            navigation.reset({index: 0, routes: [{name: 'MainApp'}]});
+            // navigation.reset({index: 0, routes: [{name: 'MainApp'}]});
+            navigation.replace('Home');
           } else {
             navigation.replace('LoginScreen');
           }

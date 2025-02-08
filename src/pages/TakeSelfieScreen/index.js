@@ -49,13 +49,13 @@ const TakeSelfieScreen = ({navigation}) => {
   };
 
   if (device == null) {
-    return <ActivityIndicator size={20} color={'#C11F4B'} />;
+    return <ActivityIndicator size={20} color={'#DD4017'} />;
   }
   return (
     <SafeAreaView>
       <TouchableOpacity
         style={styles.back}
-        onPress={() => navigation.navigate('MainApp')}
+        onPress={() => navigation.goBack()}
         activeOpacity={0.9}>
         <Feather name="arrow-left" size={25} color={'#fff'} />
       </TouchableOpacity>
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     padding: 10,
-    backgroundColor: '#C11F4B',
+    backgroundColor: '#DD4017',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 5,

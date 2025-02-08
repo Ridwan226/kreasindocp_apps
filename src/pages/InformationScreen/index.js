@@ -10,7 +10,9 @@ const InformationScreen = ({navigation}) => {
       <HeaderPrimary title="Information" />
       <Card.Title
         title="Card Title"
-        subtitle="Card Subtitle"
+        subtitle="Card Subtitle | Human Resources
+Marketing
+Finance "
         left={props => (
           <Avatar.Icon {...props} icon="bell" backgroundColor="#DD4017" />
         )}

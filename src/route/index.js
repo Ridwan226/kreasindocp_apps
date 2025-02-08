@@ -29,11 +29,11 @@ const MainApp = () => {
         component={HomeScreen}
         options={{headerShown: false}}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Information"
         component={InformationScreen}
         options={{headerShown: false}}
-      />
+      /> */}
     </Tab.Navigator>
   );
 };
@@ -46,9 +46,14 @@ const Router = () => {
         component={SplashScreen}
         options={{headerShown: false}}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="MainApp"
         component={MainApp}
+        options={{headerShown: false}}
+      /> */}
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
         options={{headerShown: false}}
       />
       <Stack.Screen

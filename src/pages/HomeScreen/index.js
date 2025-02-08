@@ -1,24 +1,24 @@
-import {
-  Image,
-  PermissionsAndroid,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import React, {useCallback, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {CardUser, Gap} from '../../component';
-import {Button, Dialog} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useFocusEffect} from '@react-navigation/native';
-import {showMessage} from '../../utils';
+import React, {useCallback, useState} from 'react';
+import {
+  ImageBackground,
+  PermissionsAndroid,
+  ScrollView,
+  ScrollViewBase,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
-import {clockInPost, getShiftData} from '../../redux/action/shift';
+import {Button, Dialog} from 'react-native-paper';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {useDispatch, useSelector} from 'react-redux';
+import {CardUser, Gap, LocationProject} from '../../component';
 import {getProfileDataAction} from '../../redux/action/profile';
-import Feather from 'react-native-vector-icons/Feather';
+import {clockInPost, getShiftData} from '../../redux/action/shift';
+import {showMessage} from '../../utils';
+import moment from 'moment';
 
 const HomeScreen = ({navigation}) => {
   const [location, setLocation] = useState(false);
@@ -159,68 +159,95 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.page}>
-      <ScrollView>
+      <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
         <CardUser
           onPressLogout={() => setVisibleLogout(!visibleLogout)}
           name={dataProfile?.first_name}
-          username={dataProfile?.username}
+          username={
+            dataShift?.attendance_time_checks >= 1
+              ? moment(
+                  dataShift?.attendance_time_checks_value_api?.[0]?.clock_in,
+                ).format('HH:MM A')
+              : dataProfile?.username
+          }
           image={dataProfile?.profile_photo}
+          timeIn={dataShift?.attendance_time_checks >= 1 ? true : false}
         />
         <View style={styles.container}>
-          <View style={styles.wpUser}>
-            <View style={{width: '70%'}}>
-              <Text style={styles.txName}>
-                Welcome IT {dataProfile?.first_name} {dataProfile?.last_name}
-              </Text>
-              <Text style={styles.txShift}>{dataShift?.shift}</Text>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <View
+              style={[
+                styles.wpTime,
+                {borderBottomWidth: 1, borderColor: '#c9c9c9'},
+              ]}>
+              <Text style={styles.txTitle}>Jam Kerja</Text>
+              <Text style={styles.txDesc}>{dataShift?.shift}</Text>
             </View>
-            <View style={styles.wpRole}>
-              <Text style={styles.txRole}>{dataShift?.idesignations}</Text>
+            <View
+              style={[
+                styles.wpTime,
+                {
+                  borderBottomWidth: 1,
+                  borderLeftWidth: 1,
+                  borderColor: '#c9c9c9',
+                },
+              ]}>
+              <Text style={styles.txTitle}>Posisi</Text>
+              <Text style={styles.txPosisi}>{dataShift?.idesignations}</Text>
             </View>
           </View>
-          <Gap height={20} />
+          {dataShift?.projects?.length > 0 && (
+            <>
+              <Gap height={10} />
+              <LocationProject data={dataShift?.projects} />
+            </>
+          )}
+
+          <Gap height={10} />
           <View style={styles.wpAbsen}>
             {dataShift?.attendance_time_checks < 1 ? (
-              <>
-                {imageSelfie?.uri ? (
-                  <Image
-                    source={{
-                      uri: imageSelfie?.uri,
-                    }}
-                    style={styles.img}
-                  />
-                ) : null}
+              imageSelfie?.uri ? (
+                <ImageBackground
+                  style={{
+                    width: '100%',
+                    height: '90%',
+                    alignItems: 'center',
 
-                <Gap height={20} />
-                <Button
-                  icon="camera"
-                  buttonColor="#DD4017"
-                  mode="contained"
-                  disabled={
-                    dataShift?.attendance_time_checks < 1 ? false : true
-                  }
-                  onPress={() => navigation.push('TakeSelfieScreen')}>
-                  Ambil Foto
-                </Button>
-              </>
-            ) : (
-              <View
-                style={{
-                  alignItems: 'flex-start',
-                  width: '100%',
-                }}>
-                <Text>
-                  Anda sudah Clock in di Lokasi :{' '}
-                  {
-                    dataShift?.attendance_time_checks_value_api?.[0]
-                      ?.project_name
-                  }
-                </Text>
-              </View>
-            )}
+                    justifyContent: 'center',
+                  }}
+                  imageStyle={{
+                    borderRadius: 10,
+                    objectFit: 'cover',
+                  }}
+                  source={{uri: imageSelfie?.uri}}>
+                  <Button
+                    icon="camera"
+                    buttonColor="#DD4017"
+                    mode="contained"
+                    disabled={
+                      dataShift?.attendance_time_checks < 1 ? false : true
+                    }
+                    onPress={() => navigation.push('TakeSelfieScreen')}>
+                    Ulangi Foto
+                  </Button>
+                </ImageBackground>
+              ) : (
+                <View style={styles.wpButtonFoto}>
+                  <Button
+                    icon="camera"
+                    buttonColor="#DD4017"
+                    mode="contained"
+                    disabled={
+                      dataShift?.attendance_time_checks < 1 ? false : true
+                    }
+                    onPress={() => navigation.push('TakeSelfieScreen')}>
+                    Ambil Foto
+                  </Button>
+                </View>
+              )
+            ) : null}
 
-            <Gap height={20} />
-
+            <Gap height={10} />
             <View style={styles.wpButton}>
               <Button
                 icon="arrow-right"
@@ -250,37 +277,7 @@ const HomeScreen = ({navigation}) => {
             </Button>
           </View>
         </View>
-
-        <View style={styles.wpIconMenu}>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            style={styles.wpIcon}
-            onPress={() => navigation.push('TaskScreen')}>
-            <Feather name="check-square" size={30} color={'#DD4017'} />
-            <Text style={styles.txMenu}>{'Tasks'}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            style={styles.wpIcon}
-            onPress={() => navigation.push('ProjectScreen')}>
-            <Feather name="briefcase" size={30} color={'#DD4017'} />
-            <Text style={styles.txMenu}>Projects</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            style={styles.wpIcon}
-            onPress={() => navigation.push('RequestMenuScreen')}>
-            <Feather name="git-pull-request" size={30} color={'#DD4017'} />
-            <Text style={styles.txMenu}>Request</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            style={styles.wpIcon}
-            onPress={() => navigation.push('ClientScreen')}>
-            <Feather name="users" size={30} color={'#DD4017'} />
-            <Text style={styles.txMenu}>Manage Client</Text>
-          </TouchableOpacity>
-        </View>
+        <Gap height={500} />
       </ScrollView>
       <Dialog visible={visibleLogout} onDismiss={hideDialog}>
         <Dialog.Icon icon="alert" />
@@ -309,13 +306,14 @@ const styles = StyleSheet.create({
     objectFit: 'cover',
     borderRadius: 10,
   },
-
   container: {
-    margin: 15,
-    borderWidth: 1,
+    marginVertical: 10,
+    marginHorizontal: 15,
+    // borderWidth: 1,
     borderColor: '#02275D',
     borderRadius: 10,
     padding: 10,
+    flex: 1,
   },
 
   wpUser: {
@@ -323,6 +321,34 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginVertical: 10,
+  },
+  wpTime: {
+    width: '50%',
+    padding: 10,
+  },
+  txTitle: {
+    fontSize: 14,
+    fontFamily: 'Poppins-SemiBold',
+    color: '#6c757d',
+  },
+  txDesc: {
+    fontSize: 16,
+    fontFamily: 'Poppins-SemiBold',
+    color: '#02275D',
+  },
+  txPosisi: {
+    fontSize: 13,
+    fontFamily: 'Poppins-SemiBold',
+    color: '#02275D',
+  },
+  wpButtonFoto: {
+    width: '100%',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#DD4017',
+    height: '80%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   txName: {
     fontSize: 14,

@@ -1,4 +1,4 @@
 import Gap from './Gap';
 import LoadingPrimary from './LoadingPrimary';
-
-export {Gap, LoadingPrimary};
+import ListInfo from './ListInfo';
+export {Gap, LoadingPrimary, ListInfo};

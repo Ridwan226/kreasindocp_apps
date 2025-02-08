@@ -51,7 +51,7 @@ const MyAttendanceScreen = ({navigation}) => {
       <TouchableOpacity onPress={() => showPicker(true)} style={styles.btnDate}>
         <Text>Berdasarkan : {moment(date, 'MM-YYYY').format('MMM YYYY')}</Text>
       </TouchableOpacity>
-      <ScrollView>
+      <ScrollView style={{flex: 1, backgroundColor: '#F3F3F3'}}>
         {dateList?.map((item, index) => {
           return (
             <TouchableOpacity
@@ -66,14 +66,35 @@ const MyAttendanceScreen = ({navigation}) => {
               }
               activeOpacity={0.8}>
               <View>
-                <Text style={styles.txDate}>
-                  {moment(item?.attendance_date).format('dddd, DD MMM YYYY')}
-                </Text>
-                {item?.status ? (
+                <View style={styles.wpDateHead}>
+                  <Text style={styles.txDate}>
+                    {moment(item?.attendance_date).format('DD MMM YYYY')}
+                  </Text>
+                  {item?.clock_in ? (
+                    <Text>
+                      {item?.clock_in
+                        ? moment(item?.clock_in).format('HH:MM A')
+                        : null}{' '}
+                      {item?.clock_out &&
+                        `-  ${moment(item?.clock_out).format('HH:MM A')}`}
+                    </Text>
+                  ) : null}
+                </View>
+
+                {/* {item?.status ? (
                   <Text style={styles.txStatus}>{item?.status}</Text>
-                ) : null}
+                ) : null} */}
+                {item?.project_address && (
+                  <>
+                    <Gap height={10} />
+                    <Text style={styles.txLokasi}>Lokasi</Text>
+                    <Text style={styles.txAddress}>
+                      {item?.project_address}
+                    </Text>
+                  </>
+                )}
               </View>
-              <View>
+              {/* <View>
                 {item?.clock_in ? (
                   <Text style={styles.txTime}>
                     Jam Masuk {moment(item?.clock_in).format('HH:MM A')}
@@ -84,7 +105,7 @@ const MyAttendanceScreen = ({navigation}) => {
                     Jam Keluar {moment(item?.clock_out).format('HH:MM A')}
                   </Text>
                 ) : null}
-              </View>
+              </View> */}
             </TouchableOpacity>
           );
         })}
@@ -126,12 +147,29 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    borderColor: '#02275D',
+    borderColor: '#CFCFCF',
+    backgroundColor: '#FFF',
+  },
+  wpDateHead: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
   },
   txDate: {
     fontFamily: 'Poppins-Medium',
-    fontSize: 16,
-    color: '#02275D',
+    fontSize: 15,
+    color: '#535353',
+  },
+  txLokasi: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: 13,
+    color: '#959595',
+  },
+  txAddress: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: 13,
+    color: '#4E4E4E',
   },
   txStatus: {
     fontFamily: 'Poppins-Medium',
