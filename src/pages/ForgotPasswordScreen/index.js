@@ -1,4 +1,3 @@
-import React, {useState} from 'react';
 import {
   Dimensions,
   Image,
@@ -7,20 +6,21 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import React, {useState} from 'react';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {Gap, HeaderPrimary} from '../../component';
 import InputScrollView from 'react-native-input-scroll-view';
 import {Button, TextInput} from 'react-native-paper';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {Gap} from '../../component';
-import {showMessage, useForm} from '../../utils';
 import {useDispatch} from 'react-redux';
-import {signInAccton} from '../../redux/action';
+import {useForm} from '../../utils';
+import {ForgotPasswordAccton} from '../../redux/action';
 const {width, height} = Dimensions.get('window');
-const LoginScreen = ({navigation}) => {
+
+const ForgotPasswordScreen = ({navigation}) => {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const dispatch = useDispatch();
   const [form, setForm] = useForm({
-    iusername: '',
-    password: '',
+    email: '',
   });
 
   const onSubmit = () => {
@@ -30,15 +30,18 @@ const LoginScreen = ({navigation}) => {
     }
 
     const data = new FormData();
-    data.append('iusername', form.iusername);
-    data.append('password', form.password);
+    data.append('email', form.email);
 
     dispatch({type: 'SET_LOADING', value: true});
-    dispatch(signInAccton(data, navigation));
+    dispatch(ForgotPasswordAccton(data));
+    setForm('email', '');
   };
-
   return (
     <SafeAreaView style={styles.page}>
+      <HeaderPrimary
+        onPress={() => navigation.goBack()}
+        title="Forgot Password"
+      />
       <InputScrollView style={styles.scroll}>
         <View style={styles.contentWrapper}>
           <Image
@@ -50,24 +53,10 @@ const LoginScreen = ({navigation}) => {
           <View style={styles.wpForm}>
             <TextInput
               mode="outlined"
-              label="Username"
-              value={form.iusername}
-              onChangeText={value => setForm('iusername', value)}
+              label="Email"
+              value={form.email}
+              onChangeText={value => setForm('email', value)}
               placeholder="Type something"
-            />
-            <Gap height={20} />
-            <TextInput
-              mode="outlined"
-              label="Password"
-              secureTextEntry={secureTextEntry}
-              value={form.password}
-              onChangeText={value => setForm('password', value)}
-              right={
-                <TextInput.Icon
-                  icon={secureTextEntry ? 'eye' : 'eye-off'}
-                  onPress={() => setSecureTextEntry(!secureTextEntry)}
-                />
-              }
             />
 
             <Gap height={20} />
@@ -81,15 +70,15 @@ const LoginScreen = ({navigation}) => {
                 fontFamily: 'Poppins-Medium',
               }}
               onPress={onSubmit}>
-              Login
+              Send Email
             </Button>
             <Gap height={20} />
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => navigation.navigate('ForgotPasswordScreen')}
               activeOpacity={0.7}>
               <Text style={styles.txForgot}>Forgot Password</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
       </InputScrollView>
@@ -97,7 +86,7 @@ const LoginScreen = ({navigation}) => {
   );
 };
 
-export default LoginScreen;
+export default ForgotPasswordScreen;
 
 const styles = StyleSheet.create({
   page: {

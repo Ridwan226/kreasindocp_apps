@@ -71,14 +71,16 @@ const MyAttendanceScreen = ({navigation}) => {
                     {moment(item?.attendance_date).format('DD MMM YYYY')}
                   </Text>
                   {item?.clock_in ? (
-                    <Text>
+                    <Text style={styles.txTime}>
                       {item?.clock_in
                         ? moment(item?.clock_in).format('HH:MM A')
                         : null}{' '}
                       {item?.clock_out &&
                         `-  ${moment(item?.clock_out).format('HH:MM A')}`}
                     </Text>
-                  ) : null}
+                  ) : (
+                    <Text style={styles.txStatus}>{item?.status}</Text>
+                  )}
                 </View>
 
                 {/* {item?.status ? (
@@ -172,18 +174,14 @@ const styles = StyleSheet.create({
     color: '#4E4E4E',
   },
   txStatus: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: 12,
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 17,
     color: '#02275D',
-    backgroundColor: '#DDEDEA',
-    padding: 5,
-    borderRadius: 5,
-    textAlign: 'center',
-    maxWidth: 130,
+    textAlign: 'right',
   },
   txTime: {
     fontFamily: 'Poppins-Medium',
-    fontSize: 12,
+    fontSize: 15,
     color: '#02275D',
   },
 });

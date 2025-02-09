@@ -12,6 +12,7 @@ import RequestMenuScreen from './RequestMenuScreen';
 import TasksAddScreen from './TasksAddScreen';
 import ProjectAddScreen from './ProjectAddScreen';
 import InformationDetailScreen from './InformationDetailScreen';
+import ForgotPasswordScreen from './ForgotPasswordScreen';
 export {
   SplashScreen,
   HomeScreen,
@@ -27,4 +28,5 @@ export {
   TasksAddScreen,
   ProjectAddScreen,
   InformationDetailScreen,
+  ForgotPasswordScreen,
 };

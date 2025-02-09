@@ -32,7 +32,6 @@ const HomeScreen = ({navigation}) => {
 
   useFocusEffect(
     useCallback(() => {
-      console.log('imageSelfie', imageSelfie);
       getDataShift();
       getDataProfile();
       getLocation();
@@ -123,13 +122,13 @@ const HomeScreen = ({navigation}) => {
     form.append('clock_state', 'clock_in');
     form.append('type', 'set_clocking');
 
-    console.log('form', form);
     dispatch(clockInPost(form));
     setTimeout(() => {
+      console.log('get Data');
       getDataShift();
       getDataProfile();
       getLocation();
-    }, 2000);
+    }, 3000);
   };
 
   const onClockOut = () => {
@@ -154,7 +153,7 @@ const HomeScreen = ({navigation}) => {
       getDataShift();
       getDataProfile();
       getLocation();
-    }, 2000);
+    }, 3000);
   };
 
   return (
@@ -212,8 +211,7 @@ const HomeScreen = ({navigation}) => {
                     width: '100%',
                     height: '90%',
                     alignItems: 'center',
-
-                    justifyContent: 'center',
+                    position: 'relative',
                   }}
                   imageStyle={{
                     borderRadius: 10,
@@ -224,10 +222,16 @@ const HomeScreen = ({navigation}) => {
                     icon="camera"
                     buttonColor="#DD4017"
                     mode="contained"
+                    style={{
+                      position: 'absolute',
+                      bottom: '15%',
+                    }}
                     disabled={
                       dataShift?.attendance_time_checks < 1 ? false : true
                     }
-                    onPress={() => navigation.push('TakeSelfieScreen')}>
+                    onPress={() => {
+                      navigation.push('TakeSelfieScreen');
+                    }}>
                     Ulangi Foto
                   </Button>
                 </ImageBackground>

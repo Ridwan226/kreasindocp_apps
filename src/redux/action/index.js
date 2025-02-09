@@ -15,7 +15,28 @@ export const signInAccton = (form, navigation) => dispatch => {
       storeData('tokenLogin', {value: token});
       dispatch({type: 'SET_LOADING', value: false});
       showMessage('Login Success', 'success');
-      navigation.reset({index: 0, routes: [{name: 'MainApp'}]});
+      navigation.replace('Home');
+    })
+    .catch(err => {
+      console.log('err', err);
+      showMessage(
+        err?.response?.data?.message
+          ? err?.response?.data?.message
+          : 'Something went wrong',
+      );
+      dispatch({type: 'SET_LOADING', value: false});
+    });
+};
+
+export const ForgotPasswordAccton = form => dispatch => {
+  Axios.post(`${API_HOST.url_api}/Auth/forgot_password`, form, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+    .then(res => {
+      showMessage('Success Send Email, Please Check Your Email', 'success');
+      dispatch({type: 'SET_LOADING', value: false});
     })
     .catch(err => {
       console.log('err', err);

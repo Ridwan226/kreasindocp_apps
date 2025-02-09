@@ -3,6 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import {
   ClientScreen,
+  ForgotPasswordScreen,
   HomeScreen,
   InformationDetailScreen,
   InformationScreen,
@@ -59,6 +60,11 @@ const Router = () => {
       <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ForgotPasswordScreen"
+        component={ForgotPasswordScreen}
         options={{headerShown: false}}
       />
       <Stack.Screen
