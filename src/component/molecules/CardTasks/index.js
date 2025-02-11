@@ -21,7 +21,7 @@ const CardTasks = ({item}) => {
     <TouchableOpacity
       style={styles.container}
       activeOpacity={0.7}
-      onPress={() => navigation.push('TaskDetailScreen')}>
+      onPress={() => navigation.push('TaskDetailScreen', {item: item})}>
       <View>
         <Text style={styles.txHead}>Task #{item.number}</Text>
         <Text style={styles.txTitle}>{item.task_name}</Text>
@@ -59,19 +59,24 @@ const CardTasks = ({item}) => {
         }}>
         <Text style={styles.txTitle}>TIM</Text>
         <View style={styles.wpImg}>
-          {item?.assigned_to?.map((item, index) => (
-            <Image
-              key={index}
-              source={{
-                uri: item?.img,
-              }}
-              style={styles.imgUser}
-            />
-          ))}
+          {item?.assigned_to?.map((item, index) => {
+            if (item?.img == null) return null;
+            return (
+              <Image
+                key={index}
+                source={{
+                  uri: item?.img,
+                }}
+                style={styles.imgUser}
+              />
+            );
+          })}
         </View>
       </View>
       <View style={styles.wpStatus} activeOpacity={0.7}>
-        <Text style={styles.txTitle}>{statusText(item.task_status)}</Text>
+        <Text style={styles.txTitle}>
+          {statusText(item.task_status)} ({item?.task_progress}%)
+        </Text>
       </View>
     </TouchableOpacity>
   );

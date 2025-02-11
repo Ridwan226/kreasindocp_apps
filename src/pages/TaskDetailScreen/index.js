@@ -1,26 +1,49 @@
 import {Image, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Gap, HeaderPrimary} from '../../component';
 import CheckBox from '@react-native-community/checkbox';
+import moment from 'moment';
+import {useDispatch} from 'react-redux';
+import {gettaskDataDetail} from '../../redux/action/task';
 
-const TaskDetailScreen = ({navigation}) => {
+const TaskDetailScreen = ({navigation, route}) => {
+  console.log('item', route.params);
+  const [data, setData] = useState();
+  const {item} = route.params;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = () => {
+    let form = new FormData();
+    form.append('id_task', item?.task_id);
+    dispatch(gettaskDataDetail(form, setData));
+  };
+
+  const setToggleCheckBox = (newValue, item) => {
+    console.log('setToggleCheckBox', newValue);
+    console.log('item', item);
+
+    let form = new FormData();
+    form.append('taskid', item?.task_id);
+    form.append('status', newValue ? '1' : '0');
+    form.append('checklist_id', item?.checklist_id);
+  };
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#FFF'}}>
       <HeaderPrimary onPress={() => navigation.goBack()} title="Task Detail" />
       <View style={styles.wpHeadInfo}>
-        <Text style={styles.txTask}>Task #1</Text>
-        <Text style={styles.txTitle}>
-          Perbaikan Kamar Mandi Utama Perbaikan Kamar Mandi Utama
-        </Text>
+        <Text style={styles.txTask}>Task #{item?.number}</Text>
+        <Text style={styles.txTitle}>{item?.task_name}</Text>
       </View>
       <Gap height={10} />
       <View style={styles.wpLocation}>
         <Text style={styles.txTask}>Lokasi</Text>
-        <Text style={styles.txLocation}>
-          Jl. Pluit Karang Indah VIII No.35, RT.5/RW.12, Pluit, Kec.
-          Penjaringan, Jkt Utara, Daerah Khusus Ibukota Jakarta 14450
-        </Text>
+        <Text style={styles.txLocation}>{data?.project?.address}</Text>
       </View>
       <View
         style={{
@@ -31,15 +54,19 @@ const TaskDetailScreen = ({navigation}) => {
         }}>
         <View style={styles.wpItemBody}>
           <Text style={styles.txHead}>Start</Text>
-          <Text style={styles.txHeadDesc}>10-01-2025</Text>
+          <Text style={styles.txHeadDesc}>
+            {moment(item.start_date).format('DD-MM-YYYY') || item.start_date}
+          </Text>
         </View>
         <View style={[styles.wpItemBody, {borderLeftWidth: 2, padding: 3}]}>
           <Text style={styles.txHead}>End</Text>
-          <Text style={styles.txHeadDesc}>10-01-2026</Text>
+          <Text style={styles.txHeadDesc}>
+            {moment(item.end_date).format('DD-MM-YYYY') || item.end_date}
+          </Text>
         </View>
         <View style={[styles.wpItemBody, {borderLeftWidth: 2, padding: 3}]}>
           <Text style={styles.txHead}>Est Hour</Text>
-          <Text style={styles.txHeadDesc}>23</Text>
+          <Text style={styles.txHeadDesc}>{item.task_hour}</Text>
         </View>
       </View>
       <View
@@ -78,28 +105,26 @@ const TaskDetailScreen = ({navigation}) => {
           marginHorizontal: 10,
         }}>
         <Text style={styles.txTitle}>Sub Task</Text>
-        <View style={styles.wpItemCekbox}>
-          <CheckBox
-            disabled={false}
-            value={true}
-            onValueChange={newValue => setToggleCheckBox(newValue)}
-          />
-          <Text style={styles.txLocation}>
-            Sub Task 1 Sub Task 1 Sub Task 1 Sub Task 1 Sub Task 1 Sub Task 1
-            Sub Task 1 Sub Task 1
-          </Text>
-        </View>
-        <View style={styles.wpItemCekbox}>
-          <CheckBox
-            disabled={false}
-            value={true}
-            onValueChange={newValue => setToggleCheckBox(newValue)}
-          />
-          <Text style={styles.txLocation}>
-            Sub Task 1 Sub Task 1 Sub Task 1 Sub Task 1 Sub Task 1 Sub Task 1
-            Sub Task 1 Sub Task 1
-          </Text>
-        </View>
+
+        {data?.ceklist?.length > 0 ? (
+          data?.ceklist?.map((itemCeklis, index) => (
+            <View style={styles.wpItemCekbox} key={index}>
+              <CheckBox
+                value={itemCeklis?.is_checked == 1 ? true : false}
+                onValueChange={newValue =>
+                  setToggleCheckBox(newValue, itemCeklis)
+                }
+              />
+              <Text style={styles.txLocation}>
+                {itemCeklis?.checklist_text}
+              </Text>
+            </View>
+          ))
+        ) : (
+          <View>
+            <Text>No Data</Text>
+          </View>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -165,5 +190,6 @@ const styles = StyleSheet.create({
   wpItemCekbox: {
     flexDirection: 'row',
     marginVertical: 5,
+    alignItems: 'center',
   },
 });

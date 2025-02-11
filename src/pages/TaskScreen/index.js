@@ -96,14 +96,22 @@ const TaskScreen = ({navigation}) => {
             Not Started
           </Button>
         </ScrollView>
-        <Gap height={10} />
-
-        <FlatList
-          data={data}
-          renderItem={({item}) => <CardTasks item={item} />}
-          numColumns={1}
-          ListFooterComponent={<View style={{margin: 200}} />}
-        />
+      </View>
+      <Gap height={10} />
+      <View style={{flex: 1, marginHorizontal: 10}}>
+        {data?.length > 0 ? (
+          <FlatList
+            data={data}
+            showsVerticalScrollIndicator={false}
+            renderItem={({item}) => <CardTasks item={item} />}
+            numColumns={1}
+            ListFooterComponent={<View style={{margin: 100}} />}
+          />
+        ) : (
+          <View>
+            <Text>Data Not Found</Text>
+          </View>
+        )}
       </View>
     </SafeAreaView>
   );
