@@ -50,26 +50,62 @@ export const gettaskDataDetail = (form, setData) => dispatch => {
     .catch(err => {});
 };
 
-export const updateCeklistTask = (form, setData) => dispatch => {
-  getData('tokenLogin')
+// export const updateCeklistTask = (form, setData) => dispatch => {
+//   getData('tokenLogin')
+//     .then(resToken => {
+//       Axios.post(`${API_HOST.url_api}/Task/list_task_detail`, form, {
+//         headers: {
+//           'Content-Type': 'multipart/form-data',
+//           authorization: resToken.value,
+//         },
+//       })
+//         .then(res => {
+//           let result = res.data;
+//           setData(result?.message);
+//         })
+//         .catch(err => {
+//           showMessage(
+//             err?.response?.data?.message
+//               ? err?.response?.data?.message
+//               : 'Something went wrong',
+//           );
+//         });
+//     })
+//     .catch(err => {});
+// };
+
+export const updateCeklistTask = form => dispatch => {
+  // dispatch({type: 'SET_LOADING', value: true});
+
+  return getData('tokenLogin') // Tambahkan return
     .then(resToken => {
-      Axios.post(`${API_HOST.url_api}/Task/list_task_detail`, form, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          authorization: resToken.value,
+      return Axios.post(
+        `${API_HOST.url_api}/Task/update_ceklist_subtask`,
+        form,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            authorization: resToken.value,
+          },
         },
-      })
-        .then(res => {
-          let result = res.data;
-          setData(result?.message);
-        })
-        .catch(err => {
-          showMessage(
-            err?.response?.data?.message
-              ? err?.response?.data?.message
-              : 'Something went wrong',
-          );
-        });
+      );
     })
-    .catch(err => {});
+    .then(res => {
+      let result = res.data;
+      // dispatch({type: 'SET_IMAGE_SELFIE', value: {}});
+      // console.log('res shift', result);
+      // showMessage('Save Data Success', 'success');
+      // dispatch({type: 'SET_LOADING', value: false});
+      return result; // Return response agar bisa digunakan
+    })
+    .catch(err => {
+      console.log('err', err);
+      showMessage(
+        err?.response?.data?.message
+          ? err?.response?.data?.message
+          : 'Something went wrong',
+      );
+      // dispatch({type: 'SET_LOADING', value: false});
+      throw err; // Lempar error agar bisa ditangkap di `onClockIn`
+    });
 };

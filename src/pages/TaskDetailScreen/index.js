@@ -5,7 +5,7 @@ import {Gap, HeaderPrimary} from '../../component';
 import CheckBox from '@react-native-community/checkbox';
 import moment from 'moment';
 import {useDispatch} from 'react-redux';
-import {gettaskDataDetail} from '../../redux/action/task';
+import {gettaskDataDetail, updateCeklistTask} from '../../redux/action/task';
 
 const TaskDetailScreen = ({navigation, route}) => {
   console.log('item', route.params);
@@ -23,7 +23,7 @@ const TaskDetailScreen = ({navigation, route}) => {
     dispatch(gettaskDataDetail(form, setData));
   };
 
-  const setToggleCheckBox = (newValue, item) => {
+  const setToggleCheckBox = async (newValue, item) => {
     console.log('setToggleCheckBox', newValue);
     console.log('item', item);
 
@@ -31,6 +31,13 @@ const TaskDetailScreen = ({navigation, route}) => {
     form.append('taskid', item?.task_id);
     form.append('status', newValue ? '1' : '0');
     form.append('checklist_id', item?.checklist_id);
+    console.log('form', form);
+    try {
+      await dispatch(updateCeklistTask(form));
+      getData();
+    } catch (error) {
+      console.error('Clock in failed', error);
+    }
   };
 
   return (
