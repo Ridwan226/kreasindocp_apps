@@ -104,7 +104,7 @@ const HomeScreen = ({navigation}) => {
     });
   };
 
-  const onClockIn = () => {
+  const onClockIn = async () => {
     if (!imageSelfie?.uri) {
       showMessage('Silahkan Ambil Foto Terlebih Dahulu');
       return;
@@ -122,16 +122,26 @@ const HomeScreen = ({navigation}) => {
     form.append('clock_state', 'clock_in');
     form.append('type', 'set_clocking');
 
-    dispatch(clockInPost(form));
-    setTimeout(() => {
+    try {
+      await dispatch(clockInPost(form)); // Sekarang bisa `await`
       console.log('get Data');
       getDataShift();
       getDataProfile();
       getLocation();
-    }, 3000);
+    } catch (error) {
+      console.error('Clock in failed', error);
+    }
+
+    // dispatch(clockInPost(form));
+    // setTimeout(() => {
+    //   console.log('get Data');
+    //   getDataShift();
+    //   getDataProfile();
+    //   getLocation();
+    // }, 3000);
   };
 
-  const onClockOut = () => {
+  const onClockOut = async () => {
     if (!location?.coords?.latitude) {
       showMessage('Silahkan Aktifkan GPS Lokasi Anda');
       return;
@@ -147,13 +157,23 @@ const HomeScreen = ({navigation}) => {
       dataShift?.attendance_time_checks_value_api?.[0]?.time_attendance_id,
     );
 
-    console.log('form', form);
-    dispatch(clockInPost(form));
-    setTimeout(() => {
+    try {
+      await dispatch(clockInPost(form)); // Sekarang bisa `await`
+      console.log('get Data');
       getDataShift();
       getDataProfile();
       getLocation();
-    }, 3000);
+    } catch (error) {
+      console.error('Clock in failed', error);
+    }
+
+    // console.log('form', form);
+    // dispatch(clockInPost(form));
+    // setTimeout(() => {
+    //   getDataShift();
+    //   getDataProfile();
+    //   getLocation();
+    // }, 3000);
   };
 
   return (
@@ -189,6 +209,7 @@ const HomeScreen = ({navigation}) => {
                   borderBottomWidth: 1,
                   borderLeftWidth: 1,
                   borderColor: '#c9c9c9',
+                  paddingHorizontal: 5,
                 },
               ]}>
               <Text style={styles.txTitle}>Posisi</Text>
@@ -328,7 +349,7 @@ const styles = StyleSheet.create({
   },
   wpTime: {
     width: '50%',
-    padding: 10,
+    // padding: 10,
   },
   txTitle: {
     fontSize: 14,
