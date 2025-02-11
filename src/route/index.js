@@ -15,6 +15,7 @@ import {
   RequestMenuScreen,
   SplashScreen,
   TakeSelfieScreen,
+  TaskDetailScreen,
   TasksAddScreen,
   TaskScreen,
 } from '../pages';
@@ -105,6 +106,11 @@ const Router = () => {
       <Stack.Screen
         name="TasksAddScreen"
         component={TasksAddScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="TaskDetailScreen"
+        component={TaskDetailScreen}
         options={{headerShown: false}}
       />
       <Stack.Screen

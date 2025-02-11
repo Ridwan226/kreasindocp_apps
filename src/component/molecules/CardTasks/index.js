@@ -1,59 +1,79 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import Feather from 'react-native-vector-icons/Feather';
+import {useNavigation} from '@react-navigation/native';
+import {statusText} from '../../../utils';
+import moment from 'moment';
 
 const CardTasks = ({item}) => {
-  console.log('sds', item);
+  const navigation = useNavigation();
+
   if (item.empty) {
     console.log('Please select', item);
     return (
       <View style={styles.container}>
-        <Text>ga ada</Text>
+        <Text>No Data</Text>
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.wpHead}>
-        <Text style={styles.texHead}>
-          Website RedesignWebsite Redesign Website Redesign Website Redesign
-        </Text>
-        <Text style={styles.texHead}>2025-02-03</Text>
-      </View>
+    <TouchableOpacity
+      style={styles.container}
+      activeOpacity={0.7}
+      onPress={() => navigation.push('TaskDetailScreen')}>
       <View>
-        <Text style={styles.txBody}>
-          Redesign the homepage layout to improve user navigation and visual app
-        </Text>
-        <Text style={styles.txBody}>Due : 2025-02-28</Text>
+        <Text style={styles.txHead}>Task #{item.number}</Text>
+        <Text style={styles.txTitle}>{item.task_name}</Text>
       </View>
-      <View style={styles.wpImg}>
-        <Image
-          source={{
-            uri: 'https://kreasindocp.graphie.design/public/uploads/users/download%20(19).jpeg',
-          }}
-          style={styles.imgUser}
-        />
-        <Image
-          source={{
-            uri: 'https://kreasindocp.graphie.design/public/uploads/users/download%20(19).jpeg',
-          }}
-          style={styles.imgUser}
-        />
-        <Image
-          source={{
-            uri: 'https://kreasindocp.graphie.design/public/uploads/users/download%20(19).jpeg',
-          }}
-          style={styles.imgUser}
-        />
+
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginVertical: 5,
+        }}>
+        <View style={styles.wpItemBody}>
+          <Text style={styles.txHead}>Start</Text>
+          <Text style={styles.txHeadDesc}>
+            {moment(item.start_date).format('DD-MM-YYYY') || item.start_date}
+          </Text>
+        </View>
+        <View style={[styles.wpItemBody, {borderLeftWidth: 2, padding: 3}]}>
+          <Text style={styles.txHead}>End</Text>
+          <Text style={styles.txHeadDesc}>
+            {moment(item.end_date).format('DD-MM-YYYY') || item.end_date}
+          </Text>
+        </View>
+        <View style={[styles.wpItemBody, {borderLeftWidth: 2, padding: 3}]}>
+          <Text style={styles.txHead}>Est Hour</Text>
+          <Text style={styles.txHeadDesc}>{item.task_hour}</Text>
+        </View>
       </View>
-      <View style={styles.wpFooter}>
-        <Text style={styles.txStatus}>Status</Text>
-        <TouchableOpacity>
-          <Feather name="eye" size={30} color={'#DD4017'} />
-        </TouchableOpacity>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginVertical: 5,
+        }}>
+        <Text style={styles.txTitle}>TIM</Text>
+        <View style={styles.wpImg}>
+          {item?.assigned_to?.map((item, index) => (
+            <Image
+              key={index}
+              source={{
+                uri: item?.img,
+              }}
+              style={styles.imgUser}
+            />
+          ))}
+        </View>
       </View>
-    </View>
+      <View style={styles.wpStatus} activeOpacity={0.7}>
+        <Text style={styles.txTitle}>{statusText(item.task_status)}</Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 
@@ -67,33 +87,34 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     padding: 7,
     borderWidth: 1,
-    borderBlockColor: '#DDDDDD',
+    borderColor: '#DDDDDD',
   },
-  wpHead: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    borderBottomWidth: 1,
-    borderBottomColor: '#DDDDDD',
-    marginVertical: 5,
+  wpItemBody: {
+    width: '33.33%',
+    borderBottomWidth: 2,
+    borderTopWidth: 2,
+    borderColor: '#DDDDDD',
   },
-  texHead: {
-    fontSize: 12,
-    fontFamily: 'Poppins-Medium',
+  txHead: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 13,
+    color: '#999999',
+  },
+  txHeadDesc: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: 14,
     color: '#02275D',
-    maxWidth: '50%',
   },
-  txBody: {
-    fontSize: 12,
-    fontFamily: 'Poppins-Medium',
+  txTitle: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 15,
     color: '#02275D',
-    maxWidth: '90%',
   },
   wpImg: {
     flexDirection: 'row',
     marginVertical: 5,
-    borderTopWidth: 1,
-    borderTopColor: '#DDDDDD',
-    paddingTop: 10,
+    maxWidth: '70%',
+    marginRight: 10,
   },
   imgUser: {
     width: 35,
@@ -104,19 +125,11 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: '#fff',
   },
-  wpFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  wpStatus: {
+    width: '100%',
     alignItems: 'center',
-    marginVertical: 5,
-  },
-  txStatus: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    backgroundColor: '#FFD966',
     borderRadius: 5,
-    backgroundColor: '#e8e7fc',
-    fontSize: 13,
-    fontFamily: 'Poppins-Medium',
-    color: '#02275D',
+    paddingVertical: 3,
   },
 });

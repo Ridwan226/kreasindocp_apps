@@ -124,11 +124,9 @@ const HomeScreen = ({navigation}) => {
 
     dispatch(clockInPost(form));
     setTimeout(() => {
-      console.log('get Data');
       getDataShift();
       getDataProfile();
-      getLocation();
-    }, 3000);
+    }, 5000);
   };
 
   const onClockOut = () => {
@@ -152,8 +150,7 @@ const HomeScreen = ({navigation}) => {
     setTimeout(() => {
       getDataShift();
       getDataProfile();
-      getLocation();
-    }, 3000);
+    }, 5000);
   };
 
   return (
