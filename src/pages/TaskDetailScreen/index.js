@@ -86,24 +86,18 @@ const TaskDetailScreen = ({navigation, route}) => {
         }}>
         <Text style={styles.txTitle}>TIM</Text>
         <View style={styles.wpImg}>
-          <Image
-            source={{
-              uri: 'https://kreasindocp.graphie.design/public/uploads/users/download%20(19).jpeg',
-            }}
-            style={styles.imgUser}
-          />
-          <Image
-            source={{
-              uri: 'https://kreasindocp.graphie.design/public/uploads/users/download%20(19).jpeg',
-            }}
-            style={styles.imgUser}
-          />
-          <Image
-            source={{
-              uri: 'https://kreasindocp.graphie.design/public/uploads/users/download%20(19).jpeg',
-            }}
-            style={styles.imgUser}
-          />
+          {item?.assigned_to?.map((item, index) => {
+            if (item?.img == null) return null;
+            return (
+              <Image
+                key={index}
+                source={{
+                  uri: item?.img,
+                }}
+                style={styles.imgUser}
+              />
+            );
+          })}
         </View>
       </View>
       <View
@@ -190,7 +184,7 @@ const styles = StyleSheet.create({
     height: 35,
     borderRadius: 50 / 2,
     objectFit: 'cover',
-    marginRight: -11,
+    marginRight: -7,
     borderWidth: 3,
     borderColor: '#fff',
   },

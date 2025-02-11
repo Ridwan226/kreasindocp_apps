@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     height: 35,
     borderRadius: 50 / 2,
     objectFit: 'cover',
-    marginRight: -11,
+    marginRight: -7,
     borderWidth: 3,
     borderColor: '#fff',
   },
