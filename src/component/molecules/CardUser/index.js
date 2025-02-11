@@ -1,9 +1,10 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
 import {Image} from 'react-native';
 import {Button, Dialog} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const CardUser = ({onPressLogout, name, username, image, timeIn}) => {
   const navigation = useNavigation();
@@ -27,17 +28,25 @@ const CardUser = ({onPressLogout, name, username, image, timeIn}) => {
             )}
           </View>
         </View>
-        <Button
-          mode="contained"
-          style={styles.btnLogout}
-          labelStyle={{
-            color: '#999999',
-            fontSize: 15,
-            fontFamily: 'Poppins-Medium',
-          }}
-          onPress={onPressLogout}>
-          Logout
-        </Button>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => navigation.navigate('TaskScreen')}>
+            <Image
+              source={require('./../../../assets/image/task-cion.png')}
+              style={styles.imgIcon}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.wpIcon}
+            activeOpacity={0.7}
+            onPress={onPressLogout}>
+            <Image
+              source={require('./../../../assets/image/logout.png')}
+              style={styles.imgIcon}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -86,5 +95,20 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: 'Poppins-Medium',
     color: 'green',
+  },
+  imgIcon: {
+    width: 25,
+    height: 25,
+    objectFit: 'contain',
+  },
+  wpIcon: {
+    marginLeft: 10,
+    // width: 30,
+    // height: 30,
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#EEEEEE',
+    borderRadius: 100 / 2,
   },
 });
