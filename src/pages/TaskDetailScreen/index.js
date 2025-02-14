@@ -1,23 +1,54 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {Gap, HeaderPrimary} from '../../component';
 import CheckBox from '@react-native-community/checkbox';
 import moment from 'moment';
+import React, {useEffect, useState} from 'react';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {Button, TextInput} from 'react-native-paper';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {useDispatch} from 'react-redux';
-import {gettaskDataDetail, updateCeklistTask} from '../../redux/action/task';
+import {Gap, HeaderPrimary} from '../../component';
+import {
+  addSubTask,
+  gettaskDataDetail,
+  updateCeklistTask,
+} from '../../redux/action/task';
+import {getData, showMessage} from '../../utils';
+import Modal from 'react-native-modal';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 const TaskDetailScreen = ({navigation, route}) => {
   console.log('item', route.params);
-  const [data, setData] = useState();
+
+  const [data, setData] = useState({});
+  const [user, setDataUser] = useState({});
+  const [visible, setVisible] = useState(false);
+  const [desc, setDesc] = useState('');
   const {item} = route.params;
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getData();
+    getDataTask();
+    getDataUserLocal();
   }, []);
 
-  const getData = () => {
+  const getDataUserLocal = async () => {
+    getData('userProfile')
+      .then(res => {
+        setDataUser(res);
+        console.log('res userProfile', res);
+      })
+      .catch(err => {
+        console.log('err userProfile', err);
+      });
+  };
+
+  const getDataTask = () => {
     let form = new FormData();
     form.append('id_task', item?.task_id);
     dispatch(gettaskDataDetail(form, setData));
@@ -34,12 +65,53 @@ const TaskDetailScreen = ({navigation, route}) => {
     console.log('form', form);
     try {
       await dispatch(updateCeklistTask(form));
-      getData();
+      getDataTask();
     } catch (error) {
-      console.error('Clock in failed', error);
+      console.log('Clock in failed', error);
     }
   };
 
+  const addDataSubTask = async () => {
+    if (desc == '') {
+      showMessage('Silahkan Isi Deskripsi Task');
+      toggleModal();
+      return;
+    }
+    let form = new FormData();
+    form.append('taskid', item?.task_id);
+    form.append('desc', desc);
+    try {
+      await dispatch(addSubTask(form));
+      toggleModal();
+      getDataTask();
+      setDesc('');
+    } catch (error) {
+      console.log('Clock in failed', error);
+    }
+  };
+
+  const setValueCheckBox = itemCeklis => {
+    if (user?.role == 3) {
+      if (itemCeklis?.spv_cek == 1) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (user?.role == 10) {
+      if (itemCeklis?.spv_cek == 1) {
+        return true;
+      } else {
+        if (itemCeklis?.staff_cek == 1) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    }
+  };
+  const toggleModal = () => {
+    setVisible(!visible);
+  };
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#FFF'}}>
       <HeaderPrimary onPress={() => navigation.goBack()} title="Task Detail" />
@@ -100,33 +172,123 @@ const TaskDetailScreen = ({navigation, route}) => {
           })}
         </View>
       </View>
-      <View
-        style={{
-          marginVertical: 5,
-          marginHorizontal: 10,
-        }}>
-        <Text style={styles.txTitle}>Sub Task</Text>
-
-        {data?.ceklist?.length > 0 ? (
-          data?.ceklist?.map((itemCeklis, index) => (
-            <View style={styles.wpItemCekbox} key={index}>
-              <CheckBox
-                value={itemCeklis?.is_checked == 1 ? true : false}
-                onValueChange={newValue =>
-                  setToggleCheckBox(newValue, itemCeklis)
-                }
-              />
-              <Text style={styles.txLocation}>
-                {itemCeklis?.checklist_text}
-              </Text>
+      <ScrollView>
+        <View
+          style={{
+            marginVertical: 5,
+            marginHorizontal: 10,
+          }}>
+          <View style={styles.wpSubTask}>
+            <Text style={styles.txTitle}>Sub Task</Text>
+            <View style={styles.wpSubTaskItem}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <View
+                  style={{
+                    width: 15,
+                    height: 15,
+                    borderRadius: 2,
+                    marginHorizontal: 5,
+                    backgroundColor: '#DAE9D2',
+                  }}
+                />
+                <Text>SPV</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}>
+                <View
+                  style={{
+                    width: 15,
+                    height: 15,
+                    borderRadius: 2,
+                    marginHorizontal: 5,
+                    backgroundColor: '#D0E1F3',
+                  }}
+                />
+                <Text>Staff</Text>
+              </View>
             </View>
-          ))
-        ) : (
-          <View>
-            <Text>No Data</Text>
           </View>
-        )}
-      </View>
+
+          {data?.ceklist?.length > 0 ? (
+            data?.ceklist?.map((itemCeklis, index) => (
+              <View
+                style={
+                  itemCeklis?.spv_cek == 1
+                    ? styles.wpItemCekboxSpv
+                    : itemCeklis?.staff_cek == 1
+                    ? styles.wpItemCekboxStaff
+                    : styles.wpItemCekbox
+                }
+                key={index}>
+                <CheckBox
+                  value={setValueCheckBox(itemCeklis)}
+                  onValueChange={newValue =>
+                    setToggleCheckBox(newValue, itemCeklis)
+                  }
+                />
+                <Text style={styles.txLocation}>
+                  {itemCeklis?.checklist_text}
+                </Text>
+              </View>
+            ))
+          ) : (
+            <View>
+              <Text>No Data</Text>
+            </View>
+          )}
+        </View>
+      </ScrollView>
+      {(user?.role == 3 || user?.role == 9) && (
+        <>
+          <View
+            style={{
+              flex: 1,
+              position: 'absolute',
+              bottom: 0,
+              width: '100%',
+              padding: 10,
+            }}>
+            <Button
+              mode="contained"
+              style={{borderRadius: 10, backgroundColor: '#DD4017'}}
+              onPress={() => toggleModal()}>
+              Add SubTask
+            </Button>
+          </View>
+          <Modal isVisible={visible}>
+            <View style={styles.wpModal}>
+              <View style={styles.wpModalHeader}>
+                <Text style={styles.txModalHeader}>Add SubTask!</Text>
+                <TouchableOpacity onPress={() => toggleModal()}>
+                  <Entypo name="cross" size={30} color={'#DD4017'} />
+                </TouchableOpacity>
+              </View>
+              <Gap height={10} />
+              <TextInput
+                mode="outlined"
+                label="Description"
+                value={desc}
+                onChangeText={text => setDesc(text)}
+                placeholder="Ex : Membobok Dinding Kamar Utama"
+                multiline
+                numberOfLines={6}
+                style={styles.textArea}
+              />
+              <Gap height={20} />
+
+              <Button
+                mode="contained"
+                style={{borderRadius: 10, backgroundColor: '#DD4017'}}
+                onPress={() => addDataSubTask()}>
+                Simpan & tambah ke list
+              </Button>
+            </View>
+          </Modal>
+        </>
+      )}
     </SafeAreaView>
   );
 };
@@ -188,9 +350,67 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: '#fff',
   },
+
+  wpSubTask: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  wpSubTaskItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
   wpItemCekbox: {
     flexDirection: 'row',
     marginVertical: 5,
     alignItems: 'center',
+    paddingVertical: 5,
+  },
+  wpItemCekboxStaff: {
+    flexDirection: 'row',
+    marginVertical: 5,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingVertical: 5,
+    borderColor: '#638AC9 ',
+    backgroundColor: '#D0E1F3',
+  },
+
+  wpItemCekboxSpv: {
+    flexDirection: 'row',
+    marginVertical: 5,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingVertical: 5,
+
+    borderColor: '#A1C792',
+    backgroundColor: '#DAE9D2',
+  },
+
+  // Style Modal
+
+  wpModal: {
+    flex: 1,
+    backgroundColor: '#FFF',
+    padding: 10,
+    borderRadius: 10,
+    maxHeight: '60%',
+    position: 'relative',
+  },
+  wpModalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderBottomWidth: 2,
+    borderBottomColor: '#DD4017',
+  },
+  txModalHeader: {
+    fontSize: 20,
+    fontFamily: 'Poppins-SemiBold',
+    color: '#DD4017',
   },
 });

@@ -7,7 +7,7 @@ import moment from 'moment';
 
 const CardTasks = ({item}) => {
   const navigation = useNavigation();
-
+  let color = '#FF0000';
   if (item.empty) {
     console.log('Please select', item);
     return (
@@ -15,6 +15,20 @@ const CardTasks = ({item}) => {
         <Text>No Data</Text>
       </View>
     );
+  }
+
+  if (item.task_status == 1) {
+    color = '#7267EF';
+  } else if (item.task_status == 2) {
+    color = '#17C666';
+  } else if (item.task_status == 3) {
+    color = '#EA4D4D';
+  } else if (item.task_status == 4) {
+    color = '#6c757d';
+  } else if (item.task_status == 0) {
+    color = '#ffa21d';
+  } else {
+    color = '#FF0000';
   }
 
   return (
@@ -73,8 +87,8 @@ const CardTasks = ({item}) => {
           })}
         </View>
       </View>
-      <View style={styles.wpStatus} activeOpacity={0.7}>
-        <Text style={styles.txTitle}>
+      <View style={styles.wpStatus(color)} activeOpacity={0.7}>
+        <Text style={styles.txStatus}>
           {statusText(item.task_status)} ({item?.task_progress}%)
         </Text>
       </View>
@@ -130,11 +144,16 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: '#fff',
   },
-  wpStatus: {
+  txStatus: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 15,
+    color: '#FFF',
+  },
+  wpStatus: color => ({
     width: '100%',
     alignItems: 'center',
-    backgroundColor: '#FFD966',
+    backgroundColor: color,
     borderRadius: 5,
     paddingVertical: 3,
-  },
+  }),
 });

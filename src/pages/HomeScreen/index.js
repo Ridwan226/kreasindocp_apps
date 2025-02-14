@@ -129,7 +129,7 @@ const HomeScreen = ({navigation}) => {
       getDataProfile();
       getLocation();
     } catch (error) {
-      console.error('Clock in failed', error);
+      console.log('Clock in failed', error);
     }
 
     // dispatch(clockInPost(form));

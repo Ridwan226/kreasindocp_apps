@@ -109,3 +109,33 @@ export const updateCeklistTask = form => dispatch => {
       throw err; // Lempar error agar bisa ditangkap di `onClockIn`
     });
 };
+
+export const addSubTask = form => dispatch => {
+  dispatch({type: 'SET_LOADING', value: true});
+
+  return getData('tokenLogin') // Tambahkan return
+    .then(resToken => {
+      return Axios.post(`${API_HOST.url_api}/Task/add_subtask`, form, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          authorization: resToken.value,
+        },
+      });
+    })
+    .then(res => {
+      let result = res.data;
+      showMessage('Save Data Success', 'success');
+      dispatch({type: 'SET_LOADING', value: false});
+      return result; // Return response agar bisa digunakan
+    })
+    .catch(err => {
+      console.log('err', err);
+      showMessage(
+        err?.response?.data?.message
+          ? err?.response?.data?.message
+          : 'Something went wrong',
+      );
+      dispatch({type: 'SET_LOADING', value: false});
+      throw err;
+    });
+};

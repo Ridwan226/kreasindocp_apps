@@ -62,7 +62,7 @@ export const getShiftData = setDataShift => dispatch => {
 export const clockInPost = form => dispatch => {
   dispatch({type: 'SET_LOADING', value: true});
 
-  return getData('tokenLogin') // Tambahkan return
+  return getData('tokenLogin')
     .then(resToken => {
       return Axios.post(`${API_HOST.url_api}/Shifts/set_clocking`, form, {
         headers: {
