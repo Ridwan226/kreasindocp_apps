@@ -91,13 +91,13 @@ const TaskDetailScreen = ({navigation, route}) => {
   };
 
   const setValueCheckBox = itemCeklis => {
-    if (user?.role == 3) {
+    if (user?.role == 3 || user?.role == 9 || user?.role == 4) {
       if (itemCeklis?.spv_cek == 1) {
         return true;
       } else {
         return false;
       }
-    } else if (user?.role == 10) {
+    } else if (user?.role == 10 || user?.role == 11 || user?.role == 5) {
       if (itemCeklis?.spv_cek == 1) {
         return true;
       } else {
@@ -241,7 +241,7 @@ const TaskDetailScreen = ({navigation, route}) => {
           )}
         </View>
       </ScrollView>
-      {(user?.role == 3 || user?.role == 9) && (
+      {(user?.role == 3 || user?.role == 9 || user?.role == 4) && (
         <>
           <View
             style={{
