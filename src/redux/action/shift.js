@@ -80,7 +80,7 @@ export const clockInPost = form => dispatch => {
       return result; // Return response agar bisa digunakan
     })
     .catch(err => {
-      console.log('err', err);
+      console.log('err', err?.response?.data?.message);
       showMessage(
         err?.response?.data?.message
           ? err?.response?.data?.message

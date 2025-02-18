@@ -98,8 +98,8 @@ const HomeScreen = ({navigation}) => {
     console.log('onLogout');
     const keys = await AsyncStorage.getAllKeys();
     console.log('onLogout', keys);
-
     AsyncStorage.multiRemove(keys).then(res => {
+      dispatch({type: 'DESTROY_SESSION'});
       navigation.replace('SplashScreen');
     });
   };
