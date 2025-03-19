@@ -8,21 +8,24 @@ const LocationProject = ({data, task = false}) => {
     <View style={styles.container(task)}>
       <TouchableOpacity
         onPress={() => setViewList(!viewList)}
-        activeOpacity={0.7}>
+        activeOpacity={0.7}
+        style={{marginBottom: 10}}>
         <View style={styles.wpLocation}>
           <Text style={styles.txLokasi}>Lokasi Proyek</Text>
           <AntDesign name="caretdown" size={20} color={'#DD4017'} />
         </View>
         <Text style={styles.txAddress}>{data?.[0]?.address}</Text>
       </TouchableOpacity>
-      {viewList &&
-        data?.map((item, index) =>
-          index != 0 ? (
-            <View key={index}>
-              <Text style={styles.txAddress}>{item?.address}</Text>
-            </View>
-          ) : null,
-        )}
+      <View style={styles.wpList}>
+        {viewList &&
+          data?.map((item, index) =>
+            index != 0 ? (
+              <View key={index} style={styles.locationItem}>
+                <Text style={styles.txAddressItem}>{item?.address}</Text>
+              </View>
+            ) : null,
+          )}
+      </View>
     </View>
   );
 };
@@ -33,6 +36,8 @@ const styles = StyleSheet.create({
   container: task => ({
     backgroundColor: task ? '#F3F3F3' : '#fff',
     padding: task ? 10 : 0,
+    position: 'relative',
+    width: '100%',
   }),
   wpLocation: {
     flexDirection: 'row',
@@ -48,5 +53,23 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-SemiBold',
     fontSize: 14,
     color: '#02275D',
+  },
+  txAddressItem: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 12,
+    color: '#666',
+  },
+  locationItem: {
+    borderWidth: 1,
+    borderColor: '#DDDDDD',
+    padding: 10,
+  },
+  wpList: {
+    position: 'absolute',
+    width: '100%',
+    top: '100%',
+    left: 0,
+    backgroundColor: '#fff',
+    zIndex: 100,
   },
 });

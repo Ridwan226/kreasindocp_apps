@@ -43,9 +43,9 @@ const TaskScreen = ({navigation}) => {
         // iconName={'plus'}
       />
       {dataShift?.projects?.length > 0 && (
-        <>
+        <View style={{zIndex: 20}}>
           <LocationProject data={dataShift?.projects} task={true} />
-        </>
+        </View>
       )}
 
       <Gap height={10} />

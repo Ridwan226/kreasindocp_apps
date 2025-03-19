@@ -217,10 +217,10 @@ const HomeScreen = ({navigation}) => {
             </View>
           </View>
           {dataShift?.projects?.length > 0 && (
-            <>
+            <View style={{zIndex: 25}}>
               <Gap height={10} />
               <LocationProject data={dataShift?.projects} />
-            </>
+            </View>
           )}
 
           <Gap height={10} />
@@ -399,6 +399,7 @@ const styles = StyleSheet.create({
   },
   wpAbsen: {
     alignItems: 'center',
+    zIndex: 20,
   },
   wpButton: {
     flexDirection: 'row',

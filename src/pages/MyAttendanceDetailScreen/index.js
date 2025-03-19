@@ -42,23 +42,23 @@ const MyAttendanceDetailScreen = ({navigation, route}) => {
         <View style={styles.wpEmployee}>
           <Text style={styles.txTitle}>Employee Information</Text>
           <View style={styles.wpInfo}>
-            <Text style={styles.txInfo}>Office Shift </Text>
+            <Text style={styles.txHeadTitle}>Office Shift </Text>
             <Text style={styles.txInfo}>{data?.shift_name}</Text>
           </View>
           <View style={styles.wpInfo}>
-            <Text style={styles.txInfo}>Account Email </Text>
+            <Text style={styles.txHeadTitle}>Account Email </Text>
             <Text style={styles.txInfo}>{data?.email}</Text>
           </View>
           <View style={styles.wpInfo}>
-            <Text style={styles.txInfo}>Attendance Date</Text>
+            <Text style={styles.txHeadTitle}>Attendance Date</Text>
             <Text style={styles.txInfo}>{data?.attendance_date}</Text>
           </View>
           <View style={styles.wpInfo}>
-            <Text style={styles.txInfo}>Total Work</Text>
+            <Text style={styles.txHeadTitle}>Total Work</Text>
             <Text style={styles.txInfo}>{data?.total_work}</Text>
           </View>
           <View style={styles.wpInfo}>
-            <Text style={styles.txInfo}>Late</Text>
+            <Text style={styles.txHeadTitle}>Late</Text>
             <Text style={styles.txInfo}>{data?.total_time_l}</Text>
           </View>
           <Gap height={20} />
@@ -85,7 +85,9 @@ const MyAttendanceDetailScreen = ({navigation, route}) => {
                 </Lightbox>
 
                 <View>
-                  <Text style={styles.txHead}>Distance : {item?.distance}</Text>
+                  <Text style={styles.txHeadTitle}>
+                    Distance : {item?.distance} m
+                  </Text>
                   <TouchableOpacity
                     onPress={() =>
                       Linking.openURL(
@@ -97,23 +99,24 @@ const MyAttendanceDetailScreen = ({navigation, route}) => {
                         styles.txHead,
                         {textDecorationLine: 'underline'},
                       ]}>
-                      Location : {item?.clock_in_latitude}{' '}
-                      {item?.clock_in_longitude}
+                      {item?.project_name}
+                      {/* Location : {item?.clock_in_latitude}{' '}
+                      {item?.clock_in_longitude} */}
                     </Text>
                   </TouchableOpacity>
                 </View>
               </View>
               <View style={styles.wpTime}>
                 <View>
-                  <Text style={styles.txHead}>Time In</Text>
+                  <Text style={styles.txHeadTitle}>Time In</Text>
                   <Text style={styles.txHead}>{item?.fclock_in}</Text>
                 </View>
                 <View>
-                  <Text style={styles.txHead}>Time Out</Text>
+                  <Text style={styles.txHeadTitle}>Time Out</Text>
                   <Text style={styles.txHead}>{item?.fclock_out}</Text>
                 </View>
                 <View>
-                  <Text style={styles.txHead}>Total Work</Text>
+                  <Text style={styles.txHeadTitle}>Total Work</Text>
                   <Text style={styles.txHead}>{item?.total_work}</Text>
                 </View>
               </View>
@@ -150,6 +153,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     color: '#02275D',
   },
+  txInfoTitle: {
+    fontSize: 16,
+    fontFamily: 'Poppins-Medium',
+    color: '#666',
+  },
   wpList: {
     borderWidth: 1,
     borderColor: '#cfd1d1',
@@ -175,6 +183,12 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: 'Poppins-Medium',
     color: '#02275D',
+    textAlign: 'right',
+  },
+  txHeadTitle: {
+    fontSize: 13,
+    fontFamily: 'Poppins-Medium',
+    color: '#666',
     textAlign: 'right',
   },
   wpTime: {
