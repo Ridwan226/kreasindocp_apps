@@ -2,10 +2,10 @@ import Axios from 'axios';
 import {API_HOST} from '../../config';
 import {getData, showMessage, storeData} from '../../utils';
 
-export const getShiftData = setDataShift => dispatch => {
+export const getShiftData = (setDataShift, form) => dispatch => {
   getData('tokenLogin')
     .then(resToken => {
-      Axios.get(`${API_HOST.url_api}/Shifts/get_shift`, {
+      Axios.post(`${API_HOST.url_api}/Shifts/get_shift`, form, {
         headers: {
           'Content-Type': 'multipart/form-data',
           authorization: resToken.value,

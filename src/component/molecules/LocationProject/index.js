@@ -14,14 +14,20 @@ const LocationProject = ({data, task = false}) => {
           <Text style={styles.txLokasi}>Lokasi Proyek</Text>
           <AntDesign name="caretdown" size={20} color={'#DD4017'} />
         </View>
-        <Text style={styles.txAddress}>{data?.[0]?.address}</Text>
+        <Text style={styles.txAddress}>
+          {data?.[0]?.address} | Jarak :{' '}
+          {parseInt(data?.[0]?.distance_in_meters).toLocaleString()} m
+        </Text>
       </TouchableOpacity>
       <View style={styles.wpList}>
         {viewList &&
           data?.map((item, index) =>
             index != 0 ? (
               <View key={index} style={styles.locationItem}>
-                <Text style={styles.txAddressItem}>{item?.address}</Text>
+                <Text style={styles.txAddressItem}>
+                  {item?.address} | Jarak :{' '}
+                  {parseInt(item?.distance_in_meters).toLocaleString()} m
+                </Text>
               </View>
             ) : null,
           )}
@@ -35,7 +41,7 @@ export default LocationProject;
 const styles = StyleSheet.create({
   container: task => ({
     backgroundColor: task ? '#F3F3F3' : '#fff',
-    padding: task ? 10 : 0,
+    padding: task ? 10 : 10,
     position: 'relative',
     width: '100%',
   }),
@@ -68,7 +74,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     top: '100%',
-    left: 0,
+    left: 10,
     backgroundColor: '#fff',
     zIndex: 100,
   },

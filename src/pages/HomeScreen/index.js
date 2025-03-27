@@ -1,9 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useFocusEffect} from '@react-navigation/native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   ImageBackground,
   PermissionsAndroid,
+  RefreshControl,
   ScrollView,
   ScrollViewBase,
   StyleSheet,
@@ -25,8 +26,10 @@ const HomeScreen = ({navigation}) => {
   const [visibleLogout, setVisibleLogout] = useState(false);
   const [dataShift, setDataShift] = useState({});
   const [dataProfile, setDataProfile] = useState({});
+  const [refreshing, setRefreshing] = useState(false);
   const hideDialog = () => setVisibleLogout(!visibleLogout);
   const {isLoading, imageSelfie} = useSelector(state => state.globalReducer);
+
   console.log('isLoading', isLoading);
   const dispatch = useDispatch();
 
@@ -34,12 +37,27 @@ const HomeScreen = ({navigation}) => {
     useCallback(() => {
       getDataShift();
       getDataProfile();
-      getLocation();
-    }, []),
+    }, [location]),
   );
 
+  useEffect(() => {
+    getLocation();
+  }, []);
+
   const getDataShift = () => {
-    dispatch(getShiftData(setDataShift));
+    console.log('position getsift', location);
+
+    let form = new FormData();
+    form.append(
+      'latitude',
+      location?.coords?.latitude ? location?.coords?.latitude : 1,
+    );
+    form.append(
+      'longitude',
+      location?.coords?.longitude ? location?.coords?.longitude : 1,
+    );
+
+    dispatch(getShiftData(setDataShift, form));
   };
 
   const getDataProfile = () => {
@@ -90,7 +108,6 @@ const HomeScreen = ({navigation}) => {
         );
       }
     });
-    console.log(location);
   };
 
   const onLogout = async () => {
@@ -175,10 +192,23 @@ const HomeScreen = ({navigation}) => {
     //   getLocation();
     // }, 3000);
   };
+  const onRefresh = () => {
+    setRefreshing(true);
+    getLocation();
+    getDataShift();
+    getDataProfile();
+    dispatch({type: 'SET_IMAGE_SELFIE', value: {}});
+    setRefreshing(false);
+  };
 
   return (
     <SafeAreaView style={styles.page}>
-      <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={{flex: 1}}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <CardUser
           onPressLogout={() => setVisibleLogout(!visibleLogout)}
           name={dataProfile?.first_name}

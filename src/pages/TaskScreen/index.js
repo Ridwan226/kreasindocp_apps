@@ -1,5 +1,12 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {FlatList, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  FlatList,
+  PermissionsAndroid,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {CardTasks, Gap, HeaderPrimary, LocationProject} from '../../component';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -8,30 +15,91 @@ import {useDispatch} from 'react-redux';
 import {gettaskData} from '../../redux/action/task';
 import {useFocusEffect} from '@react-navigation/native';
 import {getShiftData} from '../../redux/action/shift';
+import Geolocation from 'react-native-geolocation-service';
 
 const TaskScreen = ({navigation}) => {
   const [status, setStatus] = useState('semua');
   const [data, setData] = useState([]);
   const [dataShift, setDataShift] = useState({});
   const dispatch = useDispatch();
+  const [location, setLocation] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
       getData();
       getDataShift();
-    }, [status]),
+    }, [status, location]),
   );
 
-  // useEffect(() => {
-  //   getData();
-  // }, [status]);
+  useEffect(() => {
+    getLocation();
+  }, []);
   const getDataShift = () => {
-    dispatch(getShiftData(setDataShift));
+    console.log('position getsift', location);
+
+    let form = new FormData();
+    form.append(
+      'latitude',
+      location?.coords?.latitude ? location?.coords?.latitude : 1,
+    );
+    form.append(
+      'longitude',
+      location?.coords?.longitude ? location?.coords?.longitude : 1,
+    );
+    console.log('form', form);
+    dispatch(getShiftData(setDataShift, form));
   };
+
   const getData = () => {
     let form = new FormData();
     form.append('status', status);
     dispatch(gettaskData(form, setData));
+  };
+
+  const requestLocationPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Geolocation Permission',
+          message: 'Can we access your location?',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      console.log('granted', granted);
+      if (granted === 'granted') {
+        console.log('You can use Geolocation');
+        return true;
+      } else {
+        console.log('You cannot use Geolocation');
+        return false;
+      }
+    } catch (err) {
+      return false;
+    }
+  };
+
+  const getLocation = () => {
+    const result = requestLocationPermission();
+    result.then(res => {
+      console.log('res is:', res);
+      if (res) {
+        Geolocation.getCurrentPosition(
+          position => {
+            console.log(position);
+            setLocation(position);
+          },
+          error => {
+            // See error code charts below.
+            console.log(error.code, error.message);
+            setLocation(false);
+          },
+          {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+        );
+      }
+    });
   };
 
   return (
