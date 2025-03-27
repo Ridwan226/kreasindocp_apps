@@ -1,11 +1,58 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {useDispatch, useSelector} from 'react-redux';
 const LocationProject = ({data, task = false}) => {
   const [viewList, setViewList] = useState(false);
+  const [projectSelected, setProjectSelected] = useState({});
+  const dispatch = useDispatch();
+  const {projectId} = useSelector(state => state.globalReducer);
+  useEffect(() => {
+    const filteredData = data.filter(item => item.project_id === projectId)[0]; // Mengambil objek pertama hasil filter
+    setProjectSelected(filteredData);
+  }, [projectId]);
+
+  const setProject = item => {
+    dispatch({
+      type: 'SET_PROJECT_ID',
+      value: item?.project_id,
+    });
+    // setProjectSelected(item);
+    setViewList(!viewList);
+  };
 
   return (
     <View style={styles.container(task)}>
+      {/* {projectSelected ? (
+        <TouchableOpacity
+          onPress={() => setViewList(!viewList)}
+          activeOpacity={0.7}
+          style={{marginBottom: 10}}>
+          <View style={styles.wpLocation}>
+            <Text style={styles.txLokasi}>Lokasi Proyek</Text>
+            <AntDesign name="caretdown" size={20} color={'#DD4017'} />
+          </View>
+          <Text style={styles.txAddress}>
+            {projectSelected?.address} | Jarak :{' '}
+            {parseInt(projectSelected?.distance_in_meters).toLocaleString()} m
+          </Text>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          onPress={() => setViewList(!viewList)}
+          activeOpacity={0.7}
+          style={{marginBottom: 10}}>
+          <View style={styles.wpLocation}>
+            <Text style={styles.txLokasi}>Lokasi Proyek</Text>
+            <AntDesign name="caretdown" size={20} color={'#DD4017'} />
+          </View>
+          <Text style={styles.txAddress}>
+            {data?.[0]?.address} | Jarak :{' '}
+            {parseInt(data?.[0]?.distance_in_meters).toLocaleString()} m
+          </Text>
+        </TouchableOpacity>
+      )} */}
+
       <TouchableOpacity
         onPress={() => setViewList(!viewList)}
         activeOpacity={0.7}
@@ -15,22 +62,24 @@ const LocationProject = ({data, task = false}) => {
           <AntDesign name="caretdown" size={20} color={'#DD4017'} />
         </View>
         <Text style={styles.txAddress}>
-          {data?.[0]?.address} | Jarak :{' '}
-          {parseInt(data?.[0]?.distance_in_meters).toLocaleString()} m
+          {projectSelected?.address} | Jarak :{' '}
+          {parseInt(projectSelected?.distance_in_meters).toLocaleString()} m
         </Text>
       </TouchableOpacity>
+
       <View style={styles.wpList}>
         {viewList &&
-          data?.map((item, index) =>
-            index != 0 ? (
-              <View key={index} style={styles.locationItem}>
-                <Text style={styles.txAddressItem}>
-                  {item?.address} | Jarak :{' '}
-                  {parseInt(item?.distance_in_meters).toLocaleString()} m
-                </Text>
-              </View>
-            ) : null,
-          )}
+          data?.map((item, index) => (
+            <TouchableOpacity
+              key={index}
+              style={styles.locationItem}
+              onPress={() => setProject(item)}>
+              <Text style={styles.txAddressItem}>
+                {item?.address} | Jarak :{' '}
+                {parseInt(item?.distance_in_meters).toLocaleString()} m
+              </Text>
+            </TouchableOpacity>
+          ))}
       </View>
     </View>
   );

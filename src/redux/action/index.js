@@ -18,7 +18,6 @@ export const signInAccton = (form, navigation) => dispatch => {
       navigation.replace('Home');
     })
     .catch(err => {
-      console.log('err', err);
       showMessage(
         err?.response?.data?.message
           ? err?.response?.data?.message
@@ -39,7 +38,6 @@ export const ForgotPasswordAccton = form => dispatch => {
       dispatch({type: 'SET_LOADING', value: false});
     })
     .catch(err => {
-      console.log('err', err);
       showMessage(
         err?.response?.data?.message
           ? err?.response?.data?.message

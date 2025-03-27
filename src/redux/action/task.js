@@ -99,7 +99,6 @@ export const updateCeklistTask = form => dispatch => {
       return result; // Return response agar bisa digunakan
     })
     .catch(err => {
-      console.log('err', err);
       showMessage(
         err?.response?.data?.message
           ? err?.response?.data?.message
@@ -129,7 +128,6 @@ export const addSubTask = form => dispatch => {
       return result; // Return response agar bisa digunakan
     })
     .catch(err => {
-      console.log('err', err);
       showMessage(
         err?.response?.data?.message
           ? err?.response?.data?.message

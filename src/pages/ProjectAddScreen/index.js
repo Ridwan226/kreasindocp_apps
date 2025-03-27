@@ -92,12 +92,8 @@ const ProjectAddScreen = ({navigation}) => {
               popupTitle="Select item"
               title="Select item"
               data={mockData}
-              onSelect={data => {
-                console.log(data);
-              }}
-              onRemoveItem={data => {
-                console.log(data);
-              }}
+              onSelect={data => {}}
+              onRemoveItem={data => {}}
               selectButtonText={'Done'}
               cancelButtonText={'Cencel'}
               searchPlaceHolderText="Search Item"
@@ -115,12 +111,8 @@ const ProjectAddScreen = ({navigation}) => {
               popupTitle="Select item"
               title="Select item"
               data={mockData}
-              onSelect={data => {
-                console.log(data);
-              }}
-              onRemoveItem={data => {
-                console.log(data);
-              }}
+              onSelect={data => {}}
+              onRemoveItem={data => {}}
               selectButtonText={'Done'}
               cancelButtonText={'Cencel'}
               searchPlaceHolderText="Search Item"
@@ -138,12 +130,8 @@ const ProjectAddScreen = ({navigation}) => {
               popupTitle="Select item"
               title="Select item"
               data={mockData}
-              onSelect={data => {
-                console.log(data);
-              }}
-              onRemoveItem={data => {
-                console.log(data);
-              }}
+              onSelect={data => {}}
+              onRemoveItem={data => {}}
               selectButtonText={'Done'}
               cancelButtonText={'Cencel'}
               searchPlaceHolderText="Search Item"

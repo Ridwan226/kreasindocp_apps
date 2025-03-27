@@ -35,8 +35,6 @@ const TaskScreen = ({navigation}) => {
     getLocation();
   }, []);
   const getDataShift = () => {
-    console.log('position getsift', location);
-
     let form = new FormData();
     form.append(
       'latitude',
@@ -46,7 +44,6 @@ const TaskScreen = ({navigation}) => {
       'longitude',
       location?.coords?.longitude ? location?.coords?.longitude : 1,
     );
-    console.log('form', form);
     dispatch(getShiftData(setDataShift, form));
   };
 
@@ -68,12 +65,9 @@ const TaskScreen = ({navigation}) => {
           buttonPositive: 'OK',
         },
       );
-      console.log('granted', granted);
       if (granted === 'granted') {
-        console.log('You can use Geolocation');
         return true;
       } else {
-        console.log('You cannot use Geolocation');
         return false;
       }
     } catch (err) {
@@ -84,16 +78,13 @@ const TaskScreen = ({navigation}) => {
   const getLocation = () => {
     const result = requestLocationPermission();
     result.then(res => {
-      console.log('res is:', res);
       if (res) {
         Geolocation.getCurrentPosition(
           position => {
-            console.log(position);
             setLocation(position);
           },
           error => {
             // See error code charts below.
-            console.log(error.code, error.message);
             setLocation(false);
           },
           {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},

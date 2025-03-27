@@ -9,7 +9,6 @@ const CardTasks = ({item}) => {
   const navigation = useNavigation();
   let color = '#FF0000';
   if (item.empty) {
-    console.log('Please select', item);
     return (
       <View style={styles.container}>
         <Text>No Data</Text>

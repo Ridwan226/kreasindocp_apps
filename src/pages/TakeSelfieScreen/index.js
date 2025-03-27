@@ -21,7 +21,6 @@ const TakeSelfieScreen = ({navigation}) => {
     useCallback(() => {
       (async () => {
         const status = await Camera.requestCameraPermission();
-        console.log('status', status);
         setHasPermission(status === 'granted' ? true : false);
       })();
     }, []),

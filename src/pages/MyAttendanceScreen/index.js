@@ -19,7 +19,6 @@ const MyAttendanceScreen = ({navigation}) => {
   const [show, setShow] = useState(false);
   const [date, setDate] = useState(new Date());
   const [dateList, setDateList] = useState([]);
-  console.log('date', moment(date, 'MM-YYYY').format('YYYY-MM'));
 
   const showPicker = useCallback(value => setShow(value), []);
   const onValueChange = useCallback(

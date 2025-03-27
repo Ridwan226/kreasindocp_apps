@@ -1,6 +1,7 @@
 const initGlobal = {
   isLoading: false,
   imageSelfie: {},
+  projectId: 0,
 };
 
 export const globalReducer = (state = initGlobal, action) => {
@@ -14,6 +15,12 @@ export const globalReducer = (state = initGlobal, action) => {
     return {
       ...state,
       imageSelfie: action.value,
+    };
+  }
+  if (action.type === 'SET_PROJECT_ID') {
+    return {
+      ...state,
+      projectId: action.value,
     };
   }
   return state;

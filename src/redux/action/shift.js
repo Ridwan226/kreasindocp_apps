@@ -13,16 +13,17 @@ export const getShiftData = (setDataShift, form) => dispatch => {
       })
         .then(res => {
           let result = res.data;
-          console.log('res shift', result);
+          dispatch({
+            type: 'SET_PROJECT_ID',
+            value: result?.message?.projects[0]?.project_id
+              ? result?.message?.projects[0]?.project_id
+              : 0,
+          });
           setDataShift(result?.message);
         })
-        .catch(err => {
-          console.log('err shift', err);
-        });
+        .catch(err => {});
     })
-    .catch(err => {
-      console.log('err shift', err);
-    });
+    .catch(err => {});
 };
 
 // export const clockInPost = form => dispatch => {
@@ -74,13 +75,11 @@ export const clockInPost = form => dispatch => {
     .then(res => {
       let result = res.data;
       dispatch({type: 'SET_IMAGE_SELFIE', value: {}});
-      console.log('res shift', result);
       showMessage('Save Data Success', 'success');
       dispatch({type: 'SET_LOADING', value: false});
       return result; // Return response agar bisa digunakan
     })
     .catch(err => {
-      console.log('err', err?.response?.data?.message);
       showMessage(
         err?.response?.data?.message
           ? err?.response?.data?.message
@@ -105,7 +104,6 @@ export const viewDataMyAttendance = (form, setDateList) => dispatch => {
           setDateList(result?.message);
         })
         .catch(err => {
-          console.log('err', err);
           showMessage(
             err?.response?.data?.message
               ? err?.response?.data?.message
@@ -113,9 +111,7 @@ export const viewDataMyAttendance = (form, setDateList) => dispatch => {
           );
         });
     })
-    .catch(err => {
-      console.log('err shift', err);
-    });
+    .catch(err => {});
 };
 
 export const viewDataMyAttendanceDetail = (form, setData) => dispatch => {
@@ -132,7 +128,6 @@ export const viewDataMyAttendanceDetail = (form, setData) => dispatch => {
           setData(result?.message);
         })
         .catch(err => {
-          console.log('err', err);
           showMessage(
             err?.response?.data?.message
               ? err?.response?.data?.message
@@ -140,7 +135,5 @@ export const viewDataMyAttendanceDetail = (form, setData) => dispatch => {
           );
         });
     })
-    .catch(err => {
-      console.log('err shift', err);
-    });
+    .catch(err => {});
 };

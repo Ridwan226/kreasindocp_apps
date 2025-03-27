@@ -17,7 +17,6 @@ import Lightbox from 'react-native-lightbox-v2';
 
 const MyAttendanceDetailScreen = ({navigation, route}) => {
   const {item} = route.params;
-  console.log('item', item);
   const [data, setData] = useState({});
 
   const dispatch = useDispatch();

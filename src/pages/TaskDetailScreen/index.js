@@ -23,8 +23,6 @@ import Modal from 'react-native-modal';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 const TaskDetailScreen = ({navigation, route}) => {
-  console.log('item', route.params);
-
   const [data, setData] = useState({});
   const [user, setDataUser] = useState({});
   const [visible, setVisible] = useState(false);
@@ -41,11 +39,8 @@ const TaskDetailScreen = ({navigation, route}) => {
     getData('userProfile')
       .then(res => {
         setDataUser(res);
-        console.log('res userProfile', res);
       })
-      .catch(err => {
-        console.log('err userProfile', err);
-      });
+      .catch(err => {});
   };
 
   const getDataTask = () => {
@@ -55,20 +50,14 @@ const TaskDetailScreen = ({navigation, route}) => {
   };
 
   const setToggleCheckBox = async (newValue, item) => {
-    console.log('setToggleCheckBox', newValue);
-    console.log('item', item);
-
     let form = new FormData();
     form.append('taskid', item?.task_id);
     form.append('status', newValue ? '1' : '0');
     form.append('checklist_id', item?.checklist_id);
-    console.log('form', form);
     try {
       await dispatch(updateCeklistTask(form));
       getDataTask();
-    } catch (error) {
-      console.log('Clock in failed', error);
-    }
+    } catch (error) {}
   };
 
   const addDataSubTask = async () => {
@@ -85,9 +74,7 @@ const TaskDetailScreen = ({navigation, route}) => {
       toggleModal();
       getDataTask();
       setDesc('');
-    } catch (error) {
-      console.log('Clock in failed', error);
-    }
+    } catch (error) {}
   };
 
   const setValueCheckBox = itemCeklis => {

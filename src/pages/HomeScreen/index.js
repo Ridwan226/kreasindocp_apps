@@ -28,9 +28,10 @@ const HomeScreen = ({navigation}) => {
   const [dataProfile, setDataProfile] = useState({});
   const [refreshing, setRefreshing] = useState(false);
   const hideDialog = () => setVisibleLogout(!visibleLogout);
-  const {isLoading, imageSelfie} = useSelector(state => state.globalReducer);
+  const {isLoading, imageSelfie, projectId} = useSelector(
+    state => state.globalReducer,
+  );
 
-  console.log('isLoading', isLoading);
   const dispatch = useDispatch();
 
   useFocusEffect(
@@ -45,8 +46,6 @@ const HomeScreen = ({navigation}) => {
   }, []);
 
   const getDataShift = () => {
-    console.log('position getsift', location);
-
     let form = new FormData();
     form.append(
       'latitude',
@@ -76,12 +75,9 @@ const HomeScreen = ({navigation}) => {
           buttonPositive: 'OK',
         },
       );
-      console.log('granted', granted);
       if (granted === 'granted') {
-        console.log('You can use Geolocation');
         return true;
       } else {
-        console.log('You cannot use Geolocation');
         return false;
       }
     } catch (err) {
@@ -92,16 +88,13 @@ const HomeScreen = ({navigation}) => {
   const getLocation = () => {
     const result = requestLocationPermission();
     result.then(res => {
-      console.log('res is:', res);
       if (res) {
         Geolocation.getCurrentPosition(
           position => {
-            console.log(position);
             setLocation(position);
           },
           error => {
             // See error code charts below.
-            console.log(error.code, error.message);
             setLocation(false);
           },
           {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
@@ -112,9 +105,7 @@ const HomeScreen = ({navigation}) => {
 
   const onLogout = async () => {
     setVisibleLogout(!visibleLogout);
-    console.log('onLogout');
     const keys = await AsyncStorage.getAllKeys();
-    console.log('onLogout', keys);
     AsyncStorage.multiRemove(keys).then(res => {
       dispatch({type: 'DESTROY_SESSION'});
       navigation.replace('SplashScreen');
@@ -138,16 +129,13 @@ const HomeScreen = ({navigation}) => {
     form.append('longitude', location?.coords?.longitude);
     form.append('clock_state', 'clock_in');
     form.append('type', 'set_clocking');
-
+    form.append('project_id', projectId);
     try {
       await dispatch(clockInPost(form)); // Sekarang bisa `await`
-      console.log('get Data');
       getDataShift();
       getDataProfile();
       getLocation();
-    } catch (error) {
-      console.log('Clock in failed', error);
-    }
+    } catch (error) {}
 
     // dispatch(clockInPost(form));
     // setTimeout(() => {
@@ -173,10 +161,10 @@ const HomeScreen = ({navigation}) => {
       'time_id',
       dataShift?.attendance_time_checks_value_api?.[0]?.time_attendance_id,
     );
+    form.append('project_id', projectId);
 
     try {
       await dispatch(clockInPost(form)); // Sekarang bisa `await`
-      console.log('get Data');
       getDataShift();
       getDataProfile();
       getLocation();
