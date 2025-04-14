@@ -2,6 +2,7 @@ const initGlobal = {
   isLoading: false,
   imageSelfie: {},
   projectId: 0,
+  dataShift: {},
 };
 
 export const globalReducer = (state = initGlobal, action) => {
@@ -15,6 +16,12 @@ export const globalReducer = (state = initGlobal, action) => {
     return {
       ...state,
       imageSelfie: action.value,
+    };
+  }
+  if (action.type === 'SET_DATA_SHIFT') {
+    return {
+      ...state,
+      dataShift: action.value,
     };
   }
   if (action.type === 'SET_PROJECT_ID') {

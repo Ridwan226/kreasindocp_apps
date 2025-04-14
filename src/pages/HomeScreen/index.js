@@ -24,11 +24,11 @@ import moment from 'moment';
 const HomeScreen = ({navigation}) => {
   const [location, setLocation] = useState(false);
   const [visibleLogout, setVisibleLogout] = useState(false);
-  const [dataShift, setDataShift] = useState({});
+  // const [dataShift, setDataShift] = useState({});
   const [dataProfile, setDataProfile] = useState({});
   const [refreshing, setRefreshing] = useState(false);
   const hideDialog = () => setVisibleLogout(!visibleLogout);
-  const {isLoading, imageSelfie, projectId} = useSelector(
+  const {isLoading, imageSelfie, projectId, dataShift} = useSelector(
     state => state.globalReducer,
   );
 
@@ -56,7 +56,7 @@ const HomeScreen = ({navigation}) => {
       location?.coords?.longitude ? location?.coords?.longitude : 1,
     );
 
-    dispatch(getShiftData(setDataShift, form));
+    dispatch(getShiftData(form));
   };
 
   const getDataProfile = () => {

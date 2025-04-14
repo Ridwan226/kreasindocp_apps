@@ -2,7 +2,7 @@ import Axios from 'axios';
 import {API_HOST} from '../../config';
 import {getData, showMessage, storeData} from '../../utils';
 
-export const getShiftData = (setDataShift, form) => dispatch => {
+export const getShiftData = form => dispatch => {
   getData('tokenLogin')
     .then(resToken => {
       Axios.post(`${API_HOST.url_api}/Shifts/get_shift`, form, {
@@ -19,7 +19,12 @@ export const getShiftData = (setDataShift, form) => dispatch => {
               ? result?.message?.projects[0]?.project_id
               : 0,
           });
-          setDataShift(result?.message);
+          dispatch({
+            type: 'SET_DATA_SHIFT',
+            value: result?.message,
+          });
+
+          // setDataShift(result?.message);
         })
         .catch(err => {});
     })
