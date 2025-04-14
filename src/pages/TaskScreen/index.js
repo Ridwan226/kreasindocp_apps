@@ -11,7 +11,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {CardTasks, Gap, HeaderPrimary, LocationProject} from '../../component';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {Button} from 'react-native-paper';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {gettaskData} from '../../redux/action/task';
 import {useFocusEffect} from '@react-navigation/native';
 import {getShiftData} from '../../redux/action/shift';
@@ -20,10 +20,10 @@ import Geolocation from 'react-native-geolocation-service';
 const TaskScreen = ({navigation}) => {
   const [status, setStatus] = useState('semua');
   const [data, setData] = useState([]);
-  const [dataShift, setDataShift] = useState({});
+  // const [dataShift, setDataShift] = useState({});
   const dispatch = useDispatch();
   const [location, setLocation] = useState(false);
-
+  const {dataShift} = useSelector(state => state.globalReducer);
   useFocusEffect(
     useCallback(() => {
       getData();
@@ -44,7 +44,7 @@ const TaskScreen = ({navigation}) => {
       'longitude',
       location?.coords?.longitude ? location?.coords?.longitude : 1,
     );
-    dispatch(getShiftData(setDataShift, form));
+    dispatch(getShiftData(form));
   };
 
   const getData = () => {

@@ -8,7 +8,9 @@ const LocationProject = ({data, task = false}) => {
   const dispatch = useDispatch();
   const {projectId, dataShift} = useSelector(state => state.globalReducer);
   useEffect(() => {
-    const filteredData = data.filter(item => item.project_id === projectId)[0]; // Mengambil objek pertama hasil filter
+    const filteredData = dataShift?.projects?.filter(
+      item => item.project_id === projectId,
+    )[0];
     setProjectSelected(filteredData);
   }, [projectId, dataShift]);
 
