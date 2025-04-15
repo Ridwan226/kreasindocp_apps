@@ -34,34 +34,34 @@ const MyAttendanceDetailScreen = ({navigation, route}) => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#FFF'}}>
       <HeaderPrimary
-        title="My Attendance Detail"
+        title="Detail Kehadiran Saya"
         onPress={() => navigation.goBack()}
       />
       <ScrollView>
         <View style={styles.wpEmployee}>
-          <Text style={styles.txTitle}>Employee Information</Text>
+          <Text style={styles.txTitle}>Informasi Karyawan</Text>
           <View style={styles.wpInfo}>
-            <Text style={styles.txHeadTitle}>Office Shift </Text>
+            <Text style={styles.txHeadTitle}>Shift Kantor </Text>
             <Text style={styles.txInfo}>{data?.shift_name}</Text>
           </View>
           <View style={styles.wpInfo}>
-            <Text style={styles.txHeadTitle}>Account Email </Text>
+            <Text style={styles.txHeadTitle}>Akun Email </Text>
             <Text style={styles.txInfo}>{data?.email}</Text>
           </View>
           <View style={styles.wpInfo}>
-            <Text style={styles.txHeadTitle}>Attendance Date</Text>
+            <Text style={styles.txHeadTitle}>Tanggal Kehadiran</Text>
             <Text style={styles.txInfo}>{data?.attendance_date}</Text>
           </View>
           <View style={styles.wpInfo}>
-            <Text style={styles.txHeadTitle}>Total Work</Text>
+            <Text style={styles.txHeadTitle}>Total Kerjaan</Text>
             <Text style={styles.txInfo}>{data?.total_work}</Text>
           </View>
           <View style={styles.wpInfo}>
-            <Text style={styles.txHeadTitle}>Late</Text>
+            <Text style={styles.txHeadTitle}>Terlambat</Text>
             <Text style={styles.txInfo}>{data?.total_time_l}</Text>
           </View>
           <Gap height={20} />
-          <Text style={styles.txTitle}>Attendance Information</Text>
+          <Text style={styles.txTitle}>Informasi Kehadiran</Text>
           <Gap height={20} />
           {data?.list?.map((item, index) => (
             <View style={styles.wpList} key={index}>
@@ -85,7 +85,7 @@ const MyAttendanceDetailScreen = ({navigation, route}) => {
 
                 <View>
                   <Text style={styles.txHeadTitle}>
-                    Distance : {item?.distance} m
+                    Jarak : {item?.distance} m
                   </Text>
                   <TouchableOpacity
                     onPress={() =>
@@ -107,15 +107,15 @@ const MyAttendanceDetailScreen = ({navigation, route}) => {
               </View>
               <View style={styles.wpTime}>
                 <View>
-                  <Text style={styles.txHeadTitle}>Time In</Text>
+                  <Text style={styles.txHeadTitle}>Jam Masuk</Text>
                   <Text style={styles.txHead}>{item?.fclock_in}</Text>
                 </View>
                 <View>
-                  <Text style={styles.txHeadTitle}>Time Out</Text>
+                  <Text style={styles.txHeadTitle}>Jam Keluar</Text>
                   <Text style={styles.txHead}>{item?.fclock_out}</Text>
                 </View>
                 <View>
-                  <Text style={styles.txHeadTitle}>Total Work</Text>
+                  <Text style={styles.txHeadTitle}>Total</Text>
                   <Text style={styles.txHead}>{item?.total_work}</Text>
                 </View>
               </View>

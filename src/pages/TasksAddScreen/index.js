@@ -44,7 +44,7 @@ const TasksAddScreen = ({navigation}) => {
         />
         <Gap height={20} />
         <View>
-          <Text>Start Date</Text>
+          <Text>Tanggal Mulai</Text>
           <TouchableOpacity
             activeOpacity={0.9}
             onPress={() => {
@@ -60,7 +60,7 @@ const TasksAddScreen = ({navigation}) => {
 
         <Gap height={10} />
         <View>
-          <Text>End Date</Text>
+          <Text>Tanggal Selesai</Text>
           <TouchableOpacity
             activeOpacity={0.9}
             onPress={() => {
@@ -83,7 +83,7 @@ const TasksAddScreen = ({navigation}) => {
         />
         <Gap height={20} />
         <View>
-          <Text>Start Date</Text>
+          <Text>Tanggal Mulai</Text>
 
           <View style={styles.container}>
             <Select2

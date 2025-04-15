@@ -61,7 +61,7 @@ const MyAttendanceScreen = ({navigation}) => {
                   ? navigation.push('MyAttendanceDetailScreen', {
                       item: item,
                     })
-                  : showMessage('data Not Found')
+                  : showMessage('Data Tidak Tersedia')
               }
               activeOpacity={0.8}>
               <View>

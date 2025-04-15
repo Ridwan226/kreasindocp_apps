@@ -70,7 +70,7 @@ const ForgotPasswordScreen = ({navigation}) => {
                 fontFamily: 'Poppins-Medium',
               }}
               onPress={onSubmit}>
-              Send Email
+              Kirim Email
             </Button>
             <Gap height={20} />
 

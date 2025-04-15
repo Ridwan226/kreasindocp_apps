@@ -11,7 +11,7 @@ const CardTasks = ({item}) => {
   if (item.empty) {
     return (
       <View style={styles.container}>
-        <Text>No Data</Text>
+        <Text>Tidak Ada Data</Text>
       </View>
     );
   }
@@ -47,19 +47,19 @@ const CardTasks = ({item}) => {
           marginVertical: 5,
         }}>
         <View style={styles.wpItemBody}>
-          <Text style={styles.txHead}>Start</Text>
+          <Text style={styles.txHead}>Mulai</Text>
           <Text style={styles.txHeadDesc}>
             {moment(item.start_date).format('DD-MM-YYYY') || item.start_date}
           </Text>
         </View>
         <View style={[styles.wpItemBody, {borderLeftWidth: 2, padding: 3}]}>
-          <Text style={styles.txHead}>End</Text>
+          <Text style={styles.txHead}>Selesai</Text>
           <Text style={styles.txHeadDesc}>
             {moment(item.end_date).format('DD-MM-YYYY') || item.end_date}
           </Text>
         </View>
         <View style={[styles.wpItemBody, {borderLeftWidth: 2, padding: 3}]}>
-          <Text style={styles.txHead}>Est Hour</Text>
+          <Text style={styles.txHead}>Jam Kerja</Text>
           <Text style={styles.txHeadDesc}>{item.task_hour}</Text>
         </View>
       </View>

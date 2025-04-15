@@ -101,7 +101,7 @@ const TaskDetailScreen = ({navigation, route}) => {
   };
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#FFF'}}>
-      <HeaderPrimary onPress={() => navigation.goBack()} title="Task Detail" />
+      <HeaderPrimary onPress={() => navigation.goBack()} title="Tugas Detail" />
       <View style={styles.wpHeadInfo}>
         <Text style={styles.txTask}>Task #{item?.number}</Text>
         <Text style={styles.txTitle}>{item?.task_name}</Text>
@@ -166,7 +166,7 @@ const TaskDetailScreen = ({navigation, route}) => {
             marginHorizontal: 10,
           }}>
           <View style={styles.wpSubTask}>
-            <Text style={styles.txTitle}>Sub Task</Text>
+            <Text style={styles.txTitle}>Sub Tugas</Text>
             <View style={styles.wpSubTaskItem}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <View
@@ -223,7 +223,7 @@ const TaskDetailScreen = ({navigation, route}) => {
             ))
           ) : (
             <View>
-              <Text>No Data</Text>
+              <Text>Tidak Ada Data</Text>
             </View>
           )}
         </View>
@@ -242,13 +242,13 @@ const TaskDetailScreen = ({navigation, route}) => {
               mode="contained"
               style={{borderRadius: 10, backgroundColor: '#DD4017'}}
               onPress={() => toggleModal()}>
-              Add SubTask
+              Tambahkan Sub Tugas
             </Button>
           </View>
           <Modal isVisible={visible}>
             <View style={styles.wpModal}>
               <View style={styles.wpModalHeader}>
-                <Text style={styles.txModalHeader}>Add SubTask!</Text>
+                <Text style={styles.txModalHeader}>Tambahkan Sub Tugas</Text>
                 <TouchableOpacity onPress={() => toggleModal()}>
                   <Entypo name="cross" size={30} color={'#DD4017'} />
                 </TouchableOpacity>

@@ -97,7 +97,7 @@ const TaskScreen = ({navigation}) => {
     <SafeAreaView style={{flex: 1, backgroundColor: '#FFF'}}>
       <HeaderPrimary
         onPress={() => navigation.goBack()}
-        title="My Tasks"
+        title="Tugas Saya"
         // onPressIcon={() => navigation.push('TasksAddScreen')}
         // iconName={'plus'}
       />
@@ -124,35 +124,35 @@ const TaskScreen = ({navigation}) => {
             style={styles.wpButtonStatus(status == 1 ? true : false)}
             labelStyle={styles.txButtonStatus(status == 1 ? true : false)}
             onPress={() => setStatus(1)}>
-            In Progress
+            Sedang berlangsung
           </Button>
           <Button
             mode="outlined"
             style={styles.wpButtonStatus(status == 2 ? true : false)}
             labelStyle={styles.txButtonStatus(status == 2 ? true : false)}
             onPress={() => setStatus(2)}>
-            Completed
+            Selesai
           </Button>
           <Button
             mode="outlined"
             style={styles.wpButtonStatus(status == 4 ? true : false)}
             labelStyle={styles.txButtonStatus(status == 4 ? true : false)}
             onPress={() => setStatus(4)}>
-            On Hold
+            Sedang Ditunda
           </Button>
           <Button
             mode="outlined"
             style={styles.wpButtonStatus(status == 3 ? true : false)}
             labelStyle={styles.txButtonStatus(status == 3 ? true : false)}
             onPress={() => setStatus(3)}>
-            Cancelled
+            Dibatalkan
           </Button>
           <Button
             mode="outlined"
             style={styles.wpButtonStatus(status === 0 ? true : false)}
             labelStyle={styles.txButtonStatus(status === 0 ? true : false)}
             onPress={() => setStatus(0)}>
-            Not Started
+            Belum Dimulai
           </Button>
         </ScrollView>
       </View>
@@ -168,7 +168,7 @@ const TaskScreen = ({navigation}) => {
           />
         ) : (
           <View>
-            <Text>Data Not Found</Text>
+            <Text>Data Tidak Tersedia</Text>
           </View>
         )}
       </View>

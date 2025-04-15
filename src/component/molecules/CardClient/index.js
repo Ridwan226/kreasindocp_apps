@@ -14,7 +14,7 @@ const CardClient = () => {
       />
       <Gap width={10} />
       <View>
-        <Text style={styles.name}>Name</Text>
+        <Text style={styles.name}>Nama</Text>
         <Text style={styles.email}>Email</Text>
       </View>
     </TouchableOpacity>

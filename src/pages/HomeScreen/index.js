@@ -15,7 +15,7 @@ import Geolocation from 'react-native-geolocation-service';
 import {Button, Dialog} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
-import {CardUser, Gap, LocationProject} from '../../component';
+import {AllertCard, CardUser, Gap, LocationProject} from '../../component';
 import {getProfileDataAction} from '../../redux/action/profile';
 import {clockInPost, getShiftData} from '../../redux/action/shift';
 import {showMessage} from '../../utils';
@@ -234,6 +234,9 @@ const HomeScreen = ({navigation}) => {
               <Text style={styles.txPosisi}>{dataShift?.idesignations}</Text>
             </View>
           </View>
+          {location?.coords?.latitude ? null : (
+            <AllertCard text="GPS Offline" />
+          )}
           {dataShift?.projects?.length > 0 && (
             <View style={{zIndex: 25}}>
               <Gap height={10} />
@@ -327,7 +330,7 @@ const HomeScreen = ({navigation}) => {
         <Dialog.Title style={styles.title}>Apakah Anda Yakin?</Dialog.Title>
         <Dialog.Actions>
           <Button onPress={() => setVisibleLogout(!visibleLogout)}>
-            Cancel
+            Batalkan
           </Button>
           <Button onPress={onLogout}>Ok</Button>
         </Dialog.Actions>
