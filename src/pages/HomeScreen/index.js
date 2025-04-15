@@ -234,7 +234,6 @@ const HomeScreen = ({navigation}) => {
               <Text style={styles.txPosisi}>{dataShift?.idesignations}</Text>
             </View>
           </View>
-          <AllertCard text="GPS Offline" />
 
           {location?.coords?.latitude ? null : (
             <AllertCard text="GPS Offline" />
