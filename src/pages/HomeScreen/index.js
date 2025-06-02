@@ -17,7 +17,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 import {AllertCard, CardUser, Gap, LocationProject} from '../../component';
 import {getProfileDataAction} from '../../redux/action/profile';
-import {clockInPost, getShiftData} from '../../redux/action/shift';
+import {clockInPost, clockLembur, getShiftData} from '../../redux/action/shift';
 import {showMessage} from '../../utils';
 import moment from 'moment';
 
@@ -189,6 +189,20 @@ const HomeScreen = ({navigation}) => {
     setRefreshing(false);
   };
 
+  const onClockLembur = async type => {
+    console.log('type', type);
+    const form = new FormData();
+    form.append('type', type);
+    try {
+      await dispatch(clockLembur(form)); // Sekarang bisa `await`
+      getDataShift();
+      getDataProfile();
+      getLocation();
+    } catch (error) {
+      console.error('Clock in failed', error);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.page}>
       <ScrollView
@@ -322,6 +336,27 @@ const HomeScreen = ({navigation}) => {
               onPress={() => navigation.push('MyAttendanceScreen')}>
               Kehadiran Saya
             </Button>
+            <Gap height={10} />
+            <Gap height={10} />
+
+            <View style={styles.wpButton}>
+              <Button
+                icon="arrow-right"
+                mode="contained"
+                disabled={dataShift?.overtime ? true : false}
+                buttonColor="#17C666"
+                onPress={() => onClockLembur('in')}>
+                Masuk Lembur
+              </Button>
+              <Button
+                icon="arrow-down"
+                mode="contained"
+                disabled={dataShift?.overtime ? false : true}
+                buttonColor="#6c757d"
+                onPress={() => onClockLembur('out')}>
+                Keluar Lembur
+              </Button>
+            </View>
           </View>
         </View>
         <Gap height={500} />

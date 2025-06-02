@@ -14,6 +14,7 @@ import {Gap, HeaderPrimary} from '../../component';
 import {useDispatch} from 'react-redux';
 import {viewDataMyAttendanceDetail} from '../../redux/action/shift';
 import Lightbox from 'react-native-lightbox-v2';
+import moment from 'moment';
 
 const MyAttendanceDetailScreen = ({navigation, route}) => {
   const {item} = route.params;
@@ -85,7 +86,8 @@ const MyAttendanceDetailScreen = ({navigation, route}) => {
 
                 <View>
                   <Text style={styles.txHeadTitle}>
-                    Jarak : {item?.distance} m
+                    Jarak : {item?.distance} m{' '}
+                    {item?.out_of_range == 1 ? '(Diluar jarak)' : ''}
                   </Text>
                   <TouchableOpacity
                     onPress={() =>
@@ -117,6 +119,31 @@ const MyAttendanceDetailScreen = ({navigation, route}) => {
                 <View>
                   <Text style={styles.txHeadTitle}>Total</Text>
                   <Text style={styles.txHead}>{item?.total_work}</Text>
+                </View>
+              </View>
+            </View>
+          ))}
+          <Gap height={20} />
+          <Text style={styles.txTitle}>Informasi Lembur</Text>
+          <Gap height={20} />
+          {data?.overtime?.map((item, index) => (
+            <View style={styles.wpList} key={index}>
+              <View style={styles.wpTime}>
+                <View>
+                  <Text style={styles.txHeadTitle}>Masuk Lembur</Text>
+                  <Text style={styles.txHead}>
+                    {moment(item?.clock_in).format('HH:mm')}
+                  </Text>
+                </View>
+                <View>
+                  <Text style={styles.txHeadTitle}>Keluar Lembur</Text>
+                  <Text style={styles.txHead}>
+                    {moment(item?.clock_out).format('HH:mm')}
+                  </Text>
+                </View>
+                <View>
+                  <Text style={styles.txHeadTitle}>Total</Text>
+                  <Text style={styles.txHead}>{item?.total_hours}</Text>
                 </View>
               </View>
             </View>

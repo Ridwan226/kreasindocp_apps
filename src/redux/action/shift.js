@@ -95,6 +95,38 @@ export const clockInPost = form => dispatch => {
     });
 };
 
+export const clockLembur = form => dispatch => {
+  dispatch({type: 'SET_LOADING', value: true});
+
+  return getData('tokenLogin')
+    .then(resToken => {
+      return Axios.post(
+        `${API_HOST.url_api}/Overtime/add_overtime_post`,
+        form,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            authorization: resToken.value,
+          },
+        },
+      );
+    })
+    .then(res => {
+      let result = res.data;
+      showMessage('Save Data Success', 'success');
+      dispatch({type: 'SET_LOADING', value: false});
+      return result; // Return response agar bisa digunakan
+    })
+    .catch(err => {
+      showMessage(
+        err?.response?.data?.message
+          ? err?.response?.data?.message
+          : 'Something went wrong',
+      );
+      throw err; // Lempar error agar bisa ditangkap di `onClockIn`
+    });
+};
+
 export const viewDataMyAttendance = (form, setDateList) => dispatch => {
   getData('tokenLogin')
     .then(resToken => {
@@ -129,6 +161,7 @@ export const viewDataMyAttendanceDetail = (form, setData) => dispatch => {
         },
       })
         .then(res => {
+          console.log('res', res.data);
           let result = res.data;
           setData(result?.message);
         })
