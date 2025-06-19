@@ -128,6 +128,11 @@ const MyAttendanceDetailScreen = ({navigation, route}) => {
           <Gap height={20} />
           {data?.overtime?.map((item, index) => (
             <View style={styles.wpList} key={index}>
+              <View style={styles.wpListHead}>
+                <View>
+                  <Text style={[styles.txHead]}>{item?.project_name}</Text>
+                </View>
+              </View>
               <View style={styles.wpTime}>
                 <View>
                   <Text style={styles.txHeadTitle}>Masuk Lembur</Text>

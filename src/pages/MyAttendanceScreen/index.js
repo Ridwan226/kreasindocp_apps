@@ -45,7 +45,7 @@ const MyAttendanceScreen = ({navigation}) => {
     <SafeAreaView style={styles.page}>
       <HeaderPrimary
         onPress={() => navigation.goBack()}
-        title="My Attendance"
+        title="Riwayat Kehadiran"
       />
       <TouchableOpacity onPress={() => showPicker(true)} style={styles.btnDate}>
         <Text>Berdasarkan : {moment(date, 'MM-YYYY').format('MMM YYYY')}</Text>
@@ -69,41 +69,59 @@ const MyAttendanceScreen = ({navigation}) => {
                   <Text style={styles.txDate}>
                     {moment(item?.attendance_date).format('DD MMM YYYY')}
                   </Text>
-                  {item?.clock_in ? (
-                    <Text style={styles.txTime}>
-                      {item?.clock_in
-                        ? moment(item?.clock_in).format('HH:MM A')
-                        : null}{' '}
-                      {item?.clock_out &&
-                        `-  ${moment(item?.clock_out).format('HH:MM A')}`}
-                    </Text>
-                  ) : (
+
+                  {item?.clock_in ? null : (
                     <Text style={styles.txStatus}>{item?.status}</Text>
                   )}
                 </View>
 
-                {/* {item?.status ? (
-                  <Text style={styles.txStatus}>{item?.status}</Text>
-                ) : null} */}
-                {item?.project_address && (
-                  <>
-                    <Gap height={10} />
-                    <Text style={styles.txLokasi}>Lokasi</Text>
-                    <Text style={styles.txAddress}>
-                      {item?.project_address}
-                    </Text>
-                  </>
-                )}
+                <Gap height={10} />
+                <View style={styles.wpItem}>
+                  <Text style={styles.txLokasi}>Absen Masuk</Text>
+                  <Text style={styles.txAddress}>
+                    {' '}
+                    {item?.clock_in
+                      ? moment(item?.clock_in).format('hh:mm A')
+                      : '-'}{' '}
+                  </Text>
+                </View>
+                <View style={styles.wpItem}>
+                  <Text style={styles.txLokasi}>Absen Keluar</Text>
+                  <Text style={styles.txAddress}>
+                    {' '}
+                    {item?.clock_out
+                      ? moment(item?.clock_out).format('hh:mm A')
+                      : '-'}{' '}
+                  </Text>
+                </View>
+                <View style={styles.wpItem}>
+                  <Text style={styles.txLokasi}>Mulai Lembur</Text>
+                  <Text style={styles.txAddress}>
+                    {' '}
+                    {item?.overtime_in
+                      ? moment(item?.overtime_in).format('hh:mm A')
+                      : '-'}{' '}
+                  </Text>
+                </View>
+                <View style={styles.wpItem}>
+                  <Text style={styles.txLokasi}>Selesai Lembur</Text>
+                  <Text style={styles.txAddress}>
+                    {' '}
+                    {item?.overtime_out
+                      ? moment(item?.overtime_out).format('hh:mm A')
+                      : '-'}{' '}
+                  </Text>
+                </View>
               </View>
               {/* <View>
                 {item?.clock_in ? (
                   <Text style={styles.txTime}>
-                    Jam Masuk {moment(item?.clock_in).format('HH:MM A')}
+                    Jam Masuk {moment(item?.clock_in).format('hh:mm A')}
                   </Text>
                 ) : null}
                 {item?.clock_out ? (
                   <Text style={styles.txTime}>
-                    Jam Keluar {moment(item?.clock_out).format('HH:MM A')}
+                    Jam Keluar {moment(item?.clock_out).format('hh:mm A')}
                   </Text>
                 ) : null}
               </View> */}
@@ -156,6 +174,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
+    borderBottomWidth: 1,
+    borderBottomColor: '#CFCFCF',
+    paddingBottom: 10,
   },
   txDate: {
     fontFamily: 'Poppins-Medium',
@@ -164,13 +185,14 @@ const styles = StyleSheet.create({
   },
   txLokasi: {
     fontFamily: 'Poppins-Medium',
-    fontSize: 13,
+    fontSize: 15,
     color: '#959595',
   },
   txAddress: {
     fontFamily: 'Poppins-Medium',
     fontSize: 13,
     color: '#4E4E4E',
+    textAlign: 'right',
   },
   txStatus: {
     fontFamily: 'Poppins-SemiBold',
@@ -182,5 +204,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontSize: 15,
     color: '#02275D',
+  },
+
+  wpItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
   },
 });

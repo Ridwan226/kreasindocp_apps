@@ -118,6 +118,7 @@ export const clockLembur = form => dispatch => {
       return result; // Return response agar bisa digunakan
     })
     .catch(err => {
+      dispatch({type: 'SET_LOADING', value: false});
       showMessage(
         err?.response?.data?.message
           ? err?.response?.data?.message

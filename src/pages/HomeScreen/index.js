@@ -10,6 +10,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Alert,
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {Button, Dialog} from 'react-native-paper';
@@ -113,6 +114,15 @@ const HomeScreen = ({navigation}) => {
   };
 
   const onClockIn = async () => {
+    if (dataShift?.overtime) {
+      Alert.alert(
+        'Tidak dapat Absen Masuk',
+        'Kamu telah melakukan lembur namun belum keluar lembur, silakan keluar lembur terlebih dahulu.',
+        [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+      );
+      return;
+    }
+
     if (!imageSelfie?.uri) {
       showMessage('Silahkan Ambil Foto Terlebih Dahulu');
       return;
@@ -190,16 +200,32 @@ const HomeScreen = ({navigation}) => {
   };
 
   const onClockLembur = async type => {
+    if (type == 'in') {
+      if (dataShift?.attendance_time_checks == 1) {
+        Alert.alert(
+          'Tidak dapat Mulai Lembur',
+          'Kamu telah absen masuk namun belum absen keluar, silakan absen keluar terlebih dahulu.',
+          [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+        );
+        return;
+      }
+    }
+
     console.log('type', type);
     const form = new FormData();
     form.append('type', type);
+    form.append('latitude', location?.coords?.latitude);
+    form.append('longitude', location?.coords?.longitude);
+    form.append('clock_state', 'clock_out');
+    form.append('project_id', projectId);
+    console.log('form', form);
     try {
       await dispatch(clockLembur(form)); // Sekarang bisa `await`
       getDataShift();
       getDataProfile();
       getLocation();
     } catch (error) {
-      console.error('Clock in failed', error);
+      console.log('Clock in failed', error);
     }
   };
 
@@ -218,7 +244,7 @@ const HomeScreen = ({navigation}) => {
             dataShift?.attendance_time_checks >= 1
               ? moment(
                   dataShift?.attendance_time_checks_value_api?.[0]?.clock_in,
-                ).format('HH:MM A')
+                ).format('hh:mm A')
               : dataProfile?.username
           }
           image={dataProfile?.profile_photo}
@@ -338,7 +364,6 @@ const HomeScreen = ({navigation}) => {
             </Button>
             <Gap height={10} />
             <Gap height={10} />
-
             <View style={styles.wpButton}>
               <Button
                 icon="arrow-right"
