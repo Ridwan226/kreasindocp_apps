@@ -368,7 +368,13 @@ const HomeScreen = ({navigation}) => {
               <Button
                 icon="arrow-right"
                 mode="contained"
-                disabled={dataShift?.overtime ? true : false}
+                disabled={
+                  dataShift?.active_overtime == 0
+                    ? true
+                    : dataShift?.overtime
+                    ? true
+                    : false
+                }
                 buttonColor="#17C666"
                 onPress={() => onClockLembur('in')}>
                 Masuk Lembur
