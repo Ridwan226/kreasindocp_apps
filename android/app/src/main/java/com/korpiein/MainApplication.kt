@@ -1,4 +1,4 @@
-package com.korpieabsence
+package com.korpiein
 
 import android.app.Application
 import com.facebook.react.PackageList
