@@ -43,6 +43,27 @@ const HomeScreen = ({navigation}) => {
   );
 
   useEffect(() => {
+    const watchId = Geolocation.watchPosition(
+      position => {
+        const {latitude, longitude} = position.coords;
+        const currentLocation = {lat: latitude, lng: longitude};
+        console.log('currentLocation', currentLocation);
+      },
+      error => console.log('Location Error:', error),
+      {
+        enableHighAccuracy: true,
+        distanceFilter: 1,
+        interval: 2000,
+        fastestInterval: 1000,
+      },
+    );
+
+    return () => {
+      Geolocation.clearWatch(watchId);
+    };
+  }, []);
+
+  useEffect(() => {
     getLocation();
   }, []);
 
@@ -56,7 +77,7 @@ const HomeScreen = ({navigation}) => {
       'longitude',
       location?.coords?.longitude ? location?.coords?.longitude : 1,
     );
-
+    console.log('location', location);
     dispatch(getShiftData(form));
   };
 
@@ -179,16 +200,9 @@ const HomeScreen = ({navigation}) => {
       getDataProfile();
       getLocation();
     } catch (error) {
-      console.error('Clock in failed', error);
+      console.log('Clock in failed', error);
+      dispatch({type: 'SET_LOADING', value: false});
     }
-
-    // console.log('form', form);
-    // dispatch(clockInPost(form));
-    // setTimeout(() => {
-    //   getDataShift();
-    //   getDataProfile();
-    //   getLocation();
-    // }, 3000);
   };
   const onRefresh = () => {
     setRefreshing(true);
@@ -226,6 +240,7 @@ const HomeScreen = ({navigation}) => {
       getLocation();
     } catch (error) {
       console.log('Clock in failed', error);
+      dispatch({type: 'SET_LOADING', value: false});
     }
   };
 

@@ -78,19 +78,21 @@ export const clockInPost = form => dispatch => {
       });
     })
     .then(res => {
+      dispatch({type: 'SET_LOADING', value: false});
+
       let result = res.data;
       dispatch({type: 'SET_IMAGE_SELFIE', value: {}});
       showMessage('Save Data Success', 'success');
-      dispatch({type: 'SET_LOADING', value: false});
       return result; // Return response agar bisa digunakan
     })
     .catch(err => {
+      dispatch({type: 'SET_LOADING', value: false});
+
       showMessage(
         err?.response?.data?.message
           ? err?.response?.data?.message
           : 'Something went wrong',
       );
-      dispatch({type: 'SET_LOADING', value: false});
       throw err; // Lempar error agar bisa ditangkap di `onClockIn`
     });
 };
