@@ -5,7 +5,7 @@ import {getData, showMessage, storeData} from '../../utils';
 export const getShiftData = form => dispatch => {
   getData('tokenLogin')
     .then(resToken => {
-      Axios.post(`${API_HOST.url_api}/Shifts/get_shift`, form, {
+      Axios.post(`${API_HOST.url_api}/Shifts/get_shift_v2`, form, {
         headers: {
           'Content-Type': 'multipart/form-data',
           authorization: resToken.value,
@@ -70,7 +70,7 @@ export const clockInPost = form => dispatch => {
 
   return getData('tokenLogin')
     .then(resToken => {
-      return Axios.post(`${API_HOST.url_api}/Shifts/set_clocking`, form, {
+      return Axios.post(`${API_HOST.url_api}/Shifts/set_clocking_v2`, form, {
         headers: {
           'Content-Type': 'multipart/form-data',
           authorization: resToken.value,

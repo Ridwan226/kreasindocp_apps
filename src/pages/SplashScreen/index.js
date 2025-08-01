@@ -4,6 +4,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {getData} from '../../utils';
 import {LogoKorpie} from '../../assets';
 import RNFS from 'react-native-fs';
+import {GLOBAL_DATA} from '../../config';
 
 const SplashScreen = ({navigation}) => {
   useEffect(() => {
@@ -32,13 +33,24 @@ const SplashScreen = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#FFF'}}>
+    <SafeAreaView
+      style={{flex: 1, backgroundColor: '#FFF', position: 'relative'}}>
       <View style={styles.container}>
         {/* <Image
           source={require('../../assets/image/logo.png')}
           style={styles.imgLogo}
         /> */}
         <LogoKorpie />
+        <Text
+          style={{
+            position: 'absolute',
+            bottom: 40,
+            fontSize: 12,
+            fontFamily: 'Poppins-Medium',
+            color: '#000',
+          }}>
+          {GLOBAL_DATA.version}
+        </Text>
       </View>
     </SafeAreaView>
   );

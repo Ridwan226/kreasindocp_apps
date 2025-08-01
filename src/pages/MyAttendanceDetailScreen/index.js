@@ -137,13 +137,15 @@ const MyAttendanceDetailScreen = ({navigation, route}) => {
                 <View>
                   <Text style={styles.txHeadTitle}>Masuk Lembur</Text>
                   <Text style={styles.txHead}>
-                    {moment(item?.clock_in).format('HH:mm')}
+                    {moment(item?.clock_in).format('HH:mm A')}
                   </Text>
                 </View>
                 <View>
                   <Text style={styles.txHeadTitle}>Keluar Lembur</Text>
                   <Text style={styles.txHead}>
-                    {moment(item?.clock_out).format('HH:mm')}
+                    {moment(item?.clock_out).format('HH:mm') == '00:00'
+                      ? '-'
+                      : moment(item?.clock_out).format('HH:mm A')}
                   </Text>
                 </View>
                 <View>

@@ -108,8 +108,13 @@ const MyAttendanceScreen = ({navigation}) => {
                   <Text style={styles.txAddress}>
                     {' '}
                     {item?.overtime_out
-                      ? moment(item?.overtime_out).format('hh:mm A')
-                      : '-'}{' '}
+                      ? moment(item?.overtime_out).format('HH:mm') == '00:00'
+                        ? '-'
+                        : moment(item?.overtime_out).format('HH:mm A')
+                      : '-'}
+                    {/* {moment(item?.overtime_out).format('HH:mm') == '00:00'
+                      ? '-'
+                      : moment(item?.overtime_out).format('HH:mm')} */}
                   </Text>
                 </View>
               </View>
