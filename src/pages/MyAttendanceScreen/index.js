@@ -142,7 +142,7 @@ const MyAttendanceScreen = ({navigation}) => {
           onChange={onValueChange}
           value={date}
           // minimumDate={new Date()}
-          maximumDate={new Date(2025, 5)}
+          maximumDate={new Date(2050, 5)}
           locale="id"
         />
       )}
