@@ -9,6 +9,19 @@ export const signInAccton = (form, navigation) => dispatch => {
     },
   })
     .then(res => {
+      // let dataLogin = {
+      //   status: 'error',
+      //   message: {
+      //     id: '123',
+      //     username: 'Yudikcp',
+      //     email: 'ambar123@gmail.com',
+      //     role: '22',
+      //   },
+      //   token:
+      //     'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjEyMyIsInVzZXJuYW1lIjoiWXVkaWtjcCIsImVtYWlsIjoiYW1iYXIxMjNAZ21haWwuY29tIiwicm9sZSI6IjIyIn0.jqSFvO1ulESXDDbRWRARkMr4Ihjf_s9ZTupPysb1yE4',
+      //   date: '2025-08-07 22:29:57',
+      // };
+
       let result = res.data;
       const token = `Bearer ${result.token}`;
       storeData('userProfile', result.message);

@@ -47,7 +47,6 @@ const HomeScreen = ({navigation}) => {
       position => {
         const {latitude, longitude} = position.coords;
         const currentLocation = {lat: latitude, lng: longitude};
-        console.log('currentLocation', currentLocation);
       },
       error => console.log('Location Error:', error),
       {
@@ -77,7 +76,6 @@ const HomeScreen = ({navigation}) => {
       'longitude',
       location?.coords?.longitude ? location?.coords?.longitude : 1,
     );
-    console.log('location', location);
     dispatch(getShiftData(form));
   };
 
@@ -200,7 +198,6 @@ const HomeScreen = ({navigation}) => {
       getDataProfile();
       getLocation();
     } catch (error) {
-      console.log('Clock in failed', error);
       dispatch({type: 'SET_LOADING', value: false});
     }
   };
@@ -225,21 +222,18 @@ const HomeScreen = ({navigation}) => {
       }
     }
 
-    console.log('type', type);
     const form = new FormData();
     form.append('type', type);
     form.append('latitude', location?.coords?.latitude);
     form.append('longitude', location?.coords?.longitude);
     form.append('clock_state', 'clock_out');
     form.append('project_id', projectId);
-    console.log('form', form);
     try {
       await dispatch(clockLembur(form)); // Sekarang bisa `await`
       getDataShift();
       getDataProfile();
       getLocation();
     } catch (error) {
-      console.log('Clock in failed', error);
       dispatch({type: 'SET_LOADING', value: false});
     }
   };
@@ -354,7 +348,15 @@ const HomeScreen = ({navigation}) => {
               <Button
                 icon="arrow-right"
                 mode="contained"
-                disabled={dataShift?.attendance_time_checks < 1 ? false : true}
+                disabled={
+                  dataShift?.overtime
+                    ? true
+                    : dataShift?.active_overtime == 1
+                    ? true
+                    : dataShift?.attendance_time_checks < 1
+                    ? false
+                    : true
+                }
                 buttonColor="#17C666"
                 onPress={() => onClockIn()}>
                 Jam Masuk
@@ -363,7 +365,7 @@ const HomeScreen = ({navigation}) => {
                 icon="arrow-down"
                 mode="contained"
                 disabled={dataShift?.attendance_time_checks < 1 ? true : false}
-                buttonColor="#6c757d"
+                buttonColor="#17C666"
                 onPress={() => onClockOut()}>
                 Jam Keluar
               </Button>
@@ -384,7 +386,9 @@ const HomeScreen = ({navigation}) => {
                 icon="arrow-right"
                 mode="contained"
                 disabled={
-                  dataShift?.active_overtime == 0
+                  dataShift?.attendance_time_checks == 1
+                    ? true
+                    : dataShift?.active_overtime == 0
                     ? true
                     : dataShift?.overtime
                     ? true
@@ -398,7 +402,7 @@ const HomeScreen = ({navigation}) => {
                 icon="arrow-down"
                 mode="contained"
                 disabled={dataShift?.overtime ? false : true}
-                buttonColor="#6c757d"
+                buttonColor="#17C666"
                 onPress={() => onClockLembur('out')}>
                 Keluar Lembur
               </Button>

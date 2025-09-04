@@ -29,7 +29,7 @@ export const gettaskData = (form, setData) => dispatch => {
 export const gettaskDataDetail = (form, setData) => dispatch => {
   getData('tokenLogin')
     .then(resToken => {
-      Axios.post(`${API_HOST.url_api}/Task/list_task_detail`, form, {
+      Axios.post(`${API_HOST.url_api}/Task/list_task_detail_v2`, form, {
         headers: {
           'Content-Type': 'multipart/form-data',
           authorization: resToken.value,
@@ -80,7 +80,7 @@ export const updateCeklistTask = form => dispatch => {
   return getData('tokenLogin') // Tambahkan return
     .then(resToken => {
       return Axios.post(
-        `${API_HOST.url_api}/Task/update_ceklist_subtask`,
+        `${API_HOST.url_api}/Task/update_ceklist_subtask_v2`,
         form,
         {
           headers: {
@@ -124,6 +124,93 @@ export const addSubTask = form => dispatch => {
     .then(res => {
       let result = res.data;
       showMessage('Save Data Success', 'success');
+      dispatch({type: 'SET_LOADING', value: false});
+      return result; // Return response agar bisa digunakan
+    })
+    .catch(err => {
+      showMessage(
+        err?.response?.data?.message
+          ? err?.response?.data?.message
+          : 'Something went wrong',
+      );
+      dispatch({type: 'SET_LOADING', value: false});
+      throw err;
+    });
+};
+
+export const addSubSubTask = form => dispatch => {
+  dispatch({type: 'SET_LOADING', value: true});
+
+  return getData('tokenLogin') // Tambahkan return
+    .then(resToken => {
+      return Axios.post(`${API_HOST.url_api}/Task/add_subtugas`, form, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          authorization: resToken.value,
+        },
+      });
+    })
+    .then(res => {
+      let result = res.data;
+      showMessage('Save Data Success', 'success');
+      dispatch({type: 'SET_LOADING', value: false});
+      return result; // Return response agar bisa digunakan
+    })
+    .catch(err => {
+      showMessage(
+        err?.response?.data?.message
+          ? err?.response?.data?.message
+          : 'Something went wrong',
+      );
+      dispatch({type: 'SET_LOADING', value: false});
+      throw err;
+    });
+};
+
+export const editSubTask = form => dispatch => {
+  dispatch({type: 'SET_LOADING', value: true});
+
+  return getData('tokenLogin') // Tambahkan return
+    .then(resToken => {
+      return Axios.post(`${API_HOST.url_api}/Task/edit_subtask`, form, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          authorization: resToken.value,
+        },
+      });
+    })
+    .then(res => {
+      let result = res.data;
+      showMessage('Save Data Success', 'success');
+      dispatch({type: 'SET_LOADING', value: false});
+      return result; // Return response agar bisa digunakan
+    })
+    .catch(err => {
+      showMessage(
+        err?.response?.data?.message
+          ? err?.response?.data?.message
+          : 'Something went wrong',
+      );
+      dispatch({type: 'SET_LOADING', value: false});
+      throw err;
+    });
+};
+
+export const deleteItemTask = form => dispatch => {
+  dispatch({type: 'SET_LOADING', value: true});
+
+  return getData('tokenLogin') // Tambahkan return
+    .then(resToken => {
+      return Axios.post(`${API_HOST.url_api}/Task/delete_task`, form, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          authorization: resToken.value,
+        },
+      });
+    })
+    .then(res => {
+      let result = res.data;
+      showMessage('Save Data Delete', 'success');
       dispatch({type: 'SET_LOADING', value: false});
       return result; // Return response agar bisa digunakan
     })

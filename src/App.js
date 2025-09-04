@@ -6,6 +6,7 @@ import store from './redux/store';
 import Router from './route';
 import Toast from 'react-native-toast-message';
 import {LoadingPrimary} from './component';
+import {MenuProvider} from 'react-native-popup-menu';
 const MainApp = () => {
   const {isLoading} = useSelector(state => state.globalReducer);
   return (
@@ -20,7 +21,9 @@ const MainApp = () => {
 const App = () => {
   return (
     <Provider store={store}>
-      <MainApp />
+      <MenuProvider>
+        <MainApp />
+      </MenuProvider>
     </Provider>
   );
 };

@@ -87,9 +87,7 @@ const CardTasks = ({item}) => {
         </View>
       </View>
       <View style={styles.wpStatus(color)} activeOpacity={0.7}>
-        <Text style={styles.txStatus}>
-          {statusText(item.task_status)} ({item?.task_progress}%)
-        </Text>
+        <Text style={styles.txStatus}>{statusText(item.task_status)}</Text>
       </View>
     </TouchableOpacity>
   );

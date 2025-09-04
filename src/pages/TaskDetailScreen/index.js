@@ -2,6 +2,7 @@ import CheckBox from '@react-native-community/checkbox';
 import moment from 'moment';
 import React, {useEffect, useState} from 'react';
 import {
+  Alert,
   Image,
   ScrollView,
   StyleSheet,
@@ -14,7 +15,10 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {useDispatch} from 'react-redux';
 import {Gap, HeaderPrimary} from '../../component';
 import {
+  addSubSubTask,
   addSubTask,
+  deleteItemTask,
+  editSubTask,
   gettaskDataDetail,
   updateCeklistTask,
 } from '../../redux/action/task';
@@ -22,11 +26,23 @@ import {getData, showMessage} from '../../utils';
 import Modal from 'react-native-modal';
 import Entypo from 'react-native-vector-icons/Entypo';
 
+import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+} from 'react-native-popup-menu';
+
 const TaskDetailScreen = ({navigation, route}) => {
   const [data, setData] = useState({});
   const [user, setDataUser] = useState({});
   const [visible, setVisible] = useState(false);
+  const [modalEditView, setModalEditView] = useState(false);
+  const [modalSubTugasView, setModalSubTugasView] = useState(false);
   const [desc, setDesc] = useState('');
+  const [descEdit, setDescEdit] = useState('');
+  const [idEdit, setIdEdit] = useState(0);
+  const [idCeklist, setIdCeklist] = useState(0);
   const {item} = route.params;
   const dispatch = useDispatch();
 
@@ -50,6 +66,20 @@ const TaskDetailScreen = ({navigation, route}) => {
   };
 
   const setToggleCheckBox = async (newValue, item) => {
+    if (item?.parent) {
+      if (user?.role == 22 || user?.role == 21 || user?.role == 24) {
+      } else {
+        showMessage('Sub Tugas Hanya Untuk Role Staff');
+        return;
+      }
+    } else {
+      if (user?.role == 12 || user?.role == 4) {
+      } else {
+        showMessage('Tugas Hanya Untuk Role SPV');
+        return;
+      }
+    }
+
     let form = new FormData();
     form.append('taskid', item?.task_id);
     form.append('status', newValue ? '1' : '0');
@@ -78,27 +108,167 @@ const TaskDetailScreen = ({navigation, route}) => {
   };
 
   const setValueCheckBox = itemCeklis => {
-    if (user?.role == 12 || user?.role == 4) {
-      if (itemCeklis?.spv_cek == 1) {
+    if (itemCeklis?.parent) {
+      if (itemCeklis?.staff_cek == 1) {
         return true;
       } else {
         return false;
       }
-    } else if (user?.role == 22 || user?.role == 21) {
+    } else {
       if (itemCeklis?.spv_cek == 1) {
         return true;
       } else {
-        if (itemCeklis?.staff_cek == 1) {
-          return true;
-        } else {
-          return false;
-        }
+        return false;
       }
     }
   };
   const toggleModal = () => {
     setVisible(!visible);
   };
+
+  const renderAcction = itemCeklis => {
+    return (
+      <Menu>
+        <MenuTrigger>
+          <Entypo name="dots-three-vertical" size={20} color={'#02275D'} />
+        </MenuTrigger>
+        <MenuOptions>
+          <MenuOption
+            onSelect={() => renderAddSubTugas(itemCeklis)}
+            text="Add Sub Tugas"
+          />
+          {itemCeklis?.created_by == user?.id && (
+            <>
+              <MenuOption
+                onSelect={() => renderAcctionEdit(itemCeklis)}
+                text="Edit"
+              />
+              <MenuOption onSelect={() => deleteItemTaskFunc(itemCeklis)}>
+                <Text style={{color: 'red'}}>Delete</Text>
+              </MenuOption>
+            </>
+          )}
+        </MenuOptions>
+      </Menu>
+    );
+  };
+
+  const renderSubAcction = itemCeklis => {
+    if (itemCeklis?.created_by == user?.id) {
+      return (
+        <Menu>
+          <MenuTrigger>
+            <Entypo name="dots-three-vertical" size={20} color={'#02275D'} />
+          </MenuTrigger>
+          <MenuOptions>
+            <MenuOption
+              onSelect={() => renderAcctionEdit(itemCeklis)}
+              text="Edit"
+            />
+            <MenuOption onSelect={() => deleteItemTaskFunc(itemCeklis)}>
+              <Text style={{color: 'red'}}>Delete</Text>
+            </MenuOption>
+          </MenuOptions>
+        </Menu>
+      );
+    }
+  };
+
+  const deleteItemTaskFunc = async itemCeklis => {
+    Alert.alert('Konfirmasi', 'Apakah kamu yakin ingin menghapus item ini?', [
+      {
+        text: 'Batal',
+        style: 'cancel',
+      },
+      {
+        text: 'Hapus',
+        style: 'destructive',
+        onPress: async () => {
+          console.log('itemCeklis', itemCeklis);
+          let form = new FormData();
+          form.append('checklist_id', itemCeklis?.checklist_id);
+          try {
+            await dispatch(deleteItemTask(form));
+            getDataTask();
+          } catch (error) {
+            console.log('Error saat hapus:', error);
+          }
+        },
+      },
+    ]);
+  };
+
+  // Edit
+
+  const toggleModalEdit = () => {
+    setModalEditView(!modalEditView);
+  };
+
+  const renderAcctionEdit = itemCeklis => {
+    if (itemCeklis?.created_by == user?.id) {
+      toggleModalEdit();
+      setDescEdit(itemCeklis?.checklist_text);
+      setIdEdit(itemCeklis?.checklist_id);
+    }
+  };
+
+  const editDataSubTask = async () => {
+    if (descEdit == '' || idEdit == 0) {
+      showMessage('Silahkan Isi Deskripsi Task');
+      return;
+    }
+
+    let form = new FormData();
+    form.append('checklist_id', idEdit);
+    form.append('desc', descEdit);
+    try {
+      await dispatch(editSubTask(form));
+      toggleModalEdit();
+      getDataTask();
+      setDescEdit('');
+      setIdEdit(0);
+    } catch (error) {
+      toggleModalEdit();
+      getDataTask();
+      setDescEdit('');
+      setIdEdit(0);
+    }
+  };
+
+  // Add Sub Task Item
+
+  const toggleAddSubTugas = () => {
+    setModalSubTugasView(!modalSubTugasView);
+  };
+
+  const renderAddSubTugas = itemCeklis => {
+    toggleAddSubTugas();
+    setIdCeklist(itemCeklis?.checklist_id);
+  };
+
+  const addSubTugasFunc = async () => {
+    if (desc == '' || idCeklist == 0) {
+      showMessage('Silahkan Isi Deskripsi Task');
+      return;
+    }
+
+    let form = new FormData();
+    form.append('checklist_id', idCeklist);
+    form.append('desc', desc);
+    try {
+      await dispatch(addSubSubTask(form));
+      toggleAddSubTugas();
+      getDataTask();
+      setDesc('');
+      setIdCeklist(0);
+    } catch (error) {
+      toggleAddSubTugas();
+      getDataTask();
+      setDesc('');
+      setIdCeklist(0);
+    }
+  };
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#FFF'}}>
       <HeaderPrimary onPress={() => navigation.goBack()} title="Tugas Detail" />
@@ -166,7 +336,7 @@ const TaskDetailScreen = ({navigation, route}) => {
             marginHorizontal: 10,
           }}>
           <View style={styles.wpSubTask}>
-            <Text style={styles.txTitle}>Sub Tugas</Text>
+            <Text style={styles.txTitle}>Item Tugas</Text>
             <View style={styles.wpSubTaskItem}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <View
@@ -201,24 +371,37 @@ const TaskDetailScreen = ({navigation, route}) => {
 
           {data?.ceklist?.length > 0 ? (
             data?.ceklist?.map((itemCeklis, index) => (
-              <View
-                style={
-                  itemCeklis?.spv_cek == 1
-                    ? styles.wpItemCekboxSpv
-                    : itemCeklis?.staff_cek == 1
-                    ? styles.wpItemCekboxStaff
-                    : styles.wpItemCekbox
-                }
-                key={index}>
-                <CheckBox
-                  value={setValueCheckBox(itemCeklis)}
-                  onValueChange={newValue =>
-                    setToggleCheckBox(newValue, itemCeklis)
-                  }
-                />
-                <Text style={styles.txLocation}>
-                  {itemCeklis?.checklist_text}
-                </Text>
+              <View key={index}>
+                <View style={styles.wpItemCekboxSpv}>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <CheckBox
+                      value={setValueCheckBox(itemCeklis)}
+                      onValueChange={newValue =>
+                        setToggleCheckBox(newValue, itemCeklis)
+                      }
+                    />
+                    <Text style={styles.txLocation}>
+                      {itemCeklis?.checklist_text}
+                    </Text>
+                  </View>
+                  {renderAcction(itemCeklis)}
+                </View>
+                {itemCeklis?.sub_ceklist?.map((itemSub, indexItem) => (
+                  <View key={indexItem} style={styles.wpItemCekboxStaff}>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <CheckBox
+                        value={setValueCheckBox(itemSub)}
+                        onValueChange={newValue =>
+                          setToggleCheckBox(newValue, itemSub)
+                        }
+                      />
+                      <Text style={styles.txLocation}>
+                        {itemSub?.checklist_text}
+                      </Text>
+                    </View>
+                    {renderSubAcction(itemSub)}
+                  </View>
+                ))}
               </View>
             ))
           ) : (
@@ -227,6 +410,7 @@ const TaskDetailScreen = ({navigation, route}) => {
             </View>
           )}
         </View>
+        <Gap height={300} />
       </ScrollView>
       {(user?.role == 12 || user?.role == 4) && (
         <>
@@ -242,13 +426,13 @@ const TaskDetailScreen = ({navigation, route}) => {
               mode="contained"
               style={{borderRadius: 10, backgroundColor: '#DD4017'}}
               onPress={() => toggleModal()}>
-              Tambahkan Sub Tugas
+              Tambahkan Item Tugas
             </Button>
           </View>
           <Modal isVisible={visible}>
             <View style={styles.wpModal}>
               <View style={styles.wpModalHeader}>
-                <Text style={styles.txModalHeader}>Tambahkan Sub Tugas</Text>
+                <Text style={styles.txModalHeader}>Tambahkan Item Tugas</Text>
                 <TouchableOpacity onPress={() => toggleModal()}>
                   <Entypo name="cross" size={30} color={'#DD4017'} />
                 </TouchableOpacity>
@@ -276,6 +460,65 @@ const TaskDetailScreen = ({navigation, route}) => {
           </Modal>
         </>
       )}
+      <Modal isVisible={modalEditView}>
+        <View style={styles.wpModal}>
+          <View style={styles.wpModalHeader}>
+            <Text style={styles.txModalHeader}>Edit Item Tugas</Text>
+            <TouchableOpacity onPress={() => toggleModalEdit()}>
+              <Entypo name="cross" size={30} color={'#DD4017'} />
+            </TouchableOpacity>
+          </View>
+          <Gap height={10} />
+          <TextInput
+            mode="outlined"
+            label="Description"
+            value={descEdit}
+            onChangeText={text => setDescEdit(text)}
+            placeholder="Ex : Membobok Dinding Kamar Utama"
+            multiline
+            numberOfLines={6}
+            style={styles.textArea}
+          />
+          <Gap height={20} />
+
+          <Button
+            mode="contained"
+            style={{borderRadius: 10, backgroundColor: '#DD4017'}}
+            onPress={() => editDataSubTask()}>
+            Simpan
+          </Button>
+        </View>
+      </Modal>
+
+      <Modal isVisible={modalSubTugasView}>
+        <View style={styles.wpModal}>
+          <View style={styles.wpModalHeader}>
+            <Text style={styles.txModalHeader}>Add Sub Tugas</Text>
+            <TouchableOpacity onPress={() => toggleAddSubTugas()}>
+              <Entypo name="cross" size={30} color={'#DD4017'} />
+            </TouchableOpacity>
+          </View>
+          <Gap height={10} />
+          <TextInput
+            mode="outlined"
+            label="Description"
+            value={desc}
+            onChangeText={text => setDesc(text)}
+            placeholder="Ex : Membobok Dinding Kamar Utama"
+            multiline
+            numberOfLines={6}
+            style={styles.textArea}
+          />
+          <Gap height={20} />
+
+          <Button
+            mode="contained"
+            style={{borderRadius: 10, backgroundColor: '#DD4017'}}
+            onPress={() => addSubTugasFunc()}>
+            Simpan
+          </Button>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -358,16 +601,19 @@ const styles = StyleSheet.create({
   wpItemCekboxStaff: {
     flexDirection: 'row',
     marginVertical: 5,
+    justifyContent: 'space-between',
     alignItems: 'center',
     borderWidth: 1,
     borderRadius: 10,
     paddingVertical: 5,
     borderColor: '#638AC9 ',
     backgroundColor: '#D0E1F3',
+    marginLeft: 20,
   },
 
   wpItemCekboxSpv: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     marginVertical: 5,
     alignItems: 'center',
     borderWidth: 1,

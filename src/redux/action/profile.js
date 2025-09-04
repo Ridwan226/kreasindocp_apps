@@ -13,14 +13,9 @@ export const getProfileDataAction = setDataProfile => dispatch => {
       })
         .then(res => {
           let result = res.data;
-          console.log('res shift', result);
           setDataProfile(result?.message);
         })
-        .catch(err => {
-          console.log('err shift', err);
-        });
+        .catch(err => {});
     })
-    .catch(err => {
-      console.log('err shift', err);
-    });
+    .catch(err => {});
 };
