@@ -1,16 +1,16 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useFocusEffect} from '@react-navigation/native';
+import moment from 'moment';
 import React, {useCallback, useEffect, useState} from 'react';
 import {
+  Alert,
   ImageBackground,
   PermissionsAndroid,
   RefreshControl,
   ScrollView,
-  ScrollViewBase,
   StyleSheet,
   Text,
   View,
-  Alert,
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {Button, Dialog} from 'react-native-paper';
@@ -20,7 +20,6 @@ import {AllertCard, CardUser, Gap, LocationProject} from '../../component';
 import {getProfileDataAction} from '../../redux/action/profile';
 import {clockInPost, clockLembur, getShiftData} from '../../redux/action/shift';
 import {showMessage} from '../../utils';
-import moment from 'moment';
 
 const HomeScreen = ({navigation}) => {
   const [location, setLocation] = useState(false);

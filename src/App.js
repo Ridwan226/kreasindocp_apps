@@ -7,6 +7,7 @@ import Router from './route';
 import Toast from 'react-native-toast-message';
 import {LoadingPrimary} from './component';
 import {MenuProvider} from 'react-native-popup-menu';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 const MainApp = () => {
   const {isLoading} = useSelector(state => state.globalReducer);
   return (
@@ -21,9 +22,11 @@ const MainApp = () => {
 const App = () => {
   return (
     <Provider store={store}>
-      <MenuProvider>
-        <MainApp />
-      </MenuProvider>
+      <SafeAreaProvider>
+        <MenuProvider>
+          <MainApp />
+        </MenuProvider>
+      </SafeAreaProvider>
     </Provider>
   );
 };

@@ -418,7 +418,7 @@ const TaskDetailScreen = ({navigation, route}) => {
             style={{
               flex: 1,
               position: 'absolute',
-              bottom: 0,
+              bottom: '5%',
               width: '100%',
               padding: 10,
             }}>
