@@ -51,7 +51,9 @@ const MyAttendanceDetailScreen = ({navigation, route}) => {
           </View>
           <View style={styles.wpInfo}>
             <Text style={styles.txHeadTitle}>Tanggal Kehadiran</Text>
-            <Text style={styles.txInfo}>{data?.attendance_date}</Text>
+            <Text style={styles.txInfo}>
+              {moment(data?.attendance_date).format('DD MMM YYYY')}
+            </Text>
           </View>
           <View style={styles.wpInfo}>
             <Text style={styles.txHeadTitle}>Total Kerjaan</Text>
@@ -137,15 +139,16 @@ const MyAttendanceDetailScreen = ({navigation, route}) => {
                 <View>
                   <Text style={styles.txHeadTitle}>Masuk Lembur</Text>
                   <Text style={styles.txHead}>
-                    {moment(item?.clock_in).format('HH:mm A')}
+                    {moment(item?.clock_in).format('HH:mm')}
                   </Text>
                 </View>
                 <View>
                   <Text style={styles.txHeadTitle}>Keluar Lembur</Text>
                   <Text style={styles.txHead}>
-                    {moment(item?.clock_out).format('HH:mm') == '00:00'
+                    {moment(item?.clock_out).format('DD MMM YYYY HH:mm') ==
+                    '00:00'
                       ? '-'
-                      : moment(item?.clock_out).format('HH:mm A')}
+                      : moment(item?.clock_out).format('DD MMM YYYY HH:mm')}
                   </Text>
                 </View>
                 <View>

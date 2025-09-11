@@ -14,6 +14,7 @@ import ProjectAddScreen from './ProjectAddScreen';
 import InformationDetailScreen from './InformationDetailScreen';
 import ForgotPasswordScreen from './ForgotPasswordScreen';
 import TaskDetailScreen from './TaskDetailScreen';
+import LogItemTaskScreen from './LogItemTaskScreen';
 export {
   SplashScreen,
   HomeScreen,
@@ -31,4 +32,5 @@ export {
   InformationDetailScreen,
   ForgotPasswordScreen,
   TaskDetailScreen,
+  LogItemTaskScreen,
 };

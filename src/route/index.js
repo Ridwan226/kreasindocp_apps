@@ -8,6 +8,7 @@ import {
   InformationDetailScreen,
   InformationScreen,
   LoginScreen,
+  LogItemTaskScreen,
   MyAttendanceDetailScreen,
   MyAttendanceScreen,
   ProjectAddScreen,
@@ -121,6 +122,11 @@ const Router = () => {
       <Stack.Screen
         name="InformationDetailScreen"
         component={InformationDetailScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="LogItemTaskScreen"
+        component={LogItemTaskScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

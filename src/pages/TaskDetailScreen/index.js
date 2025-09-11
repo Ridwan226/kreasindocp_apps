@@ -137,41 +137,59 @@ const TaskDetailScreen = ({navigation, route}) => {
             onSelect={() => renderAddSubTugas(itemCeklis)}
             text="Add Sub Tugas"
           />
-          {itemCeklis?.created_by == user?.id && (
-            <>
-              <MenuOption
-                onSelect={() => renderAcctionEdit(itemCeklis)}
-                text="Edit"
-              />
-              <MenuOption onSelect={() => deleteItemTaskFunc(itemCeklis)}>
-                <Text style={{color: 'red'}}>Delete</Text>
-              </MenuOption>
-            </>
-          )}
+          <MenuOption
+            onSelect={() => renderAcctionEdit(itemCeklis)}
+            text="Edit"
+          />
+          <MenuOption
+            onSelect={() =>
+              navigation.push('LogItemTaskScreen', {
+                item: {
+                  checklist_id: itemCeklis?.checklist_id,
+                  task_type: 0,
+                },
+              })
+            }
+            text="Log Activity"
+          />
+          <MenuOption onSelect={() => deleteItemTaskFunc(itemCeklis)}>
+            <Text style={{color: 'red'}}>Delete</Text>
+          </MenuOption>
         </MenuOptions>
       </Menu>
     );
   };
 
   const renderSubAcction = itemCeklis => {
-    if (itemCeklis?.created_by == user?.id) {
-      return (
-        <Menu>
-          <MenuTrigger>
-            <Entypo name="dots-three-vertical" size={20} color={'#02275D'} />
-          </MenuTrigger>
-          <MenuOptions>
-            <MenuOption
-              onSelect={() => renderAcctionEdit(itemCeklis)}
-              text="Edit"
-            />
-            <MenuOption onSelect={() => deleteItemTaskFunc(itemCeklis)}>
-              <Text style={{color: 'red'}}>Delete</Text>
-            </MenuOption>
-          </MenuOptions>
-        </Menu>
-      );
-    }
+    // if (itemCeklis?.created_by == user?.id) {
+    return (
+      <Menu>
+        <MenuTrigger>
+          <Entypo name="dots-three-vertical" size={20} color={'#02275D'} />
+        </MenuTrigger>
+        <MenuOptions>
+          <MenuOption
+            onSelect={() => renderAcctionEdit(itemCeklis)}
+            text="Edit"
+          />
+          <MenuOption onSelect={() => deleteItemTaskFunc(itemCeklis)}>
+            <Text style={{color: 'red'}}>Delete</Text>
+          </MenuOption>
+          <MenuOption
+            onSelect={() =>
+              navigation.push('LogItemTaskScreen', {
+                item: {
+                  checklist_id: itemCeklis?.checklist_id,
+                  task_type: 0,
+                },
+              })
+            }
+            text="Log Activity"
+          />
+        </MenuOptions>
+      </Menu>
+    );
+    // }
   };
 
   const deleteItemTaskFunc = async itemCeklis => {
@@ -205,11 +223,11 @@ const TaskDetailScreen = ({navigation, route}) => {
   };
 
   const renderAcctionEdit = itemCeklis => {
-    if (itemCeklis?.created_by == user?.id) {
-      toggleModalEdit();
-      setDescEdit(itemCeklis?.checklist_text);
-      setIdEdit(itemCeklis?.checklist_id);
-    }
+    // if (itemCeklis?.created_by == user?.id) {
+    toggleModalEdit();
+    setDescEdit(itemCeklis?.checklist_text);
+    setIdEdit(itemCeklis?.checklist_id);
+    // }
   };
 
   const editDataSubTask = async () => {
@@ -271,7 +289,19 @@ const TaskDetailScreen = ({navigation, route}) => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#FFF'}}>
-      <HeaderPrimary onPress={() => navigation.goBack()} title="Tugas Detail" />
+      <HeaderPrimary
+        onPress={() => navigation.goBack()}
+        title="Tugas Detail"
+        iconName="list"
+        onPressIcon={() =>
+          navigation.push('LogItemTaskScreen', {
+            item: {
+              checklist_id: item?.task_id,
+              task_type: 1,
+            },
+          })
+        }
+      />
       <View style={styles.wpHeadInfo}>
         <Text style={styles.txTask}>Task #{item?.number}</Text>
         <Text style={styles.txTitle}>{item?.task_name}</Text>

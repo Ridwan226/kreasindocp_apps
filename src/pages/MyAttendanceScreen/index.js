@@ -81,7 +81,7 @@ const MyAttendanceScreen = ({navigation}) => {
                   <Text style={styles.txAddress}>
                     {' '}
                     {item?.clock_in
-                      ? moment(item?.clock_in).format('hh:mm A')
+                      ? moment(item?.clock_in).format('HH:mm')
                       : '-'}{' '}
                   </Text>
                 </View>
@@ -90,7 +90,7 @@ const MyAttendanceScreen = ({navigation}) => {
                   <Text style={styles.txAddress}>
                     {' '}
                     {item?.clock_out
-                      ? moment(item?.clock_out).format('hh:mm A')
+                      ? moment(item?.clock_out).format('HH:mm')
                       : '-'}{' '}
                   </Text>
                 </View>
@@ -99,7 +99,7 @@ const MyAttendanceScreen = ({navigation}) => {
                   <Text style={styles.txAddress}>
                     {' '}
                     {item?.overtime_in
-                      ? moment(item?.overtime_in).format('hh:mm A')
+                      ? moment(item?.overtime_in).format('HH:mm')
                       : '-'}{' '}
                   </Text>
                 </View>
@@ -110,7 +110,7 @@ const MyAttendanceScreen = ({navigation}) => {
                     {item?.overtime_out
                       ? moment(item?.overtime_out).format('HH:mm') == '00:00'
                         ? '-'
-                        : moment(item?.overtime_out).format('HH:mm A')
+                        : moment(item?.overtime_out).format('HH:mm')
                       : '-'}
                     {/* {moment(item?.overtime_out).format('HH:mm') == '00:00'
                       ? '-'

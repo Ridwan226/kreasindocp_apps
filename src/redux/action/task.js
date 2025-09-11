@@ -224,3 +224,31 @@ export const deleteItemTask = form => dispatch => {
       throw err;
     });
 };
+
+export const logItemTask = (form, setData) => dispatch => {
+  return getData('tokenLogin') // Tambahkan return
+    .then(resToken => {
+      return Axios.post(
+        `${API_HOST.url_api}/Task/list_tasks_checklist_log`,
+        form,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            authorization: resToken.value,
+          },
+        },
+      );
+    })
+    .then(res => {
+      let result = res?.data?.data;
+      setData(result);
+    })
+    .catch(err => {
+      showMessage(
+        err?.response?.data?.message
+          ? err?.response?.data?.message
+          : 'Something went wrong',
+      );
+      throw err;
+    });
+};

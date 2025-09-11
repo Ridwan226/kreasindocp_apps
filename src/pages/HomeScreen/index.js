@@ -252,7 +252,7 @@ const HomeScreen = ({navigation}) => {
             dataShift?.attendance_time_checks >= 1
               ? moment(
                   dataShift?.attendance_time_checks_value_api?.[0]?.clock_in,
-                ).format('hh:mm A')
+                ).format('HH:mm')
               : dataProfile?.username
           }
           image={dataProfile?.profile_photo}
