@@ -10,6 +10,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
@@ -332,6 +333,10 @@ const HomeScreen = ({navigation}) => {
                     icon="camera"
                     buttonColor="#DD4017"
                     mode="contained"
+                    labelStyle={{
+                      fontSize: 16,
+                      fontWeight: 'bold',
+                    }}
                     disabled={
                       dataShift?.attendance_time_checks < 1 ? false : true
                     }
@@ -343,7 +348,7 @@ const HomeScreen = ({navigation}) => {
             ) : null}
 
             <Gap height={10} />
-            <View style={styles.wpButton}>
+            {/* <View style={styles.wpButton}>
               <Button
                 icon="arrow-right"
                 mode="contained"
@@ -357,6 +362,10 @@ const HomeScreen = ({navigation}) => {
                     : true
                 }
                 buttonColor="#17C666"
+                labelStyle={{
+                  fontSize: 17,
+                  fontWeight: 'bold',
+                }}
                 onPress={() => onClockIn()}>
                 Jam Masuk
               </Button>
@@ -365,9 +374,52 @@ const HomeScreen = ({navigation}) => {
                 mode="contained"
                 disabled={dataShift?.attendance_time_checks < 1 ? true : false}
                 buttonColor="#17C666"
+                labelStyle={{
+                  fontSize: 17,
+                  fontWeight: 'bold',
+                }}
                 onPress={() => onClockOut()}>
                 Jam Keluar
               </Button>
+            </View> */}
+            <View style={styles.wpButton}>
+              <TouchableOpacity
+                style={[
+                  styles.button,
+                  {
+                    backgroundColor:
+                      dataShift?.overtime || dataShift?.active_overtime == 1
+                        ? '#ccc' // abu-abu saat disable
+                        : dataShift?.attendance_time_checks < 1
+                        ? '#17C666' // hijau aktif
+                        : '#ccc', // kondisi lain disable juga
+                  },
+                ]}
+                disabled={
+                  dataShift?.overtime || dataShift?.active_overtime == 1
+                    ? true
+                    : dataShift?.attendance_time_checks < 1
+                    ? false
+                    : true
+                }
+                onPress={onClockIn}>
+                <Text style={styles.buttonText}>Jam Masuk</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[
+                  styles.button,
+                  {
+                    backgroundColor:
+                      dataShift?.attendance_time_checks < 1
+                        ? '#ccc'
+                        : '#17C666',
+                  },
+                ]}
+                disabled={dataShift?.attendance_time_checks < 1}
+                onPress={onClockOut}>
+                <Text style={styles.buttonText}>Jam Keluar</Text>
+              </TouchableOpacity>
             </View>
 
             <Button
@@ -375,36 +427,47 @@ const HomeScreen = ({navigation}) => {
               mode="contained"
               buttonColor="#DD4017"
               style={{marginTop: 20, width: '100%'}}
+              labelStyle={{fontSize: 17, fontWeight: 'bold'}}
               onPress={() => navigation.push('MyAttendanceScreen')}>
               Kehadiran Saya
             </Button>
             <Gap height={10} />
             <Gap height={10} />
             <View style={styles.wpButton}>
-              <Button
-                icon="arrow-right"
-                mode="contained"
+              {/* Tombol Masuk Lembur */}
+              <TouchableOpacity
+                style={[
+                  styles.button,
+                  {
+                    backgroundColor:
+                      dataShift?.attendance_time_checks == 1 ||
+                      dataShift?.active_overtime == 0 ||
+                      dataShift?.overtime
+                        ? '#ccc' // warna abu-abu saat disable
+                        : '#17C666', // warna hijau saat aktif
+                  },
+                ]}
                 disabled={
-                  dataShift?.attendance_time_checks == 1
-                    ? true
-                    : dataShift?.active_overtime == 0
-                    ? true
-                    : dataShift?.overtime
-                    ? true
-                    : false
+                  dataShift?.attendance_time_checks == 1 ||
+                  dataShift?.active_overtime == 0 ||
+                  dataShift?.overtime
                 }
-                buttonColor="#17C666"
                 onPress={() => onClockLembur('in')}>
-                Masuk Lembur
-              </Button>
-              <Button
-                icon="arrow-down"
-                mode="contained"
-                disabled={dataShift?.overtime ? false : true}
-                buttonColor="#17C666"
+                <Text style={styles.buttonText}>Masuk Lembur</Text>
+              </TouchableOpacity>
+
+              {/* Tombol Keluar Lembur */}
+              <TouchableOpacity
+                style={[
+                  styles.button,
+                  {
+                    backgroundColor: dataShift?.overtime ? '#17C666' : '#ccc',
+                  },
+                ]}
+                disabled={!dataShift?.overtime}
                 onPress={() => onClockLembur('out')}>
-                Keluar Lembur
-              </Button>
+                <Text style={styles.buttonText}>Keluar Lembur</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -446,7 +509,17 @@ const styles = StyleSheet.create({
     padding: 10,
     flex: 1,
   },
-
+  button: {
+    width: '48%',
+    paddingVertical: 12,
+    borderRadius: 100,
+    alignItems: 'center',
+  },
+  buttonText: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
   wpUser: {
     flexDirection: 'row',
     justifyContent: 'space-between',

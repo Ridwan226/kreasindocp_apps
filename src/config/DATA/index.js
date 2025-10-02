@@ -1,3 +1,3 @@
 export const GLOBAL_DATA = {
-  version: 'V 1.0.5',
+  version: 'V 1.0.6',
 };

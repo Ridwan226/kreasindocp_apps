@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   wpCamera: {
     position: 'absolute',
     zIndex: 999,
-    bottom: '5%',
+    bottom: '15%',
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
