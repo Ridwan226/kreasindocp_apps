@@ -301,7 +301,7 @@ const HomeScreen = ({navigation}) => {
                 <ImageBackground
                   style={{
                     width: '100%',
-                    height: '90%',
+                    height: 350,
                     alignItems: 'center',
                     position: 'relative',
                   }}
@@ -347,7 +347,7 @@ const HomeScreen = ({navigation}) => {
               )
             ) : null}
 
-            <Gap height={10} />
+            <Gap height={20} />
             {/* <View style={styles.wpButton}>
               <Button
                 icon="arrow-right"
@@ -432,7 +432,15 @@ const HomeScreen = ({navigation}) => {
               Kehadiran Saya
             </Button>
             <Gap height={10} />
+            {dataShift?.overtime_available && (
+              <AllertCard
+                text="Lembur sudah dicatat di lokasi proyek, harap cek di Kehadiran Saya "
+                type="success"
+              />
+            )}
+
             <Gap height={10} />
+
             <View style={styles.wpButton}>
               {/* Tombol Masuk Lembur */}
               <TouchableOpacity
@@ -475,7 +483,7 @@ const HomeScreen = ({navigation}) => {
             </View>
           </View>
         </View>
-        <Gap height={500} />
+        <Gap height={300} />
       </ScrollView>
       <Dialog visible={visibleLogout} onDismiss={hideDialog}>
         <Dialog.Icon icon="alert" />
@@ -554,7 +562,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1,
     borderColor: '#DD4017',
-    height: '80%',
+    height: 350,
     alignItems: 'center',
     justifyContent: 'center',
   },

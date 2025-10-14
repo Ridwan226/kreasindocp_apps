@@ -15,16 +15,16 @@ const styles = StyleSheet.create({
   container: type => ({
     padding: 10,
     width: '100%',
-    backgroundColor: type == 'warning' ? '#fff3cd' : '#1b8050ff',
+    backgroundColor: type == 'warning' ? '#fff3cd' : '#9cdabdff',
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: type == 'warning' ? '#856404' : '#75b798',
+    borderColor: type == 'warning' ? '#856404' : '#0d5d36ff',
     marginVertical: 10,
   }),
 
   text: type => ({
     fontSize: 14,
     fontFamily: 'Poppins-Medium',
-    color: type == 'warning' ? '#856404' : '#1b8050ff',
+    color: type == 'warning' ? '#856404' : '#0d5d36ff',
   }),
 });
