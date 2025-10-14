@@ -416,7 +416,7 @@ const HomeScreen = ({navigation}) => {
                         : '#17C666',
                   },
                 ]}
-                disabled={dataShift?.attendance_time_checks < 1}
+                disabled={dataShift?.attendance_time_checks < 1 ? true : false}
                 onPress={onClockOut}>
                 <Text style={styles.buttonText}>Jam Keluar</Text>
               </TouchableOpacity>
@@ -443,14 +443,18 @@ const HomeScreen = ({navigation}) => {
                       dataShift?.attendance_time_checks == 1 ||
                       dataShift?.active_overtime == 0 ||
                       dataShift?.overtime
-                        ? '#ccc' // warna abu-abu saat disable
+                        ? '#b6b3b3ff' // warna abu-abu saat disable
                         : '#17C666', // warna hijau saat aktif
                   },
                 ]}
                 disabled={
-                  dataShift?.attendance_time_checks == 1 ||
-                  dataShift?.active_overtime == 0 ||
-                  dataShift?.overtime
+                  dataShift?.attendance_time_checks == 1
+                    ? true
+                    : dataShift?.active_overtime == 0
+                    ? true
+                    : dataShift?.overtime
+                    ? true
+                    : false
                 }
                 onPress={() => onClockLembur('in')}>
                 <Text style={styles.buttonText}>Masuk Lembur</Text>
@@ -464,7 +468,7 @@ const HomeScreen = ({navigation}) => {
                     backgroundColor: dataShift?.overtime ? '#17C666' : '#ccc',
                   },
                 ]}
-                disabled={!dataShift?.overtime}
+                disabled={dataShift?.overtime ? false : true}
                 onPress={() => onClockLembur('out')}>
                 <Text style={styles.buttonText}>Keluar Lembur</Text>
               </TouchableOpacity>

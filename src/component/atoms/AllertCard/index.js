@@ -1,10 +1,10 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
-const AllertCard = ({text}) => {
+const AllertCard = ({text, type = 'warning'}) => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>{text}</Text>
+    <View style={styles.container(type)}>
+      <Text style={styles.text(type)}>{text}</Text>
     </View>
   );
 };
@@ -12,19 +12,19 @@ const AllertCard = ({text}) => {
 export default AllertCard;
 
 const styles = StyleSheet.create({
-  container: {
+  container: type => ({
     padding: 10,
     width: '100%',
-    backgroundColor: '#fff3cd',
+    backgroundColor: type == 'warning' ? '#fff3cd' : '#1b8050ff',
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#856404',
+    borderColor: type == 'warning' ? '#856404' : '#75b798',
     marginVertical: 10,
-  },
+  }),
 
-  text: {
+  text: type => ({
     fontSize: 14,
     fontFamily: 'Poppins-Medium',
-    color: '#856404',
-  },
+    color: type == 'warning' ? '#856404' : '#1b8050ff',
+  }),
 });
