@@ -1,6 +1,7 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useCallback, useRef, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
+import {Image} from 'react-native-compressor';
 import {
   Camera,
   useCameraDevice,
@@ -26,25 +27,61 @@ const TakeSelfieScreen = ({navigation}) => {
     }, []),
   );
 
+  // const takePhoto = async () => {
+  //   try {
+  //     // setIsLoadingButton(true);
+  //     const photo = await camera.current.takePhoto({
+  //       flash: 'off',
+  //     });
+  //     let name = photo.path.substring(
+  //       photo.path.lastIndexOf('/') + 1,
+  //       photo.path.length,
+  //     );
+
+  //     let dataImage = {
+  //       uri: Platform.OS === 'ios' ? photo?.path : `file://${photo?.path}`,
+  //       type: 'image/jpg',
+  //       name: name,
+  //     };
+  //     dispatch({type: 'SET_IMAGE_SELFIE', value: dataImage});
+  //     navigation.goBack();
+  //   } catch (err) {}
+  // };
+
   const takePhoto = async () => {
     try {
-      // setIsLoadingButton(true);
       const photo = await camera.current.takePhoto({
         flash: 'off',
       });
+
+      let originalPath =
+        Platform.OS === 'ios' ? photo.path : `file://${photo.path}`;
+
+      // 🔽 Kompres gambar
+      const compressedImage = await Image.compress(originalPath, {
+        compressionMethod: 'auto', // bisa 'manual' juga
+        quality: 0.4, // 0 - 1 (semakin rendah = lebih kecil size)
+        maxWidth: 900, // optional resize
+        maxHeight: 900,
+      });
+
+      // ambil nama file dari path asli
       let name = photo.path.substring(
         photo.path.lastIndexOf('/') + 1,
         photo.path.length,
       );
 
       let dataImage = {
-        uri: Platform.OS === 'ios' ? photo?.path : `file://${photo?.path}`,
-        type: 'image/jpg',
+        uri: compressedImage, // gunakan hasil kompres
+        type: 'image/jpeg',
         name: name,
       };
+
       dispatch({type: 'SET_IMAGE_SELFIE', value: dataImage});
       navigation.goBack();
-    } catch (err) {}
+    } catch (err) {
+      console.error('Error taking photo:', err);
+    }
   };
 
   if (device == null) {

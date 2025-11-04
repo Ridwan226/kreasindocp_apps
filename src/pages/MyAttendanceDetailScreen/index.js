@@ -91,6 +91,12 @@ const MyAttendanceDetailScreen = ({navigation, route}) => {
                     Jarak : {item?.distance} m{' '}
                     {item?.out_of_range == 1 ? '(Diluar jarak)' : ''}
                   </Text>
+                </View>
+              </View>
+              <View style={styles.wpTime}>
+                <View>
+                  <Text style={styles.txHeadTitle}>Jam Masuk</Text>
+                  <Text style={styles.txHead}>{item?.fclock_in}</Text>
                   <TouchableOpacity
                     onPress={() =>
                       Linking.openURL(
@@ -108,15 +114,12 @@ const MyAttendanceDetailScreen = ({navigation, route}) => {
                     </Text>
                   </TouchableOpacity>
                 </View>
-              </View>
-              <View style={styles.wpTime}>
-                <View>
-                  <Text style={styles.txHeadTitle}>Jam Masuk</Text>
-                  <Text style={styles.txHead}>{item?.fclock_in}</Text>
-                </View>
                 <View>
                   <Text style={styles.txHeadTitle}>Jam Keluar</Text>
                   <Text style={styles.txHead}>{item?.fclock_out}</Text>
+                  {item?.project_name_out && (
+                    <Text style={styles.txHead}>{item?.project_name_out}</Text>
+                  )}
                 </View>
                 <View>
                   <Text style={styles.txHeadTitle}>Total</Text>
@@ -130,17 +133,20 @@ const MyAttendanceDetailScreen = ({navigation, route}) => {
           <Gap height={20} />
           {data?.overtime?.map((item, index) => (
             <View style={styles.wpList} key={index}>
-              <View style={styles.wpListHead}>
+              {/* <View style={styles.wpListHead}>
                 <View>
                   <Text style={[styles.txHead]}>{item?.project_name}</Text>
                 </View>
-              </View>
+              </View> */}
               <View style={styles.wpTime}>
                 <View>
                   <Text style={styles.txHeadTitle}>Masuk Lembur</Text>
                   <Text style={styles.txHead}>
                     {moment(item?.clock_in).format('HH:mm')}
                   </Text>
+                  {item?.project_name && (
+                    <Text style={styles.txHead}>{item?.project_name}</Text>
+                  )}
                 </View>
                 <View>
                   <Text style={styles.txHeadTitle}>Keluar Lembur</Text>
@@ -150,6 +156,9 @@ const MyAttendanceDetailScreen = ({navigation, route}) => {
                       ? '-'
                       : moment(item?.clock_out).format('DD MMM YYYY HH:mm')}
                   </Text>
+                  {item?.project_name_out && (
+                    <Text style={styles.txHead}>{item?.project_name_out}</Text>
+                  )}
                 </View>
                 <View>
                   <Text style={styles.txHeadTitle}>Total</Text>

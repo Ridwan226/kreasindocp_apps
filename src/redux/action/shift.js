@@ -70,7 +70,7 @@ export const clockInPost = form => dispatch => {
 
   return getData('tokenLogin')
     .then(resToken => {
-      return Axios.post(`${API_HOST.url_api}/Shifts/set_clocking_v2`, form, {
+      return Axios.post(`${API_HOST.url_api}/Shifts/set_clocking_v3`, form, {
         headers: {
           'Content-Type': 'multipart/form-data',
           authorization: resToken.value,
@@ -103,7 +103,7 @@ export const clockLembur = form => dispatch => {
   return getData('tokenLogin')
     .then(resToken => {
       return Axios.post(
-        `${API_HOST.url_api}/Overtime/add_overtime_post`,
+        `${API_HOST.url_api}/Overtime/add_overtime_post_v2`,
         form,
         {
           headers: {
