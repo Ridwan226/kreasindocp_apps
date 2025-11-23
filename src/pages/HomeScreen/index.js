@@ -17,15 +17,21 @@ import Geolocation from 'react-native-geolocation-service';
 import {Button, Dialog} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
-import {AllertCard, CardUser, Gap, LocationProject} from '../../component';
-import {getProfileDataAction} from '../../redux/action/profile';
+import {
+  AllertCard,
+  CardUser,
+  Gap,
+  LocationProject,
+  NewVersionUpdate,
+} from '../../component';
+import {getProfileDataAction, getVersionApps} from '../../redux/action/profile';
 import {clockInPost, clockLembur, getShiftData} from '../../redux/action/shift';
 import {showMessage} from '../../utils';
 
 const HomeScreen = ({navigation}) => {
   const [location, setLocation] = useState(false);
   const [visibleLogout, setVisibleLogout] = useState(false);
-  // const [dataShift, setDataShift] = useState({});
+  const [isUpdateApps, setIsUpdateApps] = useState(false);
   const [dataProfile, setDataProfile] = useState({});
   const [refreshing, setRefreshing] = useState(false);
   const hideDialog = () => setVisibleLogout(!visibleLogout);
@@ -39,6 +45,7 @@ const HomeScreen = ({navigation}) => {
     useCallback(() => {
       getDataShift();
       getDataProfile();
+      getDataAppsVersion();
     }, [location]),
   );
 
@@ -81,6 +88,10 @@ const HomeScreen = ({navigation}) => {
 
   const getDataProfile = () => {
     dispatch(getProfileDataAction(setDataProfile));
+  };
+
+  const getDataAppsVersion = () => {
+    dispatch(getVersionApps(setIsUpdateApps));
   };
 
   const requestLocationPermission = async () => {
@@ -495,6 +506,7 @@ const HomeScreen = ({navigation}) => {
           <Button onPress={onLogout}>Ok</Button>
         </Dialog.Actions>
       </Dialog>
+      {isUpdateApps && <NewVersionUpdate />}
     </SafeAreaView>
   );
 };

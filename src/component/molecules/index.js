@@ -4,6 +4,9 @@ import HeaderPrimary from './HeaderPrimary';
 import CardTasks from './CardTasks';
 import CardClient from './CardClient';
 import LocationProject from './LocationProject';
+import ConnectionStatus from './ConnectionStatus';
+import NoInternet from './NoInternet';
+import NewVersionUpdate from './NewVersionUpdate';
 export {
   BottomTabNavigator,
   CardUser,
@@ -11,4 +14,7 @@ export {
   CardTasks,
   CardClient,
   LocationProject,
+  ConnectionStatus,
+  NoInternet,
+  NewVersionUpdate,
 };

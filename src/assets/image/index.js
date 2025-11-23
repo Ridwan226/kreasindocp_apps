@@ -1,3 +1,4 @@
 import LogoKorpie from './LogoKorpie.svg';
-
-export {LogoKorpie};
+import NoKoneksi from './NoKoneksi.svg';
+import UpdateApps from './UpdateApps.svg';
+export {LogoKorpie, NoKoneksi, UpdateApps};

@@ -3,6 +3,7 @@ const initGlobal = {
   imageSelfie: {},
   projectId: 0,
   dataShift: {},
+  isConnectedInternet: null,
 };
 
 export const globalReducer = (state = initGlobal, action) => {
@@ -28,6 +29,12 @@ export const globalReducer = (state = initGlobal, action) => {
     return {
       ...state,
       projectId: action.value,
+    };
+  }
+  if (action.type === 'SET_IS_CONNECTED') {
+    return {
+      ...state,
+      isConnectedInternet: action.value,
     };
   }
   return state;
