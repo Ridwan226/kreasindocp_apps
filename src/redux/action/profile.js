@@ -37,8 +37,13 @@ export const getVersionApps = getDataAppsVersion => dispatch => {
           } else {
             getDataAppsVersion(true);
           }
+          dispatch({type: 'SET_IS_CONNECTED', value: false});
         })
-        .catch(err => {});
+        .catch(err => {
+          dispatch({type: 'SET_IS_CONNECTED', value: true});
+        });
     })
-    .catch(err => {});
+    .catch(err => {
+      dispatch({type: 'SET_IS_CONNECTED', value: true});
+    });
 };
