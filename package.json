@@ -1,14 +1,18 @@
 {
-  "name": "kreasindocp",
+  "name": "korpiein",
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
+    "android": "react-native run-android --active-arch-only",
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "postinstall": "patch-package"
+    "android:release": "cd android && ./gradlew assembleRelease && cd ..",
+    "android:bundle": "cd android && ./gradlew bundleRelease && cd ..",
+    "postinstall": "patch-package",
+    "android:cleanmac": "rm -rf android/.cxx android/app/.cxx android/app/build android/build && cd android && ./gradlew clean",
+    "android:cleanwin": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"Remove-Item -Recurse -Force 'android/.cxx','android/app/.cxx','android/app/build','android/build' -ErrorAction SilentlyContinue; cd android; ./gradlew.bat clean\""
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.1.1",
@@ -37,6 +41,7 @@
     "react-native-month-year-picker": "^1.9.0",
     "react-native-pager-view": "^6.7.0",
     "react-native-paper": "^5.13.1",
+    "react-native-permissions": "^5.5.1",
     "react-native-popup-menu": "^0.18.0",
     "react-native-reanimated": "3.18.0",
     "react-native-responsive-fontsize": "^0.5.1",

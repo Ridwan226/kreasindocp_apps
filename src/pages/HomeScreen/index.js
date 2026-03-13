@@ -176,14 +176,6 @@ const HomeScreen = ({navigation}) => {
       getDataProfile();
       getLocation();
     } catch (error) {}
-
-    // dispatch(clockInPost(form));
-    // setTimeout(() => {
-    //   console.log('get Data');
-    //   getDataShift();
-    //   getDataProfile();
-    //   getLocation();
-    // }, 3000);
   };
 
   const onClockOut = async () => {

@@ -1,12 +1,24 @@
 # Resolve react_native_pods.rb with node to allow for hoisting
-require Pod::Executable.execute_command('node', ['-p',
-  'require.resolve(
-    "react-native/scripts/react_native_pods.rb",
-    {paths: [process.argv[1]]},
-  )', __dir__]).strip
+ def node_require(script)
+   # Resolve script with node to allow for hoisting
+   require Pod::Executable.execute_command('node', ['-p',
+     "require.resolve(
+       '#{script}',
+       {paths: [process.argv[1]]},
+     )", __dir__]).strip
+ end
 
-platform :ios, min_ios_version_supported
+ node_require('react-native/scripts/react_native_pods.rb')
+node_require('react-native-permissions/scripts/setup.rb')
+platform :ios, '15.1'
 prepare_react_native_project!
+
+setup_permissions([
+  'Camera',
+  'LocationAccuracy',
+  'LocationAlways',
+  'LocationWhenInUse'
+])
 
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
@@ -14,22 +26,42 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'kreasindocp' do
+# ✅ extra pods
+pod 'react-native-geolocation-service', :path => '../node_modules/react-native-geolocation-service'
+pod 'RCT-Folly', :podspec => '../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec'
+
+target 'korpiein' do
   config = use_native_modules!
 
   use_react_native!(
     :path => config[:reactNativePath],
-    # An absolute path to your application root.
+    :hermes_enabled => true,       # pastikan Hermes aktif
+    :new_arch_enabled => false,
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
-
+  
   post_install do |installer|
-    # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
     react_native_post_install(
       installer,
       config[:reactNativePath],
       :mac_catalyst_enabled => false,
-      # :ccache_enabled => true
     )
+
+    # ✅ Fix folly Coroutine.h issue
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings["GCC_PREPROCESSOR_DEFINITIONS"] ||= ['$(inherited)']
+        config.build_settings["GCC_PREPROCESSOR_DEFINITIONS"] << 'FOLLY_NO_COROUTINES=1'
+        config.build_settings["DEBUG_INFORMATION_FORMAT"] = "dwarf-with-dsym"
+      end
+    end
+
+    # ✅ Generate Hermes dSYM agar tidak error UUID
+    begin
+      Pod::UI.puts "Generating Hermes dSYMs..."
+      system("RCT_NO_LTO=1 #{config[:reactNativePath]}/../node_modules/react-native/scripts/generate-hermes-dsym.sh")
+    rescue => e
+      Pod::UI.warn "Hermes dSYM generation failed: #{e}"
+    end
   end
 end

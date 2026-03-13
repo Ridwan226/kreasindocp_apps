@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "kreasindocp.app"
-               BlueprintName = "kreasindocp"
-               ReferencedContainer = "container:kreasindocp.xcodeproj">
+               BuildableName = "korpiein.app"
+               BlueprintName = "korpiein"
+               ReferencedContainer = "container:korpiein.xcodeproj">  
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,13 +33,13 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "kreasindocpTests.xctest"
-               BlueprintName = "kreasindocpTests"
-               ReferencedContainer = "container:kreasindocp.xcodeproj">
+               BuildableName = "korpieinTests.xctest"
+               BlueprintName = "korpieinTests"
+               ReferencedContainer = "container:korpiein.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
-   </TestAction>
+   </TestAction>    
    <LaunchAction
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "kreasindocp.app"
-            BlueprintName = "kreasindocp"
-            ReferencedContainer = "container:kreasindocp.xcodeproj">
+            BuildableName = "korpiein.app"
+            BlueprintName = "korpiein"
+            ReferencedContainer = "container:korpiein.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "kreasindocp.app"
-            BlueprintName = "kreasindocp"
-            ReferencedContainer = "container:kreasindocp.xcodeproj">
+            BuildableName = "korpiein.app"
+            BlueprintName = "korpiein"
+            ReferencedContainer = "container:korpiein.xcodeproj"> 
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

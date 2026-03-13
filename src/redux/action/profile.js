@@ -31,7 +31,6 @@ export const getVersionApps = getDataAppsVersion => dispatch => {
       })
         .then(res => {
           let result = res?.data?.message;
-          console.log('result', result);
           if (result == GLOBAL_DATA.versionApps) {
             getDataAppsVersion(false);
           } else {

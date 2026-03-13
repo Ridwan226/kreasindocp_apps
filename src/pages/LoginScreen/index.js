@@ -121,7 +121,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Bold',
     fontSize: 50,
     color: '#02275D',
-    lineHeight: 50,
   },
   desc: {
     fontFamily: 'Poppins-SemiBold',
