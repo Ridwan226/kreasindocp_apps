@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {
   Dimensions,
   Image,
+  Linking,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -35,6 +36,10 @@ const LoginScreen = ({navigation}) => {
 
     dispatch({type: 'SET_LOADING', value: true});
     dispatch(signInAccton(data, navigation));
+  };
+
+  const onDemo = () => {
+    Linking.openURL('https://forms.gle/z14MJLMVUEzwGzKH6');
   };
 
   return (
@@ -89,6 +94,15 @@ const LoginScreen = ({navigation}) => {
               onPress={() => navigation.navigate('ForgotPasswordScreen')}
               activeOpacity={0.7}>
               <Text style={styles.txForgot}>Forgot Password</Text>
+            </TouchableOpacity>
+            <Gap height={20} />
+            <TouchableOpacity
+              onPress={() => onDemo()}
+              activeOpacity={0.7}
+              style={[styles.button, {paddingVertical: 15}]}>
+              <Text style={[styles.txForgot, {color: '#FFF'}]}>
+                Request Demo / Register Company
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

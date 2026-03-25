@@ -6,6 +6,7 @@ import {
   Alert,
   ImageBackground,
   PermissionsAndroid,
+  Platform,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -95,24 +96,39 @@ const HomeScreen = ({navigation}) => {
   };
 
   const requestLocationPermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {
-          title: 'Geolocation Permission',
-          message: 'Can we access your location?',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        },
-      );
-      if (granted === 'granted') {
-        return true;
-      } else {
+    if (Platform.OS === 'ios') {
+      try {
+        const auth = await Geolocation.requestAuthorization('whenInUse');
+        if (auth === 'granted') {
+          return true;
+        }
+        return false;
+      } catch (err) {
+        console.warn(err);
         return false;
       }
-    } catch (err) {
-      return false;
+    }
+
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: 'Geolocation Permission',
+            message: 'Can we access your location?',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          return true;
+        } else {
+          return false;
+        }
+      } catch (err) {
+        return false;
+      }
     }
   };
 
