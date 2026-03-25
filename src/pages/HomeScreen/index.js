@@ -28,6 +28,7 @@ import {
 import {getProfileDataAction, getVersionApps} from '../../redux/action/profile';
 import {clockInPost, clockLembur, getShiftData} from '../../redux/action/shift';
 import {showMessage} from '../../utils';
+import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
 
 const HomeScreen = ({navigation}) => {
   const [location, setLocation] = useState(false);
@@ -35,6 +36,8 @@ const HomeScreen = ({navigation}) => {
   const [isUpdateApps, setIsUpdateApps] = useState(false);
   const [dataProfile, setDataProfile] = useState({});
   const [refreshing, setRefreshing] = useState(false);
+  const [textBiometric, setTextBiometric] = useState('');
+  const [isBiometricSignature, setIsBiometricSignature] = useState('');
   const hideDialog = () => setVisibleLogout(!visibleLogout);
   const {isLoading, imageSelfie, projectId, dataShift} = useSelector(
     state => state.globalReducer,
@@ -72,7 +75,30 @@ const HomeScreen = ({navigation}) => {
 
   useEffect(() => {
     getLocation();
+    getBiometric();
   }, []);
+
+  const getBiometric = () => {
+    const rnBiometrics = new ReactNativeBiometrics();
+
+    rnBiometrics.isSensorAvailable().then(resultObject => {
+      const {available, biometryType} = resultObject;
+
+      if (available && biometryType === BiometryTypes.TouchID) {
+        console.log('TouchID is supported');
+        setTextBiometric('TouchID is supported');
+      } else if (available && biometryType === BiometryTypes.FaceID) {
+        console.log('FaceID is supported');
+        setTextBiometric('FaceID is supported');
+      } else if (available && biometryType === BiometryTypes.Biometrics) {
+        console.log('Biometrics is supported');
+        setTextBiometric('Biometrics is supported');
+      } else {
+        console.log('Biometrics not supported');
+        setTextBiometric('Biometrics not supported');
+      }
+    });
+  };
 
   const getDataShift = () => {
     let form = new FormData();
@@ -254,6 +280,44 @@ const HomeScreen = ({navigation}) => {
       getLocation();
     } catch (error) {
       dispatch({type: 'SET_LOADING', value: false});
+    }
+  };
+
+  const getKeyBiometric = async () => {
+    try {
+      const rnBiometrics = new ReactNativeBiometrics();
+
+      // cek sensor
+      const {available} = await rnBiometrics.isSensorAvailable();
+      if (!available) {
+        showMessage('Biometrik tidak tersedia');
+        return;
+      }
+
+      // cek key
+      const {keysExist} = await rnBiometrics.biometricKeysExist();
+      if (!keysExist) {
+        await rnBiometrics.createKeys();
+      }
+
+      // payload unik
+      const payload = `absen-${Date.now()}`;
+
+      const {success, signature} = await rnBiometrics.createSignature({
+        promptMessage: 'Sign in',
+        payload,
+      });
+
+      if (!success || !signature) {
+        showMessage('Autentikasi gagal');
+        return;
+      }
+
+      console.log(signature);
+
+      setIsBiometricSignature(signature);
+    } catch (error) {
+      showMessage('Error biometrik: ' + error);
     }
   };
 
@@ -501,6 +565,11 @@ const HomeScreen = ({navigation}) => {
               </TouchableOpacity>
             </View>
           </View>
+          <TouchableOpacity onPress={() => getKeyBiometric()}>
+            <Text>Biometric Signature</Text>
+          </TouchableOpacity>
+          <Text>support : {textBiometric}</Text>
+          <Text>isBiometricSignature : {isBiometricSignature}</Text>
         </View>
         <Gap height={300} />
       </ScrollView>
