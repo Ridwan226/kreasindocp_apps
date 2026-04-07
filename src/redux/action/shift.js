@@ -164,7 +164,6 @@ export const viewDataMyAttendanceDetail = (form, setData) => dispatch => {
         },
       })
         .then(res => {
-          console.log('res', res.data);
           let result = res.data;
           setData(result?.message);
         })

@@ -1,6 +1,7 @@
 import Axios from 'axios';
 import {API_HOST, GLOBAL_DATA} from '../../config';
 import {getData, showMessage, storeData} from '../../utils';
+import {Platform} from 'react-native';
 
 export const getProfileDataAction = setDataProfile => dispatch => {
   getData('tokenLogin')
@@ -23,7 +24,7 @@ export const getProfileDataAction = setDataProfile => dispatch => {
 export const getVersionApps = getDataAppsVersion => dispatch => {
   getData('tokenLogin')
     .then(resToken => {
-      Axios.get(`${API_HOST.url_api}/Auth/apps_version`, {
+      Axios.get(`${API_HOST.url_api}/Auth/apps_version_v2`, {
         headers: {
           'Content-Type': 'multipart/form-data',
           authorization: resToken.value,
@@ -31,11 +32,24 @@ export const getVersionApps = getDataAppsVersion => dispatch => {
       })
         .then(res => {
           let result = res?.data?.message;
-          if (result == GLOBAL_DATA.versionApps) {
-            getDataAppsVersion(false);
+          if (Platform.OS === 'android') {
+            if (result?.force_update_android == true) {
+              if (result?.version_android == GLOBAL_DATA.versionAppsAndroid) {
+                getDataAppsVersion(false);
+              } else {
+                getDataAppsVersion(true);
+              }
+            }
           } else {
-            getDataAppsVersion(true);
+            if (result?.force_update_ios == true) {
+              if (result?.version_ios == GLOBAL_DATA.versionAppsIOS) {
+                getDataAppsVersion(false);
+              } else {
+                getDataAppsVersion(true);
+              }
+            }
           }
+
           dispatch({type: 'SET_IS_CONNECTED', value: false});
         })
         .catch(err => {

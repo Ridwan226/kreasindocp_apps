@@ -15,6 +15,7 @@ import {useDispatch} from 'react-redux';
 import {viewDataMyAttendanceDetail} from '../../redux/action/shift';
 import Lightbox from 'react-native-lightbox-v2';
 import moment from 'moment';
+import {API_HOST} from '../../config';
 
 const MyAttendanceDetailScreen = ({navigation, route}) => {
   const {item} = route.params;
@@ -80,7 +81,7 @@ const MyAttendanceDetailScreen = ({navigation, route}) => {
                   }}>
                   <Image
                     source={{
-                      uri: `https://kreasindocp.graphie.design/public/uploads/absen/${item?.image_in}`,
+                      uri: `${API_HOST.base_url}/public/uploads/absen/${item?.image_in}`,
                     }}
                     style={styles.img}
                   />

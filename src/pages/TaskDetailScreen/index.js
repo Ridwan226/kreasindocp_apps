@@ -202,15 +202,12 @@ const TaskDetailScreen = ({navigation, route}) => {
         text: 'Hapus',
         style: 'destructive',
         onPress: async () => {
-          console.log('itemCeklis', itemCeklis);
           let form = new FormData();
           form.append('checklist_id', itemCeklis?.checklist_id);
           try {
             await dispatch(deleteItemTask(form));
             getDataTask();
-          } catch (error) {
-            console.log('Error saat hapus:', error);
-          }
+          } catch (error) {}
         },
       },
     ]);

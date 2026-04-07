@@ -3,6 +3,7 @@ import {
   Dimensions,
   Image,
   Linking,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -11,6 +12,7 @@ import {
 import InputScrollView from 'react-native-input-scroll-view';
 import {Button, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Gap} from '../../component';
 import {showMessage, useForm} from '../../utils';
 import {useDispatch} from 'react-redux';
@@ -44,7 +46,12 @@ const LoginScreen = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.page}>
-      <InputScrollView style={styles.scroll}>
+      <KeyboardAwareScrollView
+        style={styles.scroll}
+        enableOnAndroid={true}
+        extraScrollHeight={100}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}>
         <View style={styles.contentWrapper}>
           <Image
             source={require('../../assets/image/Absence.png')}
@@ -96,17 +103,19 @@ const LoginScreen = ({navigation}) => {
               <Text style={styles.txForgot}>Forgot Password</Text>
             </TouchableOpacity>
             <Gap height={20} />
-            <TouchableOpacity
-              onPress={() => onDemo()}
-              activeOpacity={0.7}
-              style={[styles.button, {paddingVertical: 15}]}>
-              <Text style={[styles.txForgot, {color: '#FFF'}]}>
-                Request Demo / Register Company
-              </Text>
-            </TouchableOpacity>
+            {Platform.OS == 'ios' && (
+              <TouchableOpacity
+                onPress={() => onDemo()}
+                activeOpacity={0.7}
+                style={[styles.button, {paddingVertical: 15}]}>
+                <Text style={[styles.txForgot, {color: '#FFF'}]}>
+                  Request Demo / Register Company
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
-      </InputScrollView>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };

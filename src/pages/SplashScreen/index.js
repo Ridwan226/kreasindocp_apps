@@ -1,4 +1,4 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, Platform, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {getData} from '../../utils';
@@ -49,7 +49,9 @@ const SplashScreen = ({navigation}) => {
             fontFamily: 'Poppins-Medium',
             color: '#000',
           }}>
-          {GLOBAL_DATA.version}
+          {Platform.OS === 'android'
+            ? GLOBAL_DATA.versionAppsAndroid
+            : GLOBAL_DATA.versionAppsIOS}
         </Text>
       </View>
     </SafeAreaView>

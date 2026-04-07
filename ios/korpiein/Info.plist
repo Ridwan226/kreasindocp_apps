@@ -33,6 +33,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>We need access to your camera to **validate your identity during attendance via selfie photo**. For example, you must take a self-portrait when checking in or out for your presence to be recorded as valid.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>This app uses Face ID to securely verify your identity when recording attendance, ensuring that only you can check in and out.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>We require location access, even when the app is closed or not in use (background), to ensure you remain within the designated work area (Geofencing) during your active work session. For instance, when you check-in and switch to another app, we continuously verify your location to maintain the integrity of your recorded work time.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

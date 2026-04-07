@@ -5,6 +5,7 @@ import {Button, Dialog} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {API_HOST} from '../../../config';
 
 const CardUser = ({onPressLogout, name, username, image, timeIn}) => {
   const navigation = useNavigation();
@@ -15,7 +16,7 @@ const CardUser = ({onPressLogout, name, username, image, timeIn}) => {
         <View style={styles.wpContent}>
           <Image
             source={{
-              uri: `https://kreasindocp.graphie.design/public/uploads/users/thumb/${image}`,
+              uri: `${API_HOST.base_url}/public/uploads/users/thumb/${image}`,
             }}
             style={styles.img}
           />

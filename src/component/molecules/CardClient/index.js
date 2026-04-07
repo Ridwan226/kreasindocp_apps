@@ -2,13 +2,14 @@ import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Gap} from '../../atoms';
+import {API_HOST} from '../../../config';
 
 const CardClient = () => {
   return (
     <TouchableOpacity style={styles.container} activeOpacity={0.7}>
       <Image
         source={{
-          uri: 'https://kreasindocp.graphie.design/public/uploads/clients/thumb/download%20(24).jpeg',
+          uri: `${API_HOST.base_url}/public/uploads/clients/thumb/download%20(24).jpeg`,
         }}
         style={styles.img}
       />

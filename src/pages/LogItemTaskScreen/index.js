@@ -10,7 +10,6 @@ const LogItemTaskScreen = ({navigation, route}) => {
   const [data, setData] = useState({});
   const {item} = route.params;
   const dispatch = useDispatch();
-  console.log('data log item', item);
   useEffect(() => {
     getDataTask();
   }, []);

@@ -18,6 +18,8 @@ import Geolocation from 'react-native-geolocation-service';
 import {Button, Dialog} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
+import DeviceInfo from 'react-native-device-info';
+
 import {
   AllertCard,
   CardUser,
@@ -27,6 +29,10 @@ import {
 } from '../../component';
 import {getProfileDataAction, getVersionApps} from '../../redux/action/profile';
 import {clockInPost, clockLembur, getShiftData} from '../../redux/action/shift';
+import {
+  registPublicKeyPos,
+  registVerifyPos,
+} from '../../redux/action/biometric';
 import {showMessage} from '../../utils';
 import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
 
@@ -36,6 +42,7 @@ const HomeScreen = ({navigation}) => {
   const [isUpdateApps, setIsUpdateApps] = useState(false);
   const [dataProfile, setDataProfile] = useState({});
   const [refreshing, setRefreshing] = useState(false);
+  const [biometricReady, setBiometricReady] = useState(false);
   const [textBiometric, setTextBiometric] = useState('');
   const [isBiometricSignature, setIsBiometricSignature] = useState('');
   const hideDialog = () => setVisibleLogout(!visibleLogout);
@@ -77,28 +84,6 @@ const HomeScreen = ({navigation}) => {
     getLocation();
     getBiometric();
   }, []);
-
-  const getBiometric = () => {
-    const rnBiometrics = new ReactNativeBiometrics();
-
-    rnBiometrics.isSensorAvailable().then(resultObject => {
-      const {available, biometryType} = resultObject;
-
-      if (available && biometryType === BiometryTypes.TouchID) {
-        console.log('TouchID is supported');
-        setTextBiometric('TouchID is supported');
-      } else if (available && biometryType === BiometryTypes.FaceID) {
-        console.log('FaceID is supported');
-        setTextBiometric('FaceID is supported');
-      } else if (available && biometryType === BiometryTypes.Biometrics) {
-        console.log('Biometrics is supported');
-        setTextBiometric('Biometrics is supported');
-      } else {
-        console.log('Biometrics not supported');
-        setTextBiometric('Biometrics not supported');
-      }
-    });
-  };
 
   const getDataShift = () => {
     let form = new FormData();
@@ -205,6 +190,13 @@ const HomeScreen = ({navigation}) => {
       return;
     }
 
+    if (biometricReady == true) {
+      let cekBio = await getKeyBiometric();
+      if (!cekBio) {
+        return;
+      }
+    }
+
     const form = new FormData();
     form.append('file', imageSelfie);
     form.append('latitude', location?.coords?.latitude);
@@ -224,6 +216,13 @@ const HomeScreen = ({navigation}) => {
     if (!location?.coords?.latitude) {
       showMessage('Silahkan Aktifkan GPS Lokasi Anda');
       return;
+    }
+
+    if (biometricReady == true) {
+      let cekBio = await getKeyBiometric();
+      if (!cekBio) {
+        return;
+      }
     }
 
     const form = new FormData();
@@ -266,6 +265,12 @@ const HomeScreen = ({navigation}) => {
         return;
       }
     }
+    if (biometricReady == true) {
+      let cekBio = await getKeyBiometric();
+      if (!cekBio) {
+        return;
+      }
+    }
 
     const form = new FormData();
     form.append('type', type);
@@ -283,6 +288,31 @@ const HomeScreen = ({navigation}) => {
     }
   };
 
+  const getBiometric = () => {
+    const rnBiometrics = new ReactNativeBiometrics();
+
+    rnBiometrics.isSensorAvailable().then(resultObject => {
+      const {available, biometryType} = resultObject;
+
+      if (available && biometryType === BiometryTypes.TouchID) {
+        console.log('TouchID is supported');
+        setBiometricReady(true);
+        registerBiometric();
+      } else if (available && biometryType === BiometryTypes.FaceID) {
+        console.log('FaceID is supported');
+        setBiometricReady(true);
+        registerBiometric();
+      } else if (available && biometryType === BiometryTypes.Biometrics) {
+        console.log('Biometrics is supported');
+        setBiometricReady(true);
+        registerBiometric();
+      } else {
+        console.log('Biometrics not supported');
+        setBiometricReady(false);
+      }
+    });
+  };
+
   const getKeyBiometric = async () => {
     try {
       const rnBiometrics = new ReactNativeBiometrics();
@@ -291,7 +321,7 @@ const HomeScreen = ({navigation}) => {
       const {available} = await rnBiometrics.isSensorAvailable();
       if (!available) {
         showMessage('Biometrik tidak tersedia');
-        return;
+        return false;
       }
 
       // cek key
@@ -310,14 +340,64 @@ const HomeScreen = ({navigation}) => {
 
       if (!success || !signature) {
         showMessage('Autentikasi gagal');
-        return;
+        return false;
       }
 
-      console.log(signature);
-
       setIsBiometricSignature(signature);
+      const deviceId = await DeviceInfo.getUniqueId();
+
+      try {
+        let result = await dispatch(
+          registVerifyPos({
+            payload,
+            signature,
+            device_id: deviceId,
+          }),
+        );
+        if (result?.status == true) {
+          return true;
+        } else {
+          showMessage('Autentikasi gagal Biometrik Gagal');
+          return false;
+        }
+      } catch (error) {
+        showMessage(
+          error?.response?.data?.message
+            ? error?.response?.data?.message
+            : 'Something went wrong',
+        );
+        return false;
+      }
     } catch (error) {
-      showMessage('Error biometrik: ' + error);
+      showMessage('Data Biometrik Tidak Valid');
+      return false;
+    }
+  };
+
+  const registerBiometric = async () => {
+    const rnBiometrics = new ReactNativeBiometrics();
+    const {publicKey} = await rnBiometrics.createKeys();
+    const deviceId = await DeviceInfo.getUniqueId();
+    const deviceName = await DeviceInfo.getDeviceName();
+
+    const formKey = new FormData();
+    formKey.append('biometric_public_key', publicKey);
+    formKey.append('device_name', deviceName);
+    formKey.append('device_id', deviceId);
+    try {
+      await dispatch(
+        registPublicKeyPos({
+          biometric_public_key: publicKey,
+          device_name: deviceName,
+          device_id: deviceId,
+        }),
+      );
+    } catch (error) {
+      showMessage(
+        error?.response?.data?.message
+          ? error?.response?.data?.message
+          : 'Something went wrong',
+      );
     }
   };
 
@@ -565,11 +645,11 @@ const HomeScreen = ({navigation}) => {
               </TouchableOpacity>
             </View>
           </View>
-          <TouchableOpacity onPress={() => getKeyBiometric()}>
+          {/* <TouchableOpacity onPress={() => getKeyBiometric()}>
             <Text>Biometric Signature</Text>
           </TouchableOpacity>
           <Text>support : {textBiometric}</Text>
-          <Text>isBiometricSignature : {isBiometricSignature}</Text>
+          <Text>isBiometricSignature : {isBiometricSignature}</Text> */}
         </View>
         <Gap height={300} />
       </ScrollView>
